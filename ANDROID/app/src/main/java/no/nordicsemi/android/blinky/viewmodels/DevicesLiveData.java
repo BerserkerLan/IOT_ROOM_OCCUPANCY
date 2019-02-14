@@ -40,7 +40,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
  */
 @SuppressWarnings("unused")
 public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
-	private static final ParcelUuid FILTER_UUID = new ParcelUuid(Manager.LBS_UUID_SERVICE);
+	private static final ParcelUuid FILTER_UUID = new ParcelUuid(Manager.LBS_UUID_SERVICE_PIR1);
 	private static final int FILTER_RSSI = -50; // [dBm]
 
 	private final List<DiscoveredBluetoothDevice> mDevices = new ArrayList<>();

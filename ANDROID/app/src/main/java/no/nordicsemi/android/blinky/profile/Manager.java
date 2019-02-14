@@ -33,7 +33,6 @@ import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import no.nordicsemi.android.ble.BleManager;
-import no.nordicsemi.android.ble.data.Data;
 import no.nordicsemi.android.blinky.profile.callback.PIR2DataCallback;
 import no.nordicsemi.android.blinky.profile.callback.PIRDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.distanceDataCallback;
@@ -43,18 +42,21 @@ import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
 public class Manager extends BleManager<ManagerCallbacks> {
+
     /**
      * Nordic Blinky Service UUID.
      */
-    public final static UUID LBS_UUID_SERVICE = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
-    public final static UUID LBS2_UUID_SERVICE = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
-    public final static UUID LBS3_UUID_SERVICE = UUID.fromString("INSERT HERE"); //READSWITCH
-    public final static UUID LBS4_UUID_SERVICE = UUID.fromString("INSERT HERE"); //DISTANCE
+
+    public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
+    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    public final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("INSERT HERE"); //READSWITCH
+    public final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("INSERT HERE"); //DISTANCE
 
 
     /**
      * SENSOR characteristic UUID.
      */
+
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
     private final static UUID READSWITCH_UUID = UUID.fromString("INSERT HERE");
@@ -90,18 +92,12 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
 
     private final PIRDataCallback pir1callBack = new PIRDataCallback() {
+
         @Override
-        public void onPIRStateChanged(@NonNull final BluetoothDevice device,
-                                      final boolean pressed) {
-            // log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
+        public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
             mCallbacks.onPIRStateChanged(device, pressed);
         }
 
-
-        @Override
-        public void onInvalidDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-
-        }
     };
 
 
@@ -112,27 +108,26 @@ public class Manager extends BleManager<ManagerCallbacks> {
             mCallbacks.onPIR2StateChanged(device, pressed);
         }
 
-        @Override
-        public void onInvalidDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-
-        }
-
     };
 
 
     private final readSwitchDataCallback readSwitchCallBack = new readSwitchDataCallback() {
+
         @Override
         public void readswitchstatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
             mCallbacks.onPIRStateChanged(device, pressed);
         }
+
     };
 
 
     private final distanceDataCallback distanceCallBack = new distanceDataCallback() {
+
         @Override
         public void distancestatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
             mCallbacks.onPIRStateChanged(device, pressed);
         }
+
     };
 
 
@@ -162,24 +157,26 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
         @Override
         public boolean isRequiredServiceSupported(@NonNull final BluetoothGatt gatt) {
-            final BluetoothGattService service = gatt.getService(LBS_UUID_SERVICE);
-            final BluetoothGattService service2 = gatt.getService(LBS2_UUID_SERVICE);
-            //:TODO Fix this to not just return true blindly
-            if (service != null) {
-                pirCharacteristic = service.getCharacteristic(PIR_UUID);
-                pir2Characteristic = service2.getCharacteristic(PIR2_UUID);
-            }
+            final BluetoothGattService pirService1 = gatt.getService(LBS_UUID_SERVICE_PIR1);
+            final BluetoothGattService pirService2 = gatt.getService(LBS2_UUID_SERVICE_PIR2);
+            final BluetoothGattService readSwitchService = gatt.getService(LBS3_UUID_SERVICE_READSWITCH);
+            final BluetoothGattService distanceSensorService = gatt.getService(LBS4_UUID_SERVICE_DISTANCE);
 
-            boolean writeRequest = true;
-            //mSupported = pirCharacteristic != null && mLedCharacteristic != null && writeRequest;
+            if (pirService1 != null) {
+                pirCharacteristic = pirService1.getCharacteristic(PIR_UUID);
+                pir2Characteristic = pirService2.getCharacteristic(PIR2_UUID);
+                readSwitchCharacteristics = readSwitchService.getCharacteristic(READSWITCH_UUID);
+                distanceCharacteristic = distanceSensorService.getCharacteristic(DISTANCE_UUID);
+            }
             return true;
         }
-
 
         @Override
         protected void onDeviceDisconnected() {
             pirCharacteristic = null;
             pir2Characteristic = null;
+            readSwitchCharacteristics = null;
+            distanceCharacteristic = null;
         }
     };
 
