@@ -20,19 +20,16 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.blinky.profile.callback;
+package no.nordicsemi.android.blinky.profile;
 
-import android.bluetooth.BluetoothDevice;
+import no.nordicsemi.android.ble.BleManagerCallbacks;
+import no.nordicsemi.android.blinky.profile.callback.PIR2Callback;
+import no.nordicsemi.android.blinky.profile.callback.PIRCallback;
+import no.nordicsemi.android.blinky.profile.callback.distanceCallback;
+import no.nordicsemi.android.blinky.profile.callback.readSwitchCallback;
 
-import androidx.annotation.NonNull;
 
-public interface BlinkyLedCallback {
-
-    /**
-     * Called when the data has been sent to the connected device.
-     *
-     * @param device the target device.
-     * @param on true when LED was enabled, false when disabled.
-     */
-    void onLedStateChanged(@NonNull final BluetoothDevice device, final boolean on);
+public interface ManagerCallbacks extends BleManagerCallbacks,
+        PIRCallback, PIR2Callback, distanceCallback, readSwitchCallback {
+    // No more methods
 }

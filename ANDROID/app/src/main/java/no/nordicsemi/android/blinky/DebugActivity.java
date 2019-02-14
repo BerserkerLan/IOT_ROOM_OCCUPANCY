@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,19 +38,23 @@ import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
 
 @SuppressWarnings("ConstantConditions")
-public class BlinkyActivity extends AppCompatActivity {
+public class DebugActivity extends AppCompatActivity {
     public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.led_switch) Switch mLed;
-    @BindView(R.id.button_state) TextView mButtonState;
-    @BindView(R.id.button_state2) TextView mButtonState2;
-    @BindView(R.id.button_state3) TextView mButtonState3;
+    @BindView(R.id.outSidePIR)
+    TextView outSidePIR;
+    @BindView(R.id.insidePIR)
+    TextView insidePIR;
+    @BindView(R.id.doorContact)
+    TextView DoorContact;
+    @BindView(R.id.DISTNACE)
+    TextView distance;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blinky);
+        setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
 
         final Intent intent = getIntent();
@@ -70,13 +73,11 @@ public class BlinkyActivity extends AppCompatActivity {
         mViewModel.connect(device);
 
         // Set up views
-        final TextView ledState = findViewById(R.id.led_state);
         final LinearLayout progressContainer = findViewById(R.id.progress_container);
         final TextView connectionState = findViewById(R.id.connection_state);
         final View content = findViewById(R.id.device_container);
         final View notSupported = findViewById(R.id.not_supported);
 
-        mLed.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.toggleLED(isChecked));
 
         mViewModel.isDeviceReady().observe(this, deviceReady -> {
             progressContainer.setVisibility(View.GONE);
@@ -100,20 +101,24 @@ public class BlinkyActivity extends AppCompatActivity {
             }
         });
 
-        mViewModel.getLEDState().observe(this, isOn -> {
-            ledState.setText(isOn ? R.string.button_released : R.string.button_pressed);
-        });
-
         mViewModel.getPIR1state().observe(this,
                 pressed -> {
-                    mButtonState.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
         mViewModel.getPIR2state().observe(this,
                 pressed -> {
-                    mButtonState2.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
+        mViewModel.getDistanceState().observe(this,
+                pressed -> {
+                    distance.setText(pressed ? "" : "PERSON");
+                });
+        mViewModel.getReadSwitchState().observe(this,
+                pressed -> {
+                    DoorContact.setText(pressed ? "CLOSED" : "OPEN");
+                });
     }
 
     @OnClick(R.id.action_clear_cache)
@@ -122,12 +127,7 @@ public class BlinkyActivity extends AppCompatActivity {
     }
 
     private void onConnectionStateChanged(final boolean connected) {
-        mLed.setEnabled(connected);
-        if (connected) {
-            // mButtonState2.setText(R.string.button_released);
-        } else {
-            // mButtonState2.setText(R.string.button_pressed);
-        }
+
     }
 
 }

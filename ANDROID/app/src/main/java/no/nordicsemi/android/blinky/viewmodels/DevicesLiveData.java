@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
-import no.nordicsemi.android.blinky.profile.BlinkyManager;
+import no.nordicsemi.android.blinky.profile.Manager;
 import no.nordicsemi.android.support.v18.scanner.ScanRecord;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
@@ -40,7 +40,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
  */
 @SuppressWarnings("unused")
 public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
-	private static final ParcelUuid FILTER_UUID = new ParcelUuid(BlinkyManager.LBS_UUID_SERVICE);
+	private static final ParcelUuid FILTER_UUID = new ParcelUuid(Manager.LBS_UUID_SERVICE_PIR1);
 	private static final int FILTER_RSSI = -50; // [dBm]
 
 	private final List<DiscoveredBluetoothDevice> mDevices = new ArrayList<>();
