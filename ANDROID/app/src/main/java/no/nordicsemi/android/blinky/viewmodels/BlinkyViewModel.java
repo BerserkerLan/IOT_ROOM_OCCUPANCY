@@ -136,7 +136,6 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	}
 
 	public void toggleLED(final boolean isOn) {
-		mBlinkyManager.send(isOn);
 		mLEDState.setValue(isOn);
 	}
 
@@ -149,21 +148,17 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	}
 
 	@Override
-	public void onButtonStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+	public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
 		mButtonState.postValue(pressed);
         System.out.println("Button 1 pressed val : " + pressed);
 	}
 
     @Override
-    public void onButton2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
+    public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
         mButtonState2.postValue(pressed);
         System.out.println("Button 2 pressed val : " + pressed);
     }
 
-    @Override
-	public void onLedStateChanged(@NonNull final BluetoothDevice device, final boolean on) {
-		mLEDState.postValue(on);
-	}
 
 	@Override
 	public void onDeviceConnecting(@NonNull final BluetoothDevice device) {

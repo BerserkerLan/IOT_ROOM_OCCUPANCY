@@ -20,19 +20,36 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.blinky.profile.data;
+package no.nordicsemi.android.blinky.profile.callback;
 
+import android.bluetooth.BluetoothDevice;
+import androidx.annotation.NonNull;
+
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
-public final class BlinkyLED {
-    private static final byte STATE_OFF = 0x00;
-    private static final byte STATE_ON = 0x01;
+@SuppressWarnings("ConstantConditions")
+public abstract class BlinkyPIRDataCallback implements ProfileDataCallback, BlinkyPIRCallback {
+    private static final int STATE_RELEASED = 0x00;
+    private static final int STATE_PRESSED = 0x01;
 
-    public static Data turnOn() {
-        return Data.opCode(STATE_ON);
-    }
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() != 1) {
+            onInvalidDataReceived(device, data);
+            return;
+        }
 
-    public static Data turnOff() {
-        return Data.opCode(STATE_OFF);
+        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
+        System.out.println("BUTTON 1 STATE : " + state);
+        if (state == STATE_PRESSED) {
+            onPIRStateChanged(device, true);
+        } else if (state == STATE_RELEASED) {
+            onPIRStateChanged(device, false);
+        } else {
+            onInvalidDataReceived(device, data);
+        }
+
+
     }
 }

@@ -29,7 +29,7 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class BlinkyButton2DataCallback implements ProfileDataCallback, BlinkyButton2Callback {
+public abstract class BlinkyPIR2DataCallback implements ProfileDataCallback, BlinkyPIR2Callback {
     private static final int STATE_RELEASED = 0x00;
     private static final int STATE_PRESSED = 0x01;
 
@@ -43,9 +43,9 @@ public abstract class BlinkyButton2DataCallback implements ProfileDataCallback, 
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
         System.out.println("BUTTON 2 STATE : " + state);
         if (state == STATE_PRESSED) {
-            onButton2StateChanged(device, true);
+            onPIR2StateChanged(device, true);
         } else if (state == STATE_RELEASED) {
-            onButton2StateChanged(device, false);
+            onPIR2StateChanged(device, false);
         } else {
             onInvalidDataReceived(device, data);
         }
