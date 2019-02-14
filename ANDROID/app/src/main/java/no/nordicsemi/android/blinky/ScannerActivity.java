@@ -44,6 +44,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -74,7 +76,7 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 
 		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setTitle(R.string.app_name);
+		Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.app_name);
 
 		// Create view model containing utility methods for scanning
 		mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
@@ -84,7 +86,7 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+		((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
 		final DevicesAdapter adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);

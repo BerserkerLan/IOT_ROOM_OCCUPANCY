@@ -27,7 +27,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.UUID;
 
@@ -37,6 +36,8 @@ import no.nordicsemi.android.ble.BleManager;
 import no.nordicsemi.android.ble.data.Data;
 import no.nordicsemi.android.blinky.profile.callback.PIR2DataCallback;
 import no.nordicsemi.android.blinky.profile.callback.PIRDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.distanceDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.readSwitchDataCallback;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
@@ -56,8 +57,8 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
-    private final static UUID READSWITCH_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
-    private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
+    private final static UUID READSWITCH_UUID = UUID.fromString("INSERT HERE");
+    private final static UUID DISTANCE_UUID = UUID.fromString("INSERT HERE");
 
     private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic;
     private LogSession mLogSession;
@@ -88,7 +89,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
     }
 
 
-    private final PIRDataCallback mButtonCallback = new PIRDataCallback() {
+    private final PIRDataCallback pir1callBack = new PIRDataCallback() {
         @Override
         public void onPIRStateChanged(@NonNull final BluetoothDevice device,
                                       final boolean pressed) {
@@ -98,24 +99,39 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
 
         @Override
-        public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
-                                          @NonNull final Data data) {
-            log(Log.WARN, "Invalid data received: " + data);
+        public void onInvalidDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+
         }
     };
 
 
-    private final PIR2DataCallback mButtonCallback2 = new PIR2DataCallback() {
+    private final PIR2DataCallback pir2callBack = new PIR2DataCallback() {
 
         @Override
         public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
-            // log(LogContract.Log.Level.APPLICATION, "Button 2" + (pressed ? "pressed" : "released"));
             mCallbacks.onPIR2StateChanged(device, pressed);
         }
 
         @Override
         public void onInvalidDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-            log(Log.WARN, "Invalid data received 2 : " + data);
+
+        }
+
+    };
+
+
+    private final readSwitchDataCallback readSwitchCallBack = new readSwitchDataCallback() {
+        @Override
+        public void readswitchstatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+            mCallbacks.onPIRStateChanged(device, pressed);
+        }
+    };
+
+
+    private final distanceDataCallback distanceCallBack = new distanceDataCallback() {
+        @Override
+        public void distancestatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+            mCallbacks.onPIRStateChanged(device, pressed);
         }
     };
 
@@ -126,14 +142,22 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final BleManagerGattCallback mGattCallback = new BleManagerGattCallback() {
         @Override
         protected void initialize() {
-            setNotificationCallback(pirCharacteristic).with(mButtonCallback);
-            setNotificationCallback(pir2Characteristic).with(mButtonCallback2);
+            setNotificationCallback(pirCharacteristic).with(pir1callBack);
+            setNotificationCallback(pir2Characteristic).with(pir2callBack);
+            setNotificationCallback(readSwitchCharacteristics).with(readSwitchCallBack);
+            setNotificationCallback(distanceCharacteristic).with(distanceCallBack);
 
-            readCharacteristic(pirCharacteristic).with(mButtonCallback).enqueue();
-            readCharacteristic(pir2Characteristic).with(mButtonCallback2).enqueue();
+
+            readCharacteristic(pirCharacteristic).with(pir1callBack).enqueue();
+            readCharacteristic(pir2Characteristic).with(pir2callBack).enqueue();
+            readCharacteristic(readSwitchCharacteristics).with(readSwitchCallBack).enqueue();
+            readCharacteristic(distanceCharacteristic).with(distanceCallBack).enqueue();
+
 
             enableNotifications(pirCharacteristic).enqueue();
             enableNotifications(pir2Characteristic).enqueue();
+            enableNotifications(readSwitchCharacteristics).enqueue();
+            enableNotifications(distanceCharacteristic).enqueue();
         }
 
         @Override

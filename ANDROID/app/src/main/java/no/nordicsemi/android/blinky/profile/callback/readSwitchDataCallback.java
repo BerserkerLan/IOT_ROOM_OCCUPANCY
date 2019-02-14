@@ -29,7 +29,7 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class DISTANCEDataCallback implements ProfileDataCallback, PIR2Callback {
+public abstract class readSwitchDataCallback implements ProfileDataCallback, readSwitchCallback {
     private static final int STATE_RELEASED = 0x00;
     private static final int STATE_PRESSED = 0x01;
 
@@ -41,17 +41,12 @@ public abstract class DISTANCEDataCallback implements ProfileDataCallback, PIR2C
         }
 
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        System.out.println("BUTTON 2 STATE : " + state);
         if (state == STATE_PRESSED) {
-            //:TODO Change
-            onPIR2StateChanged(device, true);
+            readswitchstatechanged(device, true);
         } else if (state == STATE_RELEASED) {
-            //:TODO Change
-            onPIR2StateChanged(device, false);
+            readswitchstatechanged(device, false);
         } else {
             onInvalidDataReceived(device, data);
         }
-
-
     }
 }
