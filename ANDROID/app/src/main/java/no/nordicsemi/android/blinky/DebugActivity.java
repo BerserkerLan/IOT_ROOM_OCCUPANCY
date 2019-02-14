@@ -48,7 +48,9 @@ public class DebugActivity extends AppCompatActivity {
     @BindView(R.id.insidePIR)
     TextView insidePIR;
     @BindView(R.id.doorContact)
-    TextView doorContact;
+    TextView DoorContact;
+    @BindView(R.id.DISTNACE)
+    TextView distance;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +111,14 @@ public class DebugActivity extends AppCompatActivity {
                     insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
+        mViewModel.getDistanceState().observe(this,
+                pressed -> {
+                    distance.setText(pressed ? "" : "PERSON");
+                });
+        mViewModel.getReadSwitchState().observe(this,
+                pressed -> {
+                    DoorContact.setText(pressed ? "CLOSED" : "OPEN");
+                });
     }
 
     @OnClick(R.id.action_clear_cache)

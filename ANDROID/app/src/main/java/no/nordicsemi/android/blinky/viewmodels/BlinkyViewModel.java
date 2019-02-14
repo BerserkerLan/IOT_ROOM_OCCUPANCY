@@ -23,12 +23,12 @@
 package no.nordicsemi.android.blinky.viewmodels;
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import android.bluetooth.BluetoothDevice;
-import androidx.annotation.NonNull;
-
 import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.profile.Manager;
@@ -37,192 +37,198 @@ import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
 public class BlinkyViewModel extends AndroidViewModel implements ManagerCallbacks {
-	private final Manager mBlinkyManager;
-	private BluetoothDevice mDevice;
+    private final Manager mBlinkyManager;
+    private BluetoothDevice mDevice;
 
-	// Connection states Connecting, Connected, Disconnecting, Disconnected etc.
-	private final MutableLiveData<String> mConnectionState = new MutableLiveData<>();
+    // Connection states Connecting, Connected, Disconnecting, Disconnected etc.
+    private final MutableLiveData<String> mConnectionState = new MutableLiveData<>();
 
-	// Flag to determine if the device is connected
-	private final MutableLiveData<Boolean> mIsConnected = new MutableLiveData<>();
+    // Flag to determine if the device is connected
+    private final MutableLiveData<Boolean> mIsConnected = new MutableLiveData<>();
 
-	// Flag to determine if the device has required services
-	private final MutableLiveData<Boolean> mIsSupported = new MutableLiveData<>();
+    // Flag to determine if the device has required services
+    private final MutableLiveData<Boolean> mIsSupported = new MutableLiveData<>();
 
-	// Flag to determine if the device is ready
-	private final MutableLiveData<Void> mOnDeviceReady = new MutableLiveData<>();
+    // Flag to determine if the device is ready
+    private final MutableLiveData<Void> mOnDeviceReady = new MutableLiveData<>();
 
-	// Flag that holds the on off state of the LED. On is true, Off is False
-	private final MutableLiveData<Boolean> mLEDState = new MutableLiveData<>();
+    // Flag that holds the on off state of the LED. On is true, Off is False
 
-	// Flag that holds the pressed released state of the button on the devkit
-	// Pressed is true, Released is false
-	private final MutableLiveData<Boolean> mButtonState = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> pirState = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> pir2State = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> readSwitchState = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> distanceState = new MutableLiveData<>();
 
-	// Flag that holds the pressed released state of the button on the devkit
-	// Pressed is true, Released is false
-	private final MutableLiveData<Boolean> mButtonState2 = new MutableLiveData<>();
+    public LiveData<Void> isDeviceReady() {
+        return mOnDeviceReady;
+    }
 
-	public LiveData<Void> isDeviceReady() {
-		return mOnDeviceReady;
-	}
+    public LiveData<String> getConnectionState() {
+        return mConnectionState;
+    }
 
-	public LiveData<String> getConnectionState() {
-		return mConnectionState;
-	}
+    public LiveData<Boolean> isConnected() {
+        return mIsConnected;
+    }
 
-	public LiveData<Boolean> isConnected() {
-		return mIsConnected;
-	}
+    public LiveData<Boolean> getPIR1state() {
+        return pirState;
+    }
 
-	public LiveData<Boolean> getPIR1state() {
-		return mButtonState;
-	}
-	public LiveData<Boolean> getPIR2state() { return mButtonState2; }
+    public LiveData<Boolean> getPIR2state() {
+        return pir2State;
+    }
 
-	public LiveData<Boolean> getLEDState() {
-		return mLEDState;
-	}
+    public LiveData<Boolean> getReadSwitchState() {
+        return readSwitchState;
+    }
 
-	public LiveData<Boolean> isSupported() {
-		return mIsSupported;
-	}
+    public LiveData<Boolean> getDistanceState() {
+        return distanceState;
+    }
 
-	public BlinkyViewModel(@NonNull final Application application) {
-		super(application);
+    public LiveData<Boolean> isSupported() {
+        return mIsSupported;
+    }
 
-		// Initialize the manager
-		mBlinkyManager = new Manager(getApplication());
-		mBlinkyManager.setGattCallbacks(this);
-	}
+    public BlinkyViewModel(@NonNull final Application application) {
+        super(application);
 
-	/**
-	 * Connect to peripheral.
-	 */
+        // Initialize the manager
+        mBlinkyManager = new Manager(getApplication());
+        mBlinkyManager.setGattCallbacks(this);
+    }
 
-	public void connect(@NonNull final DiscoveredBluetoothDevice device) {
-		// Prevent from calling again when called again (screen orientation changed)
-		if (mDevice == null) {
-			mDevice = device.getDevice();
-			final LogSession logSession
-					= Logger.newSession(getApplication(), null, device.getAddress(), device.getName());
-			mBlinkyManager.setLogger(logSession);
-			reconnect();
-		}
-	}
+    /**
+     * Connect to peripheral.
+     */
 
-	/**
-	 * Reconnects to previously connected device.
-	 * If this device was not supported, its services were cleared on disconnection, so
-	 * reconnection may help.
-	 */
+    public void connect(@NonNull final DiscoveredBluetoothDevice device) {
+        // Prevent from calling again when called again (screen orientation changed)
+        if (mDevice == null) {
+            mDevice = device.getDevice();
+            final LogSession logSession
+                    = Logger.newSession(getApplication(), null, device.getAddress(), device.getName());
+            mBlinkyManager.setLogger(logSession);
+            reconnect();
+        }
+    }
 
-	public void reconnect() {
-		if (mDevice != null) {
-			mBlinkyManager.connect(mDevice)
-					.retry(3, 100)
-					.useAutoConnect(false)
-					.enqueue();
-		}
-	}
+    /**
+     * Reconnects to previously connected device.
+     * If this device was not supported, its services were cleared on disconnection, so
+     * reconnection may help.
+     */
 
-	/**
-	 * Disconnect from peripheral.
-	 */
+    public void reconnect() {
+        if (mDevice != null) {
+            mBlinkyManager.connect(mDevice)
+                    .retry(3, 100)
+                    .useAutoConnect(false)
+                    .enqueue();
+        }
+    }
 
-	private void disconnect() {
-		mDevice = null;
-		mBlinkyManager.disconnect().enqueue();
-	}
+    /**
+     * Disconnect from peripheral.
+     */
 
-	public void toggleLED(final boolean isOn) {
-		mLEDState.setValue(isOn);
-	}
+    private void disconnect() {
+        mDevice = null;
+        mBlinkyManager.disconnect().enqueue();
+    }
 
-	@Override
-	protected void onCleared() {
-		super.onCleared();
-		if (mBlinkyManager.isConnected()) {
-			disconnect();
-		}
-	}
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (mBlinkyManager.isConnected()) {
+            disconnect();
+        }
+    }
 
-	@Override
-	public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-		mButtonState.postValue(pressed);
-        System.out.println("Button 1 pressed val : " + pressed);
-	}
+    @Override
+    public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+        pirState.postValue(pressed);
+    }
 
     @Override
     public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
-        mButtonState2.postValue(pressed);
-        System.out.println("Button 2 pressed val : " + pressed);
+        pir2State.postValue(pressed);
     }
 
+    @Override
+    public void distancestatechanged(@NonNull BluetoothDevice device, boolean pressed) {
+        distanceState.postValue(pressed);
+    }
 
-	@Override
-	public void onDeviceConnecting(@NonNull final BluetoothDevice device) {
-		mConnectionState.postValue(getApplication().getString(R.string.state_connecting));
-	}
+    @Override
+    public void readswitchstatechanged(@NonNull BluetoothDevice device, boolean pressed) {
+        readSwitchState.postValue(pressed);
+    }
 
-	@Override
-	public void onDeviceConnected(@NonNull final BluetoothDevice device) {
-		mIsConnected.postValue(true);
-		mConnectionState.postValue(getApplication().getString(R.string.state_discovering_services));
-	}
+    @Override
+    public void onDeviceConnecting(@NonNull final BluetoothDevice device) {
+        mConnectionState.postValue(getApplication().getString(R.string.state_connecting));
+    }
 
-	@Override
-	public void onDeviceDisconnecting(@NonNull final BluetoothDevice device) {
-		mIsConnected.postValue(false);
-	}
+    @Override
+    public void onDeviceConnected(@NonNull final BluetoothDevice device) {
+        mIsConnected.postValue(true);
+        mConnectionState.postValue(getApplication().getString(R.string.state_discovering_services));
+    }
 
-	@Override
-	public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
-		mIsConnected.postValue(false);
-	}
+    @Override
+    public void onDeviceDisconnecting(@NonNull final BluetoothDevice device) {
+        mIsConnected.postValue(false);
+    }
 
-	@Override
-	public void onLinkLossOccurred(@NonNull final BluetoothDevice device) {
-		mIsConnected.postValue(false);
-	}
+    @Override
+    public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
+        mIsConnected.postValue(false);
+    }
 
-	@Override
-	public void onServicesDiscovered(@NonNull final BluetoothDevice device,
-									 final boolean optionalServicesFound) {
-		mConnectionState.postValue(getApplication().getString(R.string.state_initializing));
-	}
+    @Override
+    public void onLinkLossOccurred(@NonNull final BluetoothDevice device) {
+        mIsConnected.postValue(false);
+    }
 
-	@Override
-	public void onDeviceReady(@NonNull final BluetoothDevice device) {
-		mIsSupported.postValue(true);
-		mConnectionState.postValue(null);
-		mOnDeviceReady.postValue(null);
-	}
+    @Override
+    public void onServicesDiscovered(@NonNull final BluetoothDevice device,
+                                     final boolean optionalServicesFound) {
+        mConnectionState.postValue(getApplication().getString(R.string.state_initializing));
+    }
 
-	@Override
-	public void onBondingRequired(@NonNull final BluetoothDevice device) {
-		// Blinky does not require bonding
-	}
+    @Override
+    public void onDeviceReady(@NonNull final BluetoothDevice device) {
+        mIsSupported.postValue(true);
+        mConnectionState.postValue(null);
+        mOnDeviceReady.postValue(null);
+    }
 
-	@Override
-	public void onBonded(@NonNull final BluetoothDevice device) {
-		// Blinky does not require bonding
-	}
+    @Override
+    public void onBondingRequired(@NonNull final BluetoothDevice device) {
+        // Blinky does not require bonding
+    }
 
-	@Override
-	public void onBondingFailed(@NonNull final BluetoothDevice device) {
-		// Blinky does not require bonding
-	}
+    @Override
+    public void onBonded(@NonNull final BluetoothDevice device) {
+        // Blinky does not require bonding
+    }
 
-	@Override
-	public void onError(@NonNull final BluetoothDevice device,
-						@NonNull final String message, final int errorCode) {
-		// TODO implement
-	}
+    @Override
+    public void onBondingFailed(@NonNull final BluetoothDevice device) {
+        // Blinky does not require bonding
+    }
 
-	@Override
-	public void onDeviceNotSupported(@NonNull final BluetoothDevice device) {
-		mConnectionState.postValue(null);
-		mIsSupported.postValue(false);
-	}
+    @Override
+    public void onError(@NonNull final BluetoothDevice device,
+                        @NonNull final String message, final int errorCode) {
+        // TODO implement
+    }
+
+    @Override
+    public void onDeviceNotSupported(@NonNull final BluetoothDevice device) {
+        mConnectionState.postValue(null);
+        mIsSupported.postValue(false);
+    }
 }
