@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,14 +43,16 @@ public class DebugActivity extends AppCompatActivity {
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.led_switch) Switch mLed;
-    @BindView(R.id.button_state) TextView mButtonState;
-    @BindView(R.id.button_state2) TextView mButtonState2;
-    @BindView(R.id.button_state3) TextView mButtonState3;
+    @BindView(R.id.outSidePIR)
+    TextView outSidePIR;
+    @BindView(R.id.insidePIR)
+    TextView insidePIR;
+    @BindView(R.id.doorContact)
+    TextView doorContact;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blinky);
+        setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
 
         final Intent intent = getIntent();
@@ -70,13 +71,11 @@ public class DebugActivity extends AppCompatActivity {
         mViewModel.connect(device);
 
         // Set up views
-        final TextView ledState = findViewById(R.id.led_state);
         final LinearLayout progressContainer = findViewById(R.id.progress_container);
         final TextView connectionState = findViewById(R.id.connection_state);
         final View content = findViewById(R.id.device_container);
         final View notSupported = findViewById(R.id.not_supported);
 
-        mLed.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.toggleLED(isChecked));
 
         mViewModel.isDeviceReady().observe(this, deviceReady -> {
             progressContainer.setVisibility(View.GONE);
@@ -100,18 +99,14 @@ public class DebugActivity extends AppCompatActivity {
             }
         });
 
-        mViewModel.getLEDState().observe(this, isOn -> {
-            ledState.setText(isOn ? R.string.button_released : R.string.button_pressed);
-        });
-
         mViewModel.getPIR1state().observe(this,
                 pressed -> {
-                    mButtonState.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
         mViewModel.getPIR2state().observe(this,
                 pressed -> {
-                    mButtonState2.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
     }
@@ -122,12 +117,7 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void onConnectionStateChanged(final boolean connected) {
-        mLed.setEnabled(connected);
-        if (connected) {
-            // mButtonState2.setText(R.string.button_released);
-        } else {
-            // mButtonState2.setText(R.string.button_pressed);
-        }
+
     }
 
 }
