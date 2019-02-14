@@ -23,10 +23,10 @@
 package no.nordicsemi.android.blinky.profile;
 
 import no.nordicsemi.android.ble.BleManagerCallbacks;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyPIR2Callback;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyPIRCallback;
+import no.nordicsemi.android.blinky.profile.callback.PIR2Callback;
+import no.nordicsemi.android.blinky.profile.callback.PIRCallback;
 
-public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-        BlinkyPIRCallback, BlinkyPIR2Callback {
+public interface ManagerCallbacks extends BleManagerCallbacks,
+        PIRCallback, PIR2Callback {
     // No more methods
 }

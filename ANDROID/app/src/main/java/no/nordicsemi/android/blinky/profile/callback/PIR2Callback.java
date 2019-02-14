@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface BlinkyPIR2Callback {
+public interface PIR2Callback {
 
     /**
      * Called when a button was pressed or released on device.

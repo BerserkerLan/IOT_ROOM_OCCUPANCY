@@ -31,13 +31,13 @@ import androidx.annotation.NonNull;
 
 import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
-import no.nordicsemi.android.blinky.profile.BlinkyManager;
-import no.nordicsemi.android.blinky.profile.BlinkyManagerCallbacks;
+import no.nordicsemi.android.blinky.profile.Manager;
+import no.nordicsemi.android.blinky.profile.ManagerCallbacks;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
-public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCallbacks {
-	private final BlinkyManager mBlinkyManager;
+public class BlinkyViewModel extends AndroidViewModel implements ManagerCallbacks {
+	private final Manager mBlinkyManager;
 	private BluetoothDevice mDevice;
 
 	// Connection states Connecting, Connected, Disconnecting, Disconnected etc.
@@ -92,7 +92,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 		super(application);
 
 		// Initialize the manager
-		mBlinkyManager = new BlinkyManager(getApplication());
+		mBlinkyManager = new Manager(getApplication());
 		mBlinkyManager.setGattCallbacks(this);
 	}
 

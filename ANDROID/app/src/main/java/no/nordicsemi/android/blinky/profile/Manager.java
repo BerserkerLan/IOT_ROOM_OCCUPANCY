@@ -35,13 +35,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import no.nordicsemi.android.ble.BleManager;
 import no.nordicsemi.android.ble.data.Data;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyPIR2DataCallback;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyPIRDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.PIR2DataCallback;
+import no.nordicsemi.android.blinky.profile.callback.PIRDataCallback;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
-public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
+public class Manager extends BleManager<ManagerCallbacks> {
     /**
      * Nordic Blinky Service UUID.
      */
@@ -58,7 +58,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
     private BluetoothGattCharacteristic mButtonCharacteristic, mLedCharacteristic, mButtonCharacteristic2;
     private LogSession mLogSession;
 
-    public BlinkyManager(@NonNull final Context context) {
+    public Manager(@NonNull final Context context) {
         super(context);
     }
 
@@ -84,7 +84,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
     }
 
 
-    private final BlinkyPIRDataCallback mButtonCallback = new BlinkyPIRDataCallback() {
+    private final PIRDataCallback mButtonCallback = new PIRDataCallback() {
         @Override
         public void onPIRStateChanged(@NonNull final BluetoothDevice device,
                                       final boolean pressed) {
@@ -102,7 +102,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
     };
 
 
-    private final BlinkyPIR2DataCallback mButtonCallback2 = new BlinkyPIR2DataCallback() {
+    private final PIR2DataCallback mButtonCallback2 = new PIR2DataCallback() {
 
         @Override
         public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {

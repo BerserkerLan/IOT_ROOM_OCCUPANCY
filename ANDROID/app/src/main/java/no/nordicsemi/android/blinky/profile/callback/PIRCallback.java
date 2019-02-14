@@ -23,33 +23,17 @@
 package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
+
 import androidx.annotation.NonNull;
 
-import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
-import no.nordicsemi.android.ble.data.Data;
+public interface PIRCallback {
 
-@SuppressWarnings("ConstantConditions")
-public abstract class BlinkyPIR2DataCallback implements ProfileDataCallback, BlinkyPIR2Callback {
-    private static final int STATE_RELEASED = 0x00;
-    private static final int STATE_PRESSED = 0x01;
+    /**
+     * Called when a button was pressed or released on device.
+     *
+     * @param device the target device.
+     * @param pressed true if the button was pressed, false if released.
+     */
+    void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
 
-    @Override
-    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 1) {
-            onInvalidDataReceived(device, data);
-            return;
-        }
-
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        System.out.println("BUTTON 2 STATE : " + state);
-        if (state == STATE_PRESSED) {
-            onPIR2StateChanged(device, true);
-        } else if (state == STATE_RELEASED) {
-            onPIR2StateChanged(device, false);
-        } else {
-            onInvalidDataReceived(device, data);
-        }
-
-
-    }
 }
