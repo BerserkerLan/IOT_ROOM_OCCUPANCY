@@ -45,17 +45,21 @@ public class Manager extends BleManager<ManagerCallbacks> {
     /**
      * Nordic Blinky Service UUID.
      */
-    public final static UUID LBS_UUID_SERVICE = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB");
-    public final static UUID LBS2_UUID_SERVICE = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB");
+    public final static UUID LBS_UUID_SERVICE = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
+    public final static UUID LBS2_UUID_SERVICE = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    public final static UUID LBS3_UUID_SERVICE = UUID.fromString("INSERT HERE"); //READSWITCH
+    public final static UUID LBS4_UUID_SERVICE = UUID.fromString("INSERT HERE"); //DISTANCE
 
 
     /**
-     * BUTTON characteristic UUID.
+     * SENSOR characteristic UUID.
      */
-    private final static UUID LBS_UUID_BUTTON_CHAR = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
-    private final static UUID LBS_UUID_BUTTON_CHAR2 = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
+    private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
+    private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
+    private final static UUID READSWITCH_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
+    private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
 
-    private BluetoothGattCharacteristic mButtonCharacteristic, mLedCharacteristic, mButtonCharacteristic2;
+    private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic;
     private LogSession mLogSession;
 
     public Manager(@NonNull final Context context) {
@@ -88,8 +92,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
         @Override
         public void onPIRStateChanged(@NonNull final BluetoothDevice device,
                                       final boolean pressed) {
-            log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
-            System.out.println("Button 1 state changed");
+            // log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
             mCallbacks.onPIRStateChanged(device, pressed);
         }
 
@@ -106,8 +109,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
         @Override
         public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
-            log(LogContract.Log.Level.APPLICATION, "Button 2" + (pressed ? "pressed" : "released"));
-            System.out.println("Button 2 state changed");
+            // log(LogContract.Log.Level.APPLICATION, "Button 2" + (pressed ? "pressed" : "released"));
             mCallbacks.onPIR2StateChanged(device, pressed);
         }
 
@@ -124,14 +126,14 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final BleManagerGattCallback mGattCallback = new BleManagerGattCallback() {
         @Override
         protected void initialize() {
-            setNotificationCallback(mButtonCharacteristic).with(mButtonCallback);
-            setNotificationCallback(mButtonCharacteristic2).with(mButtonCallback2);
+            setNotificationCallback(pirCharacteristic).with(mButtonCallback);
+            setNotificationCallback(pir2Characteristic).with(mButtonCallback2);
 
-            readCharacteristic(mButtonCharacteristic).with(mButtonCallback).enqueue();
-            readCharacteristic(mButtonCharacteristic2).with(mButtonCallback2).enqueue();
+            readCharacteristic(pirCharacteristic).with(mButtonCallback).enqueue();
+            readCharacteristic(pir2Characteristic).with(mButtonCallback2).enqueue();
 
-            enableNotifications(mButtonCharacteristic).enqueue();
-            enableNotifications(mButtonCharacteristic2).enqueue();
+            enableNotifications(pirCharacteristic).enqueue();
+            enableNotifications(pir2Characteristic).enqueue();
         }
 
         @Override
@@ -140,20 +142,20 @@ public class Manager extends BleManager<ManagerCallbacks> {
             final BluetoothGattService service2 = gatt.getService(LBS2_UUID_SERVICE);
             //:TODO Fix this to not just return true blindly
             if (service != null) {
-                mButtonCharacteristic = service.getCharacteristic(LBS_UUID_BUTTON_CHAR);
-                mButtonCharacteristic2 = service2.getCharacteristic(LBS_UUID_BUTTON_CHAR2);
+                pirCharacteristic = service.getCharacteristic(PIR_UUID);
+                pir2Characteristic = service2.getCharacteristic(PIR2_UUID);
             }
 
             boolean writeRequest = true;
-            //mSupported = mButtonCharacteristic != null && mLedCharacteristic != null && writeRequest;
+            //mSupported = pirCharacteristic != null && mLedCharacteristic != null && writeRequest;
             return true;
         }
 
 
         @Override
         protected void onDeviceDisconnected() {
-            mButtonCharacteristic = null;
-            mButtonCharacteristic2 = null;
+            pirCharacteristic = null;
+            pir2Characteristic = null;
         }
     };
 
