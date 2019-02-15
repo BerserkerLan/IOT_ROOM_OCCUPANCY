@@ -152,7 +152,7 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     }
 
     @Override
-    public void onPIR2StateChanged(@NonNull BluetoothDevice device, boolean pressed) {
+    public void onPIR2StateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
         pir2State.postValue(pressed);
     }
 

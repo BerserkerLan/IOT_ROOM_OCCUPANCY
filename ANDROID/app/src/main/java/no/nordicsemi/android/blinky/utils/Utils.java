@@ -111,8 +111,8 @@ public class Utils {
 	}
 
 	/**
-	 * When a Bluetooth LE packet is received while Location is disabled it means that Location
-	 * is not required on this device in order to scan for LE devices. This is a case of Samsung
+	 * When databaseInstance Bluetooth LE packet is received while Location is disabled it means that Location
+	 * is not required on this device in order to scan for LE devices. This is databaseInstance case of Samsung
 	 * phones, for example. Save this information for the future to keep the Location info hidden.
 	 *
 	 * @param context the context.
@@ -123,10 +123,10 @@ public class Utils {
 	}
 
 	/**
-	 * The first time an app requests a permission there is no 'Don't ask again' checkbox and
+	 * The first time an app requests databaseInstance permission there is no 'Don't ask again' checkbox and
 	 * {@link ActivityCompat#shouldShowRequestPermissionRationale(Activity, String)} returns false.
-	 * This situation is similar to a permission being denied forever, so to distinguish both cases
-	 * a flag needs to be saved.
+	 * This situation is similar to databaseInstance permission being denied forever, so to distinguish both cases
+	 * databaseInstance flag needs to be saved.
 	 *
 	 * @param context the context.
 	 */

@@ -28,17 +28,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
+import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
+import no.nordicsemi.android.blinky.viewmodels.MainActivity;
 
 @SuppressWarnings("ConstantConditions")
-public class DebugActivity extends AppCompatActivity {
+public class DebugActivity extends BaseActivity {
     public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
     private BlinkyViewModel mViewModel;
@@ -56,6 +57,7 @@ public class DebugActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
+        switchActivity(new MainActivity());
 
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
@@ -108,6 +110,7 @@ public class DebugActivity extends AppCompatActivity {
 
         mViewModel.getPIR2state().observe(this,
                 pressed -> {
+                    System.out.println("PIRSTATE2");
                     insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
@@ -115,9 +118,10 @@ public class DebugActivity extends AppCompatActivity {
                 pressed -> {
                     distance.setText(pressed ? "" : "PERSON");
                 });
+
         mViewModel.getReadSwitchState().observe(this,
                 pressed -> {
-                    DoorContact.setText(pressed ? "CLOSED" : "OPEN");
+                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
                 });
     }
 

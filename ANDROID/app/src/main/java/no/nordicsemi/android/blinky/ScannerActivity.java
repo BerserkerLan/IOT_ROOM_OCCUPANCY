@@ -44,18 +44,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DevicesAdapter;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.utils.Utils;
+import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.ScannerStateLiveData;
 import no.nordicsemi.android.blinky.viewmodels.ScannerViewModel;
 
-public class ScannerActivity extends AppCompatActivity implements DevicesAdapter.OnItemClickListener {
+public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnItemClickListener {
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
 	private ScannerViewModel mScannerViewModel;
@@ -76,7 +75,7 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 
 		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.app_name);
+		getSupportActionBar().setTitle(R.string.app_name);
 
 		// Create view model containing utility methods for scanning
 		mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
@@ -86,7 +85,7 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-		((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 		final DevicesAdapter adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
@@ -175,7 +174,7 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 	}
 
 	/**
-	 * Start scanning for Bluetooth devices or displays a message based on the scanner state.
+	 * Start scanning for Bluetooth devices or displays databaseInstance message based on the scanner state.
 	 */
 	private void startScan(final ScannerStateLiveData state) {
 		// First, check the Location permission. This is required on Marshmallow onwards in order
