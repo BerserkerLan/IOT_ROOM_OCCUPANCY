@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "no.nordicsemi.android.nrfblinky"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 9
         versionName "2.4.0"
@@ -37,6 +37,9 @@ android {
 }
 
 dependencies {
+
+    implementation "org.jetbrains.anko:anko:0.10.8" //Anko library
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha03'
@@ -55,7 +58,7 @@ dependencies {
     // BLE library
     implementation 'no.nordicsemi.android:ble:2.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // To add BLE Library as a module, replace the above dependency with the following
+    // To add BLE Library as databaseInstance module, replace the above dependency with the following
     // and uncomment 2 lines in settings.gradle file.
     // implementation project(":ble")
 }

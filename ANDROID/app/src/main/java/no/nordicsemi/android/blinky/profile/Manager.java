@@ -86,7 +86,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
     @Override
     public void log(final int priority, @NonNull final String message) {
-        // The priority is a Log.X constant, while the Logger accepts it's log levels.
+        // The priority is databaseInstance Log.X constant, while the Logger accepts it's log levels.
         Logger.log(mLogSession, LogContract.Log.Level.fromPriority(priority), message);
     }
 

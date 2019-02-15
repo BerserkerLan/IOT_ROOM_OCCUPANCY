@@ -35,7 +35,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
 /**
  * This class keeps the current list of discovered Bluetooth LE devices matching filter.
- * Each time @{link {@link #applyFilter()} is called, the observers are notified with a new
+ * Each time @{link {@link #applyFilter()} is called, the observers are notified with databaseInstance new
  * list instance.
  */
 @SuppressWarnings("unused")
@@ -72,7 +72,7 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 	/* package */ synchronized boolean deviceDiscovered(final ScanResult result) {
 		DiscoveredBluetoothDevice device;
 
-		// Check if it's a new device.
+		// Check if it's databaseInstance new device.
 		final int index = indexOf(result);
 		if (index == -1) {
 			device = new DiscoveredBluetoothDevice(result);

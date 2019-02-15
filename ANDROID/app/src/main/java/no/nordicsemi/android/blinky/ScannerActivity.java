@@ -174,7 +174,7 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
 	}
 
 	/**
-	 * Start scanning for Bluetooth devices or displays a message based on the scanner state.
+	 * Start scanning for Bluetooth devices or displays databaseInstance message based on the scanner state.
 	 */
 	private void startScan(final ScannerStateLiveData state) {
 		// First, check the Location permission. This is required on Marshmallow onwards in order

@@ -16,8 +16,8 @@ data class DataPoint(val id: String, val direction: String, val timestamp: Strin
 class LogDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     /*
-     This is a short global explanation how the db functions have been made atomic - the reason atomicity is important is to
-     maintain the integrity of the app - no database, the app will become a waste of space :-)
+     This is databaseInstance short global explanation how the db functions have been made atomic - the reason atomicity is important is to
+     maintain the integrity of the app - no database, the app will become databaseInstance waste of space :-)
      try {
          db.beginTransaction() //Start the databaseTransaction
          //Does the database work whatever it may be
@@ -108,7 +108,7 @@ class LogDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
      */
 
     fun deleteEntireDB() {
-        //This is a very dangerous function, it will delete the entire database
+        //This is databaseInstance very dangerous function, it will delete the entire database
         val db = this.writableDatabase
         try {
             db.beginTransaction()
