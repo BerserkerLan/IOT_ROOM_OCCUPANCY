@@ -50,10 +50,11 @@ import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DevicesAdapter;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.utils.Utils;
+import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.ScannerStateLiveData;
 import no.nordicsemi.android.blinky.viewmodels.ScannerViewModel;
 
-public class ScannerActivity extends AppCompatActivity implements DevicesAdapter.OnItemClickListener {
+public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnItemClickListener {
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
 	private ScannerViewModel mScannerViewModel;

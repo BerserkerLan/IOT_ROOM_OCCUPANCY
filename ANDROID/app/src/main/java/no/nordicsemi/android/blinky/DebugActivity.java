@@ -35,10 +35,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
+import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
+import no.nordicsemi.android.blinky.viewmodels.MainActivity;
 
 @SuppressWarnings("ConstantConditions")
-public class DebugActivity extends AppCompatActivity {
+public class DebugActivity extends BaseActivity {
     public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
     private BlinkyViewModel mViewModel;
@@ -56,6 +58,7 @@ public class DebugActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
+        switchActivity(new MainActivity());
 
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);

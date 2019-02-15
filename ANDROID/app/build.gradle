@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -52,7 +54,11 @@ dependencies {
     implementation 'no.nordicsemi.android:log:2.2.0'
     // BLE library
     implementation 'no.nordicsemi.android:ble:2.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // To add BLE Library as a module, replace the above dependency with the following
     // and uncomment 2 lines in settings.gradle file.
     // implementation project(":ble")
+}
+repositories {
+    mavenCentral()
 }
