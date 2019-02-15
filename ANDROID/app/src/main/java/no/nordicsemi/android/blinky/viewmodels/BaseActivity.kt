@@ -10,6 +10,7 @@ import android.content.Intent
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
+
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2 {
 
     fun switchActivity(activityName:Activity){
