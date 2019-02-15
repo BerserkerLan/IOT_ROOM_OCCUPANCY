@@ -88,7 +88,6 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_summary"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/button_tool_bar" />
 
@@ -145,7 +144,6 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_2"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/button_tool_bar2" />
 

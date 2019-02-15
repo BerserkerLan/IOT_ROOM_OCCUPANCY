@@ -48,9 +48,9 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
 
     public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
-    private final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
-    private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
-    private final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //DISTANCE //:TODO Replace
+    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    public final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
+    public final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB"); //DISTANCE
 
 
     /**
@@ -60,7 +60,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
     private final static UUID READSWITCH_UUID = UUID.fromString("0000B005-0000-1000-8000-00805F9B34FB");
-    private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB"); //:TODO Replace
+    private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
 
     private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic;
     private LogSession mLogSession;
@@ -125,7 +125,6 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
         @Override
         public void distancestatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-            //TODO: EDIT THIS LATER
             mCallbacks.onPIRStateChanged(device, pressed);
         }
 
@@ -143,12 +142,10 @@ public class Manager extends BleManager<ManagerCallbacks> {
             setNotificationCallback(readSwitchCharacteristics).with(readSwitchCallBack);
             setNotificationCallback(distanceCharacteristic).with(distanceCallBack);
 
-
             readCharacteristic(pirCharacteristic).with(pir1callBack).enqueue();
             readCharacteristic(pir2Characteristic).with(pir2callBack).enqueue();
             readCharacteristic(readSwitchCharacteristics).with(readSwitchCallBack).enqueue();
             readCharacteristic(distanceCharacteristic).with(distanceCallBack).enqueue();
-
 
             enableNotifications(pirCharacteristic).enqueue();
             enableNotifications(pir2Characteristic).enqueue();
@@ -161,15 +158,28 @@ public class Manager extends BleManager<ManagerCallbacks> {
             final BluetoothGattService pirService1 = gatt.getService(LBS_UUID_SERVICE_PIR1);
             final BluetoothGattService pirService2 = gatt.getService(LBS2_UUID_SERVICE_PIR2);
             final BluetoothGattService readSwitchService = gatt.getService(LBS3_UUID_SERVICE_READSWITCH);
-            final BluetoothGattService distanceSensorService = gatt.getService(LBS4_UUID_SERVICE_DISTANCE);
+            //final BluetoothGattService distanceSensorService = gatt.getService(LBS4_UUID_SERVICE_DISTANCE);
 
             if (pirService1 != null) {
                 pirCharacteristic = pirService1.getCharacteristic(PIR_UUID);
+            }
+
+            if (pirService2 != null) {
                 pir2Characteristic = pirService2.getCharacteristic(PIR2_UUID);
+            }
+
+            if (readSwitchService != null) {
                 readSwitchCharacteristics = readSwitchService.getCharacteristic(READSWITCH_UUID);
+            }
+
+            /*
+            if(distanceSensorService!=null){
                 distanceCharacteristic = distanceSensorService.getCharacteristic(DISTANCE_UUID);
             }
+            */
+
             return true;
+
         }
 
         @Override
@@ -188,4 +198,3 @@ public class Manager extends BleManager<ManagerCallbacks> {
     }
 
 }
-

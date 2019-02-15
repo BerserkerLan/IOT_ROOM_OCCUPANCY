@@ -102,16 +102,25 @@ public class DebugActivity extends AppCompatActivity {
         });
 
         mViewModel.getPIR1state().observe(this,
-                pressed -> outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed));
+                pressed -> {
+                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                });
 
         mViewModel.getPIR2state().observe(this,
-                pressed -> insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed));
+                pressed -> {
+                    System.out.println("PIRSTATE2");
+                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                });
 
         mViewModel.getDistanceState().observe(this,
-                pressed -> distance.setText(pressed ? "" : "PERSON"));
+                pressed -> {
+                    distance.setText(pressed ? "" : "PERSON");
+                });
 
         mViewModel.getReadSwitchState().observe(this,
-                pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
+                pressed -> {
+                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
+                });
     }
 
     @OnClick(R.id.action_clear_cache)
