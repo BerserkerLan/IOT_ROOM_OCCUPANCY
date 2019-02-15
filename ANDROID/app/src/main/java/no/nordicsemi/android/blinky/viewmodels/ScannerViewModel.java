@@ -129,7 +129,7 @@ public class ScannerViewModel extends AndroidViewModel {
 	 * @param nearbyOnly if true, the list will show only devices with high RSSI.
 	 */
 	public void filterByDistance(final boolean nearbyOnly) {
-		mPreferences.edit().putBoolean(PREFS_FILTER_NEARBY_ONLY, false).apply();
+		mPreferences.edit().putBoolean(PREFS_FILTER_NEARBY_ONLY, nearbyOnly).apply();
 		if (mDevicesLiveData.filterByDistance(nearbyOnly))
 			mScannerStateLiveData.recordFound();
 		else

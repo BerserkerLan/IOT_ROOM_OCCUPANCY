@@ -48,9 +48,9 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
 
     public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
-    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
-    public final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("INSERT HERE"); //READSWITCH
-    public final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("INSERT HERE"); //DISTANCE
+    private final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
+    private final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //DISTANCE //:TODO Replace
 
 
     /**
@@ -59,8 +59,8 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
-    private final static UUID READSWITCH_UUID = UUID.fromString("INSERT HERE");
-    private final static UUID DISTANCE_UUID = UUID.fromString("INSERT HERE");
+    private final static UUID READSWITCH_UUID = UUID.fromString("0000B005-0000-1000-8000-00805F9B34FB");
+    private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB"); //:TODO Replace
 
     private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic;
     private LogSession mLogSession;
@@ -115,7 +115,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
         @Override
         public void readswitchstatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-            mCallbacks.onPIRStateChanged(device, pressed);
+            mCallbacks.readswitchstatechanged(device, pressed);
         }
 
     };
@@ -125,6 +125,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
 
         @Override
         public void distancestatechanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+            //TODO: EDIT THIS LATER
             mCallbacks.onPIRStateChanged(device, pressed);
         }
 
