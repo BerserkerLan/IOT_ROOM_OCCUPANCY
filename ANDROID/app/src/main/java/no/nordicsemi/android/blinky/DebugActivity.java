@@ -22,6 +22,7 @@
 
 package no.nordicsemi.android.blinky;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,6 @@ import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
-import no.nordicsemi.android.blinky.viewmodels.MainActivity;
 
 @SuppressWarnings("ConstantConditions")
 public class DebugActivity extends BaseActivity {
@@ -53,11 +53,26 @@ public class DebugActivity extends BaseActivity {
     @BindView(R.id.DISTNACE)
     TextView distance;
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exiting Activity?")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    resetCounter();
+                    super.onBackPressed();
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+    }
+
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
-        switchActivity(new MainActivity());
 
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
@@ -110,7 +125,6 @@ public class DebugActivity extends BaseActivity {
 
         mViewModel.getPIR2state().observe(this,
                 pressed -> {
-                    System.out.println("PIRSTATE2");
                     insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
                 });
 
