@@ -89,7 +89,8 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
         mScannerViewModel.getScannerState().observe(this, this::startScan);
         mScannerViewModel.getDevices().observe(this, devices -> {
-            for (int i = 0; i < devices.size() - 1; i++) {
+            System.out.println(">>>>>>>> in herer");
+            for (int i = 0; i < devices.size(); i++) {
                 if (devices.get(i).getAddress().equals(MAC_ADDRESS_1) || devices.get(i).getAddress().equals(MAC_ADDRESS_2)) {
                     final Intent controlBlinkIntent = new Intent(this, DebugActivity.class);
                     controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, devices.get(i));
@@ -107,8 +108,6 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
-
-        //  Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(0)).itemView.performClick();
     }
 
     @Override

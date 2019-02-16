@@ -112,13 +112,7 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
         for (final DiscoveredBluetoothDevice device : mDevices) {
             final ScanResult result = device.getScanResult();
             if (matchesUuidFilter(result) && matchesNearbyFilter(device.getHighestRssi())) {
-                System.out.println(">>>>>>>" + device.getAddress());
-                if (device.getAddress().equals(MAC_ADDRESS_1)) {
-                    devices.add(device);
-                }
-                if (device.getAddress().equals(MAC_ADDRESS_2)) {
-                    devices.add(device);
-                }
+                devices.add(device);
             }
         }
         mFilteredDevices = devices;

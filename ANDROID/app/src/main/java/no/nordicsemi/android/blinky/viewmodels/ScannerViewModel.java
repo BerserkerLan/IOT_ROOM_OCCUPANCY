@@ -184,10 +184,6 @@ public class ScannerViewModel extends AndroidViewModel{
                 mDevicesLiveData.applyFilter();
                 mScannerStateLiveData.recordFound();
             }
-
-            if(mDevicesLiveData.deviceDiscovered(result)){
-
-            }
         }
 
         @Override

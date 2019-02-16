@@ -22,6 +22,7 @@
 
 package no.nordicsemi.android.blinky;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -43,15 +44,29 @@ public class DebugActivity extends BaseActivity {
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.outSidePIR) TextView outSidePIR;
-    @BindView(R.id.insidePIR) TextView insidePIR;
-    @BindView(R.id.doorContact) TextView DoorContact;
-    @BindView(R.id.DISTNACE) TextView distance;
+    @BindView(R.id.outSidePIR)
+    TextView outSidePIR;
+    @BindView(R.id.insidePIR)
+    TextView insidePIR;
+    @BindView(R.id.doorContact)
+    TextView DoorContact;
+    @BindView(R.id.DISTNACE)
+    TextView distance;
 
     @Override
     public void onBackPressed() {
-        resetCounter();
-        super.onBackPressed();
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exiting Activity?")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    resetCounter();
+                    super.onBackPressed();
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
+
     }
 
     protected void onCreate(final Bundle savedInstanceState) {
@@ -104,16 +119,24 @@ public class DebugActivity extends BaseActivity {
         });
 
         mViewModel.getPIR1state().observe(this,
-                pressed -> { outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed); });
+                pressed -> {
+                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                });
 
         mViewModel.getPIR2state().observe(this,
-                pressed -> { insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed); });
+                pressed -> {
+                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                });
 
         mViewModel.getDistanceState().observe(this,
-                pressed -> { distance.setText(pressed ? "" : "PERSON"); });
+                pressed -> {
+                    distance.setText(pressed ? "" : "PERSON");
+                });
 
         mViewModel.getReadSwitchState().observe(this,
-                pressed -> { DoorContact.setText(pressed ? "OPEN" : "CLOSED"); });
+                pressed -> {
+                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
+                });
     }
 
     @OnClick(R.id.action_clear_cache)
