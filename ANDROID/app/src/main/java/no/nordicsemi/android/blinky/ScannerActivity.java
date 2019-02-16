@@ -56,10 +56,9 @@ import no.nordicsemi.android.blinky.viewmodels.ScannerViewModel;
 
 public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnItemClickListener {
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
-    private static final String MAC_ADDRESS_1 = "C1:9B:1E:4C:4B:7E";
-    private static final String MAC_ADDRESS_2 = "E1:73:24:C0:17:DB";
-
     private ScannerViewModel mScannerViewModel;
+    private static final String MAC_ADDRESS_1 = "C1:9B:1E:4C:4B:7E";
+    private static final String MAC_ADDRESS_2 = "E1:7E:24:C0:17:DB";
 
     @BindView(R.id.state_scanning)
     View mScanningView;
@@ -89,15 +88,27 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         // Create view model containing utility methods for scanning
         mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
         mScannerViewModel.getScannerState().observe(this, this::startScan);
+        mScannerViewModel.getDevices().observe(this, devices -> {
+            for (int i = 0; i < devices.size() - 1; i++) {
+                if (devices.get(i).getAddress().equals(MAC_ADDRESS_1) || devices.get(i).getAddress().equals(MAC_ADDRESS_2)) {
+                    final Intent controlBlinkIntent = new Intent(this, DebugActivity.class);
+                    controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, devices.get(i));
+                    startActivity(controlBlinkIntent);
+                }
+            }
+        });
 
         // Configure the recycler view
         final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
         final DevicesAdapter adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
+
+
+        //  Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(0)).itemView.performClick();
     }
 
     @Override
