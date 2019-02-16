@@ -36,7 +36,6 @@ import butterknife.OnClick;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
-import no.nordicsemi.android.blinky.viewmodels.MainActivity;
 
 @SuppressWarnings("ConstantConditions")
 public class DebugActivity extends BaseActivity {
@@ -44,20 +43,21 @@ public class DebugActivity extends BaseActivity {
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.outSidePIR)
-    TextView outSidePIR;
-    @BindView(R.id.insidePIR)
-    TextView insidePIR;
-    @BindView(R.id.doorContact)
-    TextView DoorContact;
-    @BindView(R.id.DISTNACE)
-    TextView distance;
+    @BindView(R.id.outSidePIR) TextView outSidePIR;
+    @BindView(R.id.insidePIR) TextView insidePIR;
+    @BindView(R.id.doorContact) TextView DoorContact;
+    @BindView(R.id.DISTNACE) TextView distance;
+
+    @Override
+    public void onBackPressed() {
+        resetCounter();
+        super.onBackPressed();
+    }
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
-        switchActivity(new MainActivity());
 
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
@@ -104,25 +104,16 @@ public class DebugActivity extends BaseActivity {
         });
 
         mViewModel.getPIR1state().observe(this,
-                pressed -> {
-                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
-                });
+                pressed -> { outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed); });
 
         mViewModel.getPIR2state().observe(this,
-                pressed -> {
-                    System.out.println("PIRSTATE2");
-                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
-                });
+                pressed -> { insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed); });
 
         mViewModel.getDistanceState().observe(this,
-                pressed -> {
-                    distance.setText(pressed ? "" : "PERSON");
-                });
+                pressed -> { distance.setText(pressed ? "" : "PERSON"); });
 
         mViewModel.getReadSwitchState().observe(this,
-                pressed -> {
-                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
-                });
+                pressed -> { DoorContact.setText(pressed ? "OPEN" : "CLOSED"); });
     }
 
     @OnClick(R.id.action_clear_cache)
