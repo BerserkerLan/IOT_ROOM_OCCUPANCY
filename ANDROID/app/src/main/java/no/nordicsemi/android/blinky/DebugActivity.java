@@ -25,6 +25,7 @@ package no.nordicsemi.android.blinky;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,12 +62,22 @@ public class DebugActivity extends BaseActivity {
                 .setMessage("Are you sure?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     resetCounter();
-                    super.onBackPressed();
+                    final Intent controlBlinkIntent = new Intent(this, SplashScreenActivity.class);
+                    startActivity(controlBlinkIntent);
                     finish();
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     protected void onCreate(final Bundle savedInstanceState) {
