@@ -67,4 +67,6 @@
     <string name="state_initializing">Initializing…</string>
     <string name="state_disconnected">Device disconnected.</string>
     <string name="button_2">OUTSIDE PIR</string>
+    <string name="openclose">OPEN OR CLOSE THE DOOR</string>
+    <string name="distance_sensor">Distance Sensor</string>
 </resources>

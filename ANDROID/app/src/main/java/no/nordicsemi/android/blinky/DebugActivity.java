@@ -120,8 +120,6 @@ public class DebugActivity extends BaseActivity {
             }
         });
 
-        mViewModel.isConnected().observe(this, this::onConnectionStateChanged);
-
         mViewModel.isSupported().observe(this, supported -> {
             if (!supported) {
                 progressContainer.setVisibility(View.GONE);
@@ -154,9 +152,4 @@ public class DebugActivity extends BaseActivity {
     public void onTryAgainClicked() {
         mViewModel.reconnect();
     }
-
-    private void onConnectionStateChanged(final boolean connected) {
-
-    }
-
 }
