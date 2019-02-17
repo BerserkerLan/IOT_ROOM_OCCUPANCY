@@ -106,7 +106,6 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
                     MAC2 = true;
                     MAC2_DEVICE = devices.get(i);
                 }
-
             }
 
             if (MAC1 && MAC2) {
