@@ -21,10 +21,12 @@
   -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-	android:width="600dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="600dp"
 	android:height="440dp"
 	android:viewportHeight="440"
-	android:viewportWidth="597">
+	android:viewportWidth="597"
+    tools:ignore="VectorRaster">
 	<path
 		android:name="background"
 		android:fillColor="@color/colorNordicLogoBottom"

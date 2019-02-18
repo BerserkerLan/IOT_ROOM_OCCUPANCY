@@ -199,7 +199,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="OPEN OR CLOSE THE DOOR"
+                        android:text="@string/openclose"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/button_tool_bar3" />
 
@@ -255,7 +255,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="Distnce Sensor"
+                        android:text="@string/distance_sensor"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/button_tool_bar4" />
 

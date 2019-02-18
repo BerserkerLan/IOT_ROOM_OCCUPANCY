@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import no.nordicsemi.android.blinky.utils.LogDatabase
+import no.nordicsemi.android.blinky.utils.UserDatabase
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
+    lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
+    lateinit var counterReference: TextView //Lateinit counter reference
+    var currentCount = 0 //Keeping track of the currentCount
+    lateinit var tts: TextToSpeech //Lateinit instance of the tts
 
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
@@ -37,11 +41,10 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
     }
 
-    lateinit var databaseInstance: LogDatabase
-    lateinit var counterReference: TextView
-    var currentCount = 0
-    lateinit var tts: TextToSpeech
 
+    /**
+     * Overriding onDestroy, to safely disable the TTS
+     */
     public override fun onDestroy() {
         try {
             tts.stop()
@@ -73,6 +76,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
+    /**
+     * This will increment the counter
+     */
     fun incrementCounter() {
         currentCount++
         try {
@@ -82,6 +88,10 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
+
+    /**
+     * This will decrement the counter, but not allow non zero
+     */
     fun decrementCounter() {
         currentCount--
         if (currentCount >= 0) {
@@ -101,6 +111,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
+    /**
+     * Function to make switching activities a little easier
+     */
     @Suppress("unused")
     fun switchActivity(activityName: Activity) {
         val myIntent = Intent(this, activityName::class.java)

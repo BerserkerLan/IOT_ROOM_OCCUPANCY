@@ -13,7 +13,7 @@ data class DataPoint(val id: String, val direction: String, val timestamp: Strin
 
 
 @Suppress("unused")
-class LogDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+class UserDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     /*
      This is databaseInstance short global explanation how the db functions have been made atomic - the reason atomicity is important is to
