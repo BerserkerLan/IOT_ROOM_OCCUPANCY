@@ -118,13 +118,13 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
                     builder.setMessage("Which Device?")
                             .setCancelable(false)
                             .setPositiveButton("Device 1", (dialog, id) -> {
-                                final Intent controlBlinkIntent = new Intent(getApplicationContext(), DebugActivity.class);
-                                controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, finalMAC2_DEVICE);
+                                final Intent controlBlinkIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, finalMAC2_DEVICE);
                                 startActivity(controlBlinkIntent);
                             })
                             .setNegativeButton("Device 2", (dialog, id) -> {
-                                final Intent controlBlinkIntent = new Intent(getApplicationContext(), DebugActivity.class);
-                                controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, finalMAC1_DEVICE);
+                                final Intent controlBlinkIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, finalMAC1_DEVICE);
                                 startActivity(controlBlinkIntent);
                             });
                     AlertDialog alert = builder.create();
@@ -134,13 +134,13 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
             } //If we reach this stage, its either MAC1 or MAC2, cannot be both
             else if (MAC2) {
                 //Start with MAC2
-                final Intent controlBlinkIntent = new Intent(this, DebugActivity.class);
-                controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, MAC2_DEVICE);
+                final Intent controlBlinkIntent = new Intent(this, MainActivity.class);
+                controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, MAC2_DEVICE);
                 startActivity(controlBlinkIntent);
             } else if (MAC1) {
                 //Start with MAC1
-                final Intent controlBlinkIntent = new Intent(this, DebugActivity.class);
-                controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, MAC1_DEVICE);
+                final Intent controlBlinkIntent = new Intent(this, MainActivity.class);
+                controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, MAC1_DEVICE);
                 startActivity(controlBlinkIntent);
             }
         });
@@ -194,8 +194,8 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
 
     @Override
     public void onItemClick(@NonNull final DiscoveredBluetoothDevice device) {
-        final Intent controlBlinkIntent = new Intent(this, DebugActivity.class);
-        controlBlinkIntent.putExtra(DebugActivity.EXTRA_DEVICE, device);
+        final Intent controlBlinkIntent = new Intent(this, MainActivity.class);
+        controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, device);
         startActivity(controlBlinkIntent);
     }
 
