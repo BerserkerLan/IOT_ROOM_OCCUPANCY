@@ -40,7 +40,7 @@ import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
 
 @SuppressWarnings("ConstantConditions")
-public class DebugActivity extends BaseActivity {
+public class MainActivity extends BaseActivity {
     public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
     private BlinkyViewModel mViewModel;
