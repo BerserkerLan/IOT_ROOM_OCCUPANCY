@@ -4,7 +4,7 @@
       <meta  charset='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
       <script type="text/javascript" src="day.js"></script>
-      <script type="text/javascript" src="day.js"></script>          
+      <script type="text/javascript" src="today.js"></script>          
       <title>IotSSC Appleton Tower Room 4.12</title>
       <!-- Mapbox Dependencies -->
       <link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.0/mapbox.css' rel='stylesheet' />
@@ -106,7 +106,9 @@
                   <div class="row">
                      <div class="col-sm-6">
                         <div class="chart-title knob-title">
-                           Today			                  
+                           Today: <span id="sameday"></span>
+            			<script type="text/javascript">window.onload = sameday('sameday');
+				</script>			                  
                         </div>
                         <div class="chart-stage">
                            <input type="text" class="users" value="0"/>
@@ -114,7 +116,9 @@
                      </div>
                      <div class="col-sm-6">
                         <div class="chart-title knob-title">			
-                           Last visited on the same day 
+                           Last: <span id="sameday1"></span>
+            			<script type="text/javascript">window.onload = sameday('sameday1');
+				</script>				
                         </div>
                         <div class="chart-stage">
                            <input type="text" class="errors" value="0"/>
