@@ -1,4 +1,4 @@
-package no.nordicsemi.android.blinky.viewmodels
+package no.nordicsemi.android.blinky.Activities
 
 import android.annotation.SuppressLint
 import android.app.Activity

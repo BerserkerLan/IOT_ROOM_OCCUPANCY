@@ -20,7 +20,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.blinky;
+package no.nordicsemi.android.blinky.Activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -48,10 +48,10 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DevicesAdapter;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.utils.Utils;
-import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.ScannerStateLiveData;
 import no.nordicsemi.android.blinky.viewmodels.ScannerViewModel;
 
