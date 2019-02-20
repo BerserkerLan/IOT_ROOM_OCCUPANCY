@@ -12,12 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
 import java.text.SimpleDateFormat
 import java.util.*
-import android.provider.SyncStateContract.Helpers.update
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FieldValue.serverTimestamp
-import javax.swing.UIManager.put
-
-
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
@@ -29,31 +23,53 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
     lateinit var db: FirebaseFirestore
 
-
-    private fun addUserCollection(name: String, email: String) {
-        // Create a new user with a first and last name
+    @Synchronized
+    private fun sensorTriggerred(sensorType: String) {
         val user = HashMap<String, Any>()
-        user["Email"] = email
-        user["Name"] = name
-        val a = arrayListOf<String>()
-        user["CollectedMarkers"] = a
-
+        user[getCurrentTimeUsingDate().replace("/", "")] = getDate()
         // Add a new document
-        db.collection("PIR_IN").document(getDate())
-                .set(user)
-                .addOnSuccessListener { }
-                .addOnFailureListener { }
-    }
+        when (sensorType) {
+            "PIRIN" -> {
+                println(">>>>>>>>1")
+                db.collection("PIR_IN").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { }
+            }
+            "PIROUT" -> {
+                println(">>>>>>>>2")
+                db.collection("PIR_OUT").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { }
+            }
+            "READOPEN" -> {
+                println(">>>>>>>>3")
+                db.collection("READ_OPEN").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { }
+            }
+            "READCLOSED" -> {
+                println(">>>>>>>>4")
+                db.collection("READ_CLOSED").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener { }
+                        .addOnFailureListener { }
+            }
+            else -> {
 
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
         db = FirebaseFirestore.getInstance()
-        addUserCollection("", "")
-        addUserPIRIN()
-        addUserDOORCLOSED()
-        addUserDOOROPEN()
-        addUserPIROUT()
+        sensorTriggerred("PIRIN")
+        sensorTriggerred("PIROUT")
+        sensorTriggerred("READOPEN")
+        sensorTriggerred("PEADCLOSED")
         super.onCreate(savedInstanceState)
     }
 
@@ -61,9 +77,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
     }
 
-    private fun getID() {
-
-    }
 
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTimeUsingDate(): String {
@@ -81,34 +94,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         val formatted = format1.format(cal.time)
         println(formatted.length)
         return formatted.toString()
-    }
-
-    @Synchronized
-    fun addUserPIRIN() {
-        //val a = getCurrentTimeUsingDate().replace("/", "")
-        //val map = HashMap<String, Any>()
-       // map[a] = a
-      //  db.collection("PIRIN").document(getDate()).set(map)
-
-    }
-
-    @Synchronized
-    fun addUserPIROUT() {
-        // Create a new user with a first and last name
-        //  db.collection("PIR_OUT").document(getDate()).collection(getTimeStamp())
-    }
-
-    @Synchronized
-    fun addUserDOOROPEN() {
-        // Create a new user with a first and last name
-        //  db.collection("DOOR_OPEN").document(getDate()).collection(getTimeStamp())
-    }
-
-    @Synchronized
-    fun addUserDOORCLOSED() {
-        // Create a new user with a first and last name
-        //  db.collection("DOOR_CLOSED").document(getDate()).collection(getTimeStamp())
-
     }
 
 
