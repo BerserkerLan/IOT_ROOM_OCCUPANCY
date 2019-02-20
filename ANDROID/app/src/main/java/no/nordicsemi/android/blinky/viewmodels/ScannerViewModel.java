@@ -205,7 +205,7 @@ public class ScannerViewModel extends AndroidViewModel{
 
         @Override
         public void onScanFailed(final int errorCode) {
-            System.out.println(">>>>>in here");
+            // TODO This should be handled
             mScannerStateLiveData.scanningStopped();
         }
     };

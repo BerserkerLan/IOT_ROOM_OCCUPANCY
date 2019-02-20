@@ -33,29 +33,42 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
                 println(">>>>>>>>1")
                 db.collection("PIR_IN").document(getDate())
                         .update(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             "PIROUT" -> {
-                println(">>>>>>>>2")
                 db.collection("PIR_OUT").document(getDate())
                         .update(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             "READOPEN" -> {
-                println(">>>>>>>>3")
                 db.collection("READ_OPEN").document(getDate())
                         .update(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             "READCLOSED" -> {
-                println(">>>>>>>>4")
                 db.collection("READ_CLOSED").document(getDate())
                         .update(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             else -> {
 
@@ -69,7 +82,7 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         sensorTriggerred("PIRIN")
         sensorTriggerred("PIROUT")
         sensorTriggerred("READOPEN")
-        sensorTriggerred("PEADCLOSED")
+        sensorTriggerred("READCLOSED")
         super.onCreate(savedInstanceState)
     }
 
