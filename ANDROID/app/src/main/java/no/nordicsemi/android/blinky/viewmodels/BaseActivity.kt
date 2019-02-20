@@ -32,21 +32,27 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
             "PIRIN" -> {
                 println(">>>>>>>>1")
                 db.collection("PIR_IN").document(getDate())
-                        .set(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .update(user)
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             "PIROUT" -> {
-                println(">>>>>>>>2")
                 db.collection("PIR_OUT").document(getDate())
-                        .set(user)
-                        .addOnSuccessListener { }
-                        .addOnFailureListener { }
+                        .update(user)
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
             }
             "READOPEN" -> {
-                println(">>>>>>>>3")
                 db.collection("READ_OPEN").document(getDate())
-                        .set(user)
+                        .update(user)
                         .addOnSuccessListener {
 
                         }
@@ -55,11 +61,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
                         }
             }
             "READCLOSED" -> {
-                println(">>>>>>>>4")
                 db.collection("READ_CLOSED").document(getDate())
-                        .set(user)
+                        .update(user)
                         .addOnSuccessListener {
-
 
                         }
                         .addOnFailureListener {

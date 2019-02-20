@@ -90,24 +90,25 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
         mScannerViewModel.getScannerState().observe(this, this::startScan);
         mScannerViewModel.getDevices().observe(this, devices -> {
-
             boolean MAC1 = false;
             no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice MAC1_DEVICE = null;
             boolean MAC2 = false;
             no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice MAC2_DEVICE = null;
-
-            for (int i = 0; i < devices.size(); i++) {
-                if (MAC1 && MAC2) {
-                    break;
-                } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_1)) {
-                    MAC1 = true;
-                    MAC1_DEVICE = devices.get(i);
-                } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_2)) {
-                    MAC2 = true;
-                    MAC2_DEVICE = devices.get(i);
+            try {
+                for (int i = 0; i < devices.size(); i++) {
+                    if (MAC1 && MAC2) {
+                        break;
+                    } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_1)) {
+                        MAC1 = true;
+                        MAC1_DEVICE = devices.get(i);
+                    } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_2)) {
+                        MAC2 = true;
+                        MAC2_DEVICE = devices.get(i);
+                    }
                 }
-            }
+            } catch (Exception ignored) {
 
+            }
             if (MAC1 && MAC2) {
                 if (!showingDialog) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
