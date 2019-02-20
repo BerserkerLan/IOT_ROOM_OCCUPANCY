@@ -12,6 +12,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
 import java.text.SimpleDateFormat
 import java.util.*
+import android.provider.SyncStateContract.Helpers.update
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FieldValue.serverTimestamp
+import javax.swing.UIManager.put
+
+
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
@@ -59,14 +65,10 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
     }
 
-    private fun getTimeStamp(): String {
-        return ""
-    }
-
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTimeUsingDate(): String {
         val date = Date()
-        val strDateFormat = "hh:mm:ss a"
+        val strDateFormat = "hh/mm/ss/a"
         val dateFormat = SimpleDateFormat(strDateFormat)
         return dateFormat.format(date)
     }
@@ -77,13 +79,17 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         val cal = Calendar.getInstance()
         val format1 = SimpleDateFormat("yyyyMMdd")
         val formatted = format1.format(cal.time)
-        println(formatted)
+        println(formatted.length)
         return formatted.toString()
     }
 
     @Synchronized
     fun addUserPIRIN() {
-        db.collection("PIRIN").document(getDate()).collection(getTimeStamp())
+        //val a = getCurrentTimeUsingDate().replace("/", "")
+        //val map = HashMap<String, Any>()
+       // map[a] = a
+      //  db.collection("PIRIN").document(getDate()).set(map)
+
     }
 
     @Synchronized
