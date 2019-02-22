@@ -1,4 +1,4 @@
-package no.nordicsemi.android.blinky.viewmodels
+package no.nordicsemi.android.blinky.Activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -24,65 +24,73 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     lateinit var db: FirebaseFirestore
 
     @Synchronized
-    private fun sensorTriggerred(sensorType: String) {
-        val user = HashMap<String, Any>()
-        user[getCurrentTimeUsingDate().replace("/", "")] = getDate()
-        // Add a new document
-        when (sensorType) {
-            "PIRIN" -> {
-                println(">>>>>>>>1")
-                db.collection("PIR_IN").document(getDate())
-                        .update(user)
-                        .addOnSuccessListener {
+    private fun sensorTriggerred(sensorType: String, count: Int) {
+        if (count >= 1) {
+            val user = HashMap<String, Any>()
+            println(getCurrentTimeUsingDate().replace("/", "").replace(".",""))
+            user[getCurrentTimeUsingDate().replace("/", "").replace(".","")] = count
+            // Add a new document
+            when (sensorType) {
+                "PIRIN" -> {
+                    db.collection("PIR_IN").document(getDate())
+                            .set(user)
+                            .addOnSuccessListener {
 
-                        }
-                        .addOnFailureListener {
+                            }
+                            .addOnFailureListener {
 
-                        }
+                            }
+
+                }
+
+                "PIROUT" -> {
+                    db.collection("PIR_OUT").document(getDate())
+                            .set(user)
+                            .addOnSuccessListener {
+
+                            }
+                            .addOnFailureListener {
+
+                            }
+                }
+
+                /* "READOPEN" -> {
+                    db.collection("READ_OPEN").document(getDate())
+                            .update(user)
+                            .addOnSuccessListener {
+
+                            }
+                            .addOnFailureListener {
+
+                            }
+
+                }
+
+                "READCLOSED" -> {
+                    db.collection("READ_CLOSED").document(getDate())
+                            .update(user)
+                            .addOnSuccessListener {
+
+                            }
+                            .addOnFailureListener {
+
+                            }
+                }
+                */
+                else -> {
+
+                }
             }
-            "PIROUT" -> {
-                db.collection("PIR_OUT").document(getDate())
-                        .update(user)
-                        .addOnSuccessListener {
+        } else {
 
-                        }
-                        .addOnFailureListener {
-
-                        }
-            }
-            "READOPEN" -> {
-                db.collection("READ_OPEN").document(getDate())
-                        .update(user)
-                        .addOnSuccessListener {
-
-                        }
-                        .addOnFailureListener {
-
-                        }
-            }
-            "READCLOSED" -> {
-                db.collection("READ_CLOSED").document(getDate())
-                        .update(user)
-                        .addOnSuccessListener {
-
-                        }
-                        .addOnFailureListener {
-
-                        }
-            }
-            else -> {
-
-            }
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
         db = FirebaseFirestore.getInstance()
-        sensorTriggerred("PIRIN")
-        sensorTriggerred("PIROUT")
-        sensorTriggerred("READOPEN")
-        sensorTriggerred("READCLOSED")
+        sensorTriggerred("PIRIN", 1)
         super.onCreate(savedInstanceState)
     }
 
