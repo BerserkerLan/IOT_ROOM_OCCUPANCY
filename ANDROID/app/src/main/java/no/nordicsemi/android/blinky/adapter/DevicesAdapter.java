@@ -38,7 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import no.nordicsemi.android.blinky.R;
-import no.nordicsemi.android.blinky.ScannerActivity;
+import no.nordicsemi.android.blinky.Activities.ScannerActivity;
 import no.nordicsemi.android.blinky.viewmodels.DevicesLiveData;
 
 @SuppressWarnings("unused")

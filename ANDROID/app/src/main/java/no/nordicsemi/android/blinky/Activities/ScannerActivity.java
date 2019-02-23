@@ -20,7 +20,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.blinky;
+package no.nordicsemi.android.blinky.Activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -48,10 +48,10 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DevicesAdapter;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.utils.Utils;
-import no.nordicsemi.android.blinky.viewmodels.BaseActivity;
 import no.nordicsemi.android.blinky.viewmodels.ScannerStateLiveData;
 import no.nordicsemi.android.blinky.viewmodels.ScannerViewModel;
 
@@ -91,8 +91,8 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         mScannerViewModel.getScannerState().observe(this, this::startScan);
         mScannerViewModel.getDevices().observe(this, devices -> {
             boolean MAC1 = false;
-            boolean MAC2 = false;
             no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice MAC1_DEVICE = null;
+            boolean MAC2 = false;
             no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice MAC2_DEVICE = null;
             try {
                 for (int i = 0; i < devices.size(); i++) {
@@ -109,7 +109,6 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
             } catch (Exception ignored) {
 
             }
-
             if (MAC1 && MAC2) {
                 if (!showingDialog) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);

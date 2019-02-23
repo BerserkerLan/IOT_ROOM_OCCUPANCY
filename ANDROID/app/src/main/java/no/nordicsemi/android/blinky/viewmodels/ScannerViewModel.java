@@ -36,6 +36,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import no.nordicsemi.android.blinky.Activities.ScannerActivity;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.utils.Utils;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
@@ -104,7 +105,7 @@ public class ScannerViewModel extends AndroidViewModel{
     /**
      * Forces the observers to be notified. This method is used to refresh the screen after the
      * location permission has been granted. In result, the observer in
-     * {@link no.nordicsemi.android.blinky.ScannerActivity} will try to start scanning.
+     * {@link ScannerActivity} will try to start scanning.
      */
     public void refresh() {
         mScannerStateLiveData.refresh();
