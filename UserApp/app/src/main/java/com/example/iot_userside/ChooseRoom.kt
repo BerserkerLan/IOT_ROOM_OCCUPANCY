@@ -1,35 +1,25 @@
 package com.example.iot_userside
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.webkit.WebView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
-class ChooseLevel : BaseActivity() {
-    private lateinit var myWebView: WebView
-
-    @SuppressLint("SetJavaScriptEnabled")
+class ChooseRoom : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val faq = mutableMapOf<String, Int>() //map to store a list of questions and answers
-        faq["Level -1"] = -1
-        faq["Level 0"] = 0
-        faq["Level 1"] = 1
-        faq["Level 2"] = 2
-        faq["Level 3"] = 3
-        faq["Level 4"] = 4
-        faq["Level 5"] = 5
-        faq["Level 6"] = 6
-        faq["Level 7"] = 7
-        faq["Level 8"] = 8
-        faq["Level 9"] = 9
+        val faq = mutableMapOf<String, String>() //map to store a list of questions and answers
+        faq["4.05"] = ""
+        faq["4.06"] = ""
+        faq["4.07"] = ""
+        faq["4.08"] = ""
+        faq["4.09"] = ""
+        faq["4.10"] = ""
+        faq["4.11"] = ""
+        faq["4.12"] = "4.12"
+        faq["4.13"] = ""
+        faq["4.14"] = ""
+        faq["4.14A"] = ""
 
         scrollView {
             verticalLayout {
@@ -39,18 +29,17 @@ class ChooseLevel : BaseActivity() {
                     button {
                         background
                         text = f.key
-                        background = if (f.value == 4) {
+                        background = if (f.value == "4.12") {
                             buttonGreen()
                         } else {
                             buttonGrey()
                         }
                         onClick {
-                            if (f.value == 4) {
-                                switchActivity(ChooseRoom())
+                            if (f.value == "4.12") {
+                                switchActivity(WebView())
                             } else {
-                                toast("Data on this floor is not available")
+                                toast("Data on this room is not available")
                             }
-
                         }
                     }.lparams(width = matchParent) {
                         topMargin = dip(10)
@@ -58,5 +47,6 @@ class ChooseLevel : BaseActivity() {
                 }
             }
         }
+
     }
 }
