@@ -1,5 +1,6 @@
-package com.example.iot_userside
+package com.miftekhar.iot_userside
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -26,6 +27,7 @@ open class BaseActivity : AppCompatActivity() {
         setStroke(2, Color.BLACK)
     }
 
+    @SuppressLint("PrivateResource")
     fun buttonGrey() = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
         cornerRadius = 100f

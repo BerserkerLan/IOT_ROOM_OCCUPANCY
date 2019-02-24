@@ -1,4 +1,4 @@
-package com.example.iot_userside
+package com.miftekhar.iot_userside
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

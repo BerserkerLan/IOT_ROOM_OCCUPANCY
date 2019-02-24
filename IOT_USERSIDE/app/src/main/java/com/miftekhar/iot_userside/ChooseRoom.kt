@@ -1,4 +1,4 @@
-package com.example.iot_userside
+package com.miftekhar.iot_userside
 
 import android.os.Bundle
 import org.jetbrains.anko.*

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.iot_userside">
+          package="com.miftekhar.iot_userside">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,21 +11,21 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ChooseRoom">
+        <activity android:name="com.miftekhar.iot_userside.ChooseRoom">
         </activity>
-        <activity android:name=".BaseActivity">
+        <activity android:name="com.miftekhar.iot_userside.BaseActivity">
         </activity>
         <activity
-                android:name=".ChooseLevel"
+                android:name="com.miftekhar.iot_userside.ChooseLevel"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_choose_level"
                 android:theme="@style/FullscreenTheme">
         </activity>
         <activity
-                android:name=".WebView"
+                android:name="com.miftekhar.iot_userside.WebView"
                 android:label="@string/app_name">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.miftekhar.iot_userside.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
