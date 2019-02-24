@@ -1,9 +1,8 @@
-package com.example.iot_userside
+package com.miftekhar.iot_userside
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.WindowManager
