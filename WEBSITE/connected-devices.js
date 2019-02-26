@@ -1,3 +1,21 @@
+
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-auth.js"
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-messaging.js"
+src="https://www.gstatic.com/firebasejs/5.8.4/firebase-functions.js"
+
+const firebaseApp = firebase.initializeApp({
+  apiKey: "AIzaSyC-vZnOFnjnZbIHfMJFaXPhPSxY65w64uM",
+  authDomain: "iotssc.firebaseapp.com",
+  databaseURL: "https://iotssc.firebaseio.com",
+  projectId: "iotssc",
+  storageBucket: "iotssc.appspot.com",
+  messagingSenderId: "628664425338"
+});
+
+
 var client = new Keen({
   projectId: '5337e28273f4bb4499000000',
   readKey: '8827959317a6a01257bbadf16c12eff4bc61a170863ca1dadf9b3718f56bece1ced94552c6f6fcda073de70bf860c622ed5937fcca82d57cff93b432803faed4108d2bca310ca9922d5ef6ea9381267a5bd6fd35895caec69a7e414349257ef43a29ebb764677040d4a80853e11b8a3f'
@@ -7,6 +25,175 @@ var geoProject = new Keen({
   projectId: '53eab6e12481962467000000',
   readKey: 'd1b97982ce67ad4b411af30e53dd75be6cf610213c35f3bd3dd2ef62eaeac14632164890413e2cc2df2e489da88e87430af43628b0c9e0b2870d0a70580d5f5fe8d9ba2a6d56f9448a3b6f62a5e6cdd1be435c227253fbe3fab27beb0d14f91b710d9a6e657ecf47775281abc17ec455'
 });
+
+function updateDisplay() {
+  $('#day').html(date_time('day').toString());
+//  $('#sameday').html(getTotalToday().toString());
+//  $('#getTotalYesturday').html(getTotalYesturday().toString());
+}
+
+function getMostPopularDay(){
+  var db = firebaseApp.firestore();
+  const comments = [];
+  //This will get the most popular day
+  var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+      console.log("Document data:", doc.data());
+      const MOST_POPULAR_DAY = doc.data()['Day'];
+      return MOST_POPULAR_DAY;
+     // document.write(comment);
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+  });
+}
+
+function getMostPopularMonth(){
+  var db = firebaseApp.firestore();
+  const comments = [];
+  //This will get the most popular month
+  var docRef = db.collection("AUX").doc("MOST_POPULAR_MONTH");
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+      console.log("Document data:", doc.data());
+      const MOST_POPULAR_MONTH = doc.data()['Month'];
+      return MOST_POPULAR_MONTH;
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+  });
+}
+
+function getMostPopularTime(){
+  var db = firebaseApp.firestore();
+  const comments = [];
+  //This will get the most popular time
+  var docRef = db.collection("AUX").doc("MOST_POPULAR_TIME");
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+      console.log("Document data:", doc.data());
+      const MOST_POPULAR_TIME = doc.data()['Time'];
+      return MOST_POPULAR_TIME;
+     // document.write(comment);
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+ });
+}
+
+function getMonthlyStats(){
+  var db = firebaseApp.firestore();
+  const comments = [];
+  //This will get the most popular time
+  var docRef = db.collection("PROCESSED").doc("24022019");
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+    //console.log("DOC DATA" + )
+    //console.log("DOC DATA : " + doc.data());
+    var theData = doc.data()['HOURLY'];
+    console.log("The Data", theData);
+    return theData;
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+ });
+}
+
+function getYesterdaysDate() {
+    var date = new Date();
+    date.setDate(date.getDate()-1);
+    console.log("Yesterday date", String( date.getDate() + '' + (date.getMonth()+1) + '' + date.getFullYear()));
+    return date.getDate() + '' + (date.getMonth()+1) + '' + date.getFullYear();
+}
+
+function getTodaysDate(){
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1; //January is 0 otherwise
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  today = dd +  mm + yyyy;
+  return today;
+}
+
+function getDailyStats(){
+  //  console.log(getTodaysDate());
+}
+
+
+function date_time(id)
+{
+        date = new Date;
+        year = date.getFullYear();
+        month = date.getMonth();
+        months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
+        d = date.getDate();
+        day = date.getDay();
+        days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        h = date.getHours();
+        if(h<10)
+        {
+                h = "0"+h;
+        }
+        m = date.getMinutes();
+        if(m<10)
+        {
+                m = "0"+m;
+        }
+        s = date.getSeconds();
+        if(s<10)
+        {
+                s = "0"+s;
+        }
+        result = ''+days[day]+' '+months[month]+' '+d+' '+year+' '+h+':'+m+':'+s;
+        document.getElementById(id).innerHTML = result;
+        setTimeout('date_time("'+id+'");','1000');
+        return true;
+}
+
+function getTotalToday(){
+  var db = firebaseApp.firestore();
+  const comments = [];
+  //This will get the most popular time
+  console.log("The Data", String(getTodaysDate()));
+  var docRef = db.collection("PROCESSED").doc(String(getTodaysDate()));
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+    var theData = doc.data()['TOTALTODAY'];
+    console.log("The Data", theData);
+
+    return theData;
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+ });
+ console.log("getTotalToday is: ", "Finished");
+}
+
+function getTotalYesturday(){
+
+}
+
+
 
 Keen.ready(function(){
 
@@ -34,7 +221,10 @@ Keen.ready(function(){
   tabVisitors.onclick = selectVisitorTab;
   tabBrowsers.onclick = selectBrowserTab;
   tabGeography.onclick = selectGeographyTab;
+
   selectVisitorTab();
+  updateDisplay();
+
 
   function selectVisitorTab(e) {
     if (e && e.preventDefault) {
