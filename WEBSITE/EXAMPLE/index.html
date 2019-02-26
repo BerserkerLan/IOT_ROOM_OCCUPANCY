@@ -3,74 +3,20 @@
 
 <head>
   <title>Firebase Basic Example</title>
-  <!-- including FusionCharts core package JS files -->
   <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
   <link rel="stylesheet" href="assets/css/main.css">
-
-
   <script src="assets/scripts/app.js"></script>
   <script>
   //  window.addEventListener("load", genFunction());
-
-    getMostPopularDay();
+    /*getMostPopularDay();
     getMostPopularTime();
     getMostPopularMonth();
+    getMonthlyStats();
+    getDailyStats();*/
+    getTotalToday();
+    getYesterdaysDate();
 
-    function getMostPopularDay(){
-      var db = firebaseApp.firestore();
-      const comments = [];
-      //This will get the most popular day
-      var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
-      docRef.get().then(function(doc) {
-      if (doc.exists) {
-          console.log("Document data:", doc.data());
-          const MOST_POPULAR_DAY = doc.data()['Day'];
-         // document.write(comment);
-      } else {
-          console.log("No such document!");
-      }
-      }).catch(function(error) {
-      console.log("Error getting document:", error);
-      });
-    }
-
-    function getMostPopularMonth(){
-      var db = firebaseApp.firestore();
-      const comments = [];
-      //This will get the most popular month
-      var docRef = db.collection("AUX").doc("MOST_POPULAR_MONTH");
-      docRef.get().then(function(doc) {
-      if (doc.exists) {
-          console.log("Document data:", doc.data());
-          const MOST_POPULAR_MONTH = doc.data()['Month'];
-         // document.write(comment);
-      } else {
-          console.log("No such document!");
-      }
-      }).catch(function(error) {
-      console.log("Error getting document:", error);
-      });
-
-    }
-
-    function getMostPopularTime(){
-      var db = firebaseApp.firestore();
-      const comments = [];
-      //This will get the most popular time
-      var docRef = db.collection("AUX").doc("MOST_POPULAR_TIME");
-      docRef.get().then(function(doc) {
-      if (doc.exists) {
-          console.log("Document data:", doc.data());
-          const MOST_POPULAR_TIME = doc.data()['Time'];
-         // document.write(comment);
-      } else {
-          console.log("No such document!");
-      }
-      }).catch(function(error) {
-      console.log("Error getting document:", error);
-     });
-    }
 
   </script>
 </head>
