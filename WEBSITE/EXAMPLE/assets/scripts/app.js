@@ -15,24 +15,3 @@ const firebaseApp = firebase.initializeApp({
   messagingSenderId: "628664425338"
 });
 
-
-
-/*var config = {
-    apiKey: "AIzaSyC-vZnOFnjnZbIHfMJFaXPhPSxY65w64uM",
-    authDomain: "iotssc.firebaseapp.com",
-    databaseURL: "https://iotssc.firebaseio.com",
-    projectId: "iotssc",
-    storageBucket: "iotssc.appspot.com",
-    messagingSenderId: "628664425338"
-  };
-  firebase.initializeApp(config);
-*/
-
-/*
-const auth = firebaseApp.auth();
-const db = firebaseApp.firestore();
-db.collection("PIR_IN").get().then(function(querySnapshot) {
-querySnapshot.forEach(function(doc) {
-    console.log(doc.id, " => ", doc.data());
-});
-*/

@@ -18,27 +18,57 @@
   </script>
   <script>
     window.addEventListener("load", genFunction());
-
-
     function genFunction() {
 
-      document.write("TEST1");
-    /*  var docRef = db.collection("PROCESSED").doc("24022019");
-      docRef.get().then(function(doc) {
-        // Document was found in the cache. If no cached document exists,
-        // an error will be returned to the 'catch' block below.i
-
-            console.log("Document data:", doc.data());
-      }).catch(function(error) {
-
-            console.log("Document data:");
-      }); */
+    document.write("TEST1");
     var db = firebaseApp.firestore();
-    db.collection("PIR_IN").get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        console.log(doc.id, " => ", doc.data());
+    var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
+    const comments = [];
+
+    //This will get the most popular day
+    var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+        const MOST_POPULAR_DAY = doc.data()['Day'];
+       // document.write(comment);
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
     });
-});
+
+    //This will get the most popular month
+    var docRef = db.collection("AUX").doc("MOST_POPULAR_MONTH");
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+        const MOST_POPULAR_MONTH = doc.data()['Month'];
+       // document.write(comment);
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
+    });
+
+    //This will get the most popular time
+    var docRef = db.collection("AUX").doc("MOST_POPULAR_TIME");
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+        const MOST_POPULAR_TIME = doc.data()['Time'];
+       // document.write(comment);
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
+   });
+
+
+
 
       document.write("TEST2");
     }
