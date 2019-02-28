@@ -97,22 +97,23 @@
                </div>
                <div class="chart-stage">
                   <div class="row">
-                     <div class="col-sm-6">
-                        <div class="chart-title knob-title">
-                           Today: <span id="sameday"></span>
-                        </div>
-                        <div class="chart-stage">
-                           <input type="text" class="users" value="0"/>
-                        </div>
+                    <div class="col-sm-6">
+                      <div class="chart-title knob-title">
+                         Today: <span id="sameday"></span>
+                         <script type="text/javascript">window.onload = sameday('sameday');</script>
+                      </div>
+                      <div class="chart-stage">
+                         <input type="text" class="users" value="0"/>
+                      </div>
+                   </div>
+                   <div class="chart-title knob-title">
+                        Previous <span id="sameday1"></span>
+                        <script type="text/javascript">window.onload = sameday('sameday1');</script>
                      </div>
-                     <div class="col-sm-6">
-                        <div class="chart-title knob-title">
-                           Previous <span id="sameday1"></span>
-                        </div>
-                        <div class="chart-stage">
-                           <input type="text" class="errors" value="0"/>
-                        </div>
+                     <div class="chart-stage">
+                        <input type="text" class="errors" value="0"/>
                      </div>
+                  </div>
                   </div>
                </div>
             </div>
