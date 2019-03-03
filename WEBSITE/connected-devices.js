@@ -32,6 +32,12 @@ function updateDisplay(Todays1) {
 //  $('#getTotalYesturday').html(getTotalYesturday().toString());
 }
 
+var totalToday = "UNCHANGED";
+var monthlyStats = "UNCHANGED";
+var mostPopularTime = "UNCHANGED";
+var mostPopularM0nth = "UNCHANGED";
+var mostPopularDay = "UNCHANGED";
+
 function getMostPopularDay(){
   var db = firebaseApp.firestore();
   const comments = [];
@@ -39,10 +45,10 @@ function getMostPopularDay(){
   var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
   docRef.get().then(function(doc) {
   if (doc.exists) {
-      console.log("Document data:", doc.data());
       const MOST_POPULAR_DAY = doc.data()['Day'];
+      mostPopularDay = MOST_POPULAR_DAY;
+      console.log("fin");
       return MOST_POPULAR_DAY;
-     // document.write(comment);
   } else {
       console.log("No such document!");
   }
@@ -50,6 +56,8 @@ function getMostPopularDay(){
   console.log("Error getting document:", error);
   });
 }
+//alert("Value of 'mostPopularDay' outside the function " + mostPopularDay ); //outputs 20
+
 
 function getMostPopularMonth(){
   var db = firebaseApp.firestore();
@@ -58,8 +66,8 @@ function getMostPopularMonth(){
   var docRef = db.collection("AUX").doc("MOST_POPULAR_MONTH");
   docRef.get().then(function(doc) {
   if (doc.exists) {
-      console.log("Document data:", doc.data());
       const MOST_POPULAR_MONTH = doc.data()['Month'];
+      mostPopularMonth = MOST_POPULAR_MONTH;
       return MOST_POPULAR_MONTH;
   } else {
       console.log("No such document!");
@@ -76,10 +84,10 @@ function getMostPopularTime(){
   var docRef = db.collection("AUX").doc("MOST_POPULAR_TIME");
   docRef.get().then(function(doc) {
   if (doc.exists) {
-      console.log("Document data:", doc.data());
       const MOST_POPULAR_TIME = doc.data()['Time'];
+      mostPopularTime = MOST_POPULAR_TIME;
+      console.log("TEST", mostPopularTime);
       return MOST_POPULAR_TIME;
-     // document.write(comment);
   } else {
       console.log("No such document!");
   }
@@ -88,6 +96,7 @@ function getMostPopularTime(){
  });
 }
 
+
 function getMonthlyStats(){
   var db = firebaseApp.firestore();
   const comments = [];
@@ -95,10 +104,8 @@ function getMonthlyStats(){
   var docRef = db.collection("PROCESSED").doc("24022019");
   docRef.get().then(function(doc) {
   if (doc.exists) {
-    //console.log("DOC DATA" + )
-    //console.log("DOC DATA : " + doc.data());
     var theData = doc.data()['HOURLY'];
-    console.log("The Data", theData);
+    monthlyStats = theData;
     return theData;
   } else {
       console.log("No such document!");
@@ -111,7 +118,6 @@ function getMonthlyStats(){
 function getYesterdaysDate() {
     var date = new Date();
     date.setDate(date.getDate()-1);
-    console.log("Yesterday date", String( date.getDate() + '' + (date.getMonth()+1) + '' + date.getFullYear()));
     return date.getDate() + '' + (date.getMonth()+1) + '' + date.getFullYear();
 }
 
@@ -177,13 +183,11 @@ function getTotalToday(){
   var db = firebaseApp.firestore();
   const comments = [];
   //This will get the most popular time
-  console.log("The Data", String(getTodaysDate()));
   var docRef = db.collection("PROCESSED").doc(String(getTodaysDate()));
   docRef.get().then(function(doc) {
   if (doc.exists) {
     var theData = doc.data()['TOTALTODAY'];
-    console.log("The Data", theData);
-
+    totalToday =  doc.data()['TOTALTODAY'];
     return theData;
   } else {
       console.log("No such document!");
@@ -191,17 +195,37 @@ function getTotalToday(){
   }).catch(function(error) {
   console.log("Error getting document:", error);
  });
- console.log("getTotalToday is: ", "Finished");
 }
 
-function getTotalYesturday(){
 
+
+getTotalToday();
+/*getMonthlyStats();
+getMostPopularTime();
+getMostPopularMonth();
+getMostPopularDay(); */
+/*
+console.log("The Total Today", totalToday);
+console.log("Monthly Stats", monthlyStats);
+console.log("Most Popular time", mostPopularTime);
+console.log("Most Popular Month", mostPopularM0nth);
+console.log("Most Popular Day", mostPopularDay);
+*/
+
+function myFunction(value1,value2,value3)
+{
+     var returnedObject = {};
+     returnedObject["value1"] = value1;
+     returnedObject["value2"] = value2;
+     return returnedObject;
 }
+
+var returnValue = getMonthlyStats();
+console.log("Return values ",returnValue);
 
 
 
 Keen.ready(function(){
-
   //console.log(getDateONEWEEKAGO());
   var tabVisitors = document.getElementById('tab-visitors');
   var tabBrowsers = document.getElementById('tab-browsers');
@@ -211,7 +235,7 @@ Keen.ready(function(){
   var chart_visitors = new Keen.Dataviz()
     .el('#visitors')
     .height(300)
-    .title('Monthly Visits')
+    .title('Daily Visits')
     .type('area');
 
   var chart_browsers = new Keen.Dataviz()
@@ -229,7 +253,7 @@ Keen.ready(function(){
   tabGeography.onclick = selectGeographyTab;
 
   selectVisitorTab();
-  updateDisplay("MAHBUB");
+  updateDisplay();
 
 
   function selectVisitorTab(e) {
