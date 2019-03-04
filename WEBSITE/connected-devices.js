@@ -34,13 +34,9 @@ function updateDisplay(Todays1) {
 
 
 function getAUXInformationCallBack(day, month, time){
-  //Do something
   $('#mostPopularTime').html(time.toString());
   $('#mostPopularMonth').html(month.toString());
   $('#mostPopularDay').html(day.toString());
-  console.log("DAY", day);
-  console.log("MONTH", month);
-  console.log("DAY", time);
 }
 
 function getAUXInformation(){
@@ -381,30 +377,6 @@ Keen.ready(function(){
     .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
     .title(null)
     .render();
-
-
-  // ----------------------------------------
-  // Mapbox - Active Users
-  // ----------------------------------------
-  var tframe = {
-    start: '2014-01-01',
-    end: '2014-02-01'
-  };
-
-  var DEFAULTS = {
-    coordinates: {
-      lat: 37.77350,
-      lng: -122.41104
-    },
-    zoom: 11
-  };
-
-  var initialize,
-      map,
-      markerStart = DEFAULTS.coordinates;
-
-  var activeMapData,
-      heat;
 
   function setActiveButton(button) {
     var classButtonNormal = 'btn btn-default';
