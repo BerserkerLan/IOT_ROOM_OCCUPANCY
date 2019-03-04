@@ -36,6 +36,8 @@ function updateDisplay(Todays1) {
 function getAUXInformationCallBack(day, month, time){
   //Do something
   $('#mostPopularTime').html(time.toString());
+  $('#mostPopularMonth').html(month.toString());
+  $('#mostPopularDay').html(day.toString());
   console.log("DAY", day);
   console.log("MONTH", month);
   console.log("DAY", time);
@@ -367,47 +369,19 @@ Keen.ready(function(){
       alert('An error occurred fetching Device Crashes metric');
     });
 
-
-  // ----------------------------------------
-  // Funnel
-  // ----------------------------------------
-  // var funnel = new Keen.Query('funnel', {
-  //   steps: [
-  //     {
-  //        event_collection: 'purchases',
-  //        actor_property: 'user.id'
-  //     },
-  //     {
-  //       event_collection: 'activations',
-  //       actor_property: 'user.id'
-  //     },
-  //     {
-  //       event_collection: 'status_update',
-  //       actor_property: 'user.id'
-  //     },
-  //     {
-  //       event_collection: 'user_action',
-  //       actor_property: 'user.id',
-  //       filters: [] // where property 'total_sessions' == 2
-  //     },
-  //     {
-  //       event_collection: 'user_action',
-  //       actor_property: 'user.id',
-  //       filters: [] // where property 'action' equals 'invited friend'
-  //     }
-  //   ]
-  // });
-
   /*  This funnel is built from mock data */
+
+
   var sample_funnel = new Keen.Dataviz()
     .el('#chart-05')
     .colors(['#00cfbb'])
-    .data({ result: [ 3250, 3000, 2432, 1504, 321 ] })
+    .data({ result: [ 100, 100, 100, 100, 100, 100, 100] })
     .height(340)
     .type('bar')
-    .labels(['Purchased Device', 'Activated Device', 'First Session', 'Second Session', 'Invited Friend'])
+    .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
     .title(null)
     .render();
+
 
   // ----------------------------------------
   // Mapbox - Active Users
