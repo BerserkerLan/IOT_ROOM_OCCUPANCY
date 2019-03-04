@@ -28,80 +28,43 @@ var geoProject = new Keen({
 
 function updateDisplay(Todays1) {
   $('#day').html(date_time('day').toString());
-  //$('#sameday').html(Todays1.toString());
-//  $('#getTotalYesturday').html(getTotalYesturday().toString());
+
+  //$('#getTotalYesturday').html(getTotalYesturday().toString());
 }
 
-var totalToday = "UNCHANGED";
-var monthlyStats = "UNCHANGED";
-var mostPopularTime = "UNCHANGED";
-var mostPopularM0nth = "UNCHANGED";
-var mostPopularDay = "UNCHANGED";
 
-function getMostPopularDay(){
+function getAUXInformationCallBack(day, month, time){
+  //Do something
+  $('#mostPopularTime').html(time.toString());
+  console.log("DAY", day);
+  console.log("MONTH", month);
+  console.log("DAY", time);
+}
+
+function getAUXInformation(){
   var db = firebaseApp.firestore();
   const comments = [];
   //This will get the most popular day
-  var docRef = db.collection("AUX").doc("MOST_POPULAR_DAY");
+  var docRef = db.collection("AUX").doc("INFO");
   docRef.get().then(function(doc) {
   if (doc.exists) {
-      const MOST_POPULAR_DAY = doc.data()['Day'];
-      mostPopularDay = MOST_POPULAR_DAY;
-      console.log("fin");
-      return MOST_POPULAR_DAY;
+      var MOST_POPULAR_DAY = doc.data()['DAY'];
+      var MOST_POPULAR_MONTH = doc.data()['MONTH'];
+      var MOST_POPULAR_TIME = doc.data()['TIME'];
+      getAUXInformationCallBack(MOST_POPULAR_DAY,MOST_POPULAR_MONTH,MOST_POPULAR_TIME);
   } else {
-      console.log("No such document!");
+    console.log("No such document!");
   }
   }).catch(function(error) {
   console.log("Error getting document:", error);
   });
 }
-//alert("Value of 'mostPopularDay' outside the function " + mostPopularDay ); //outputs 20
-
-
-function getMostPopularMonth(){
-  var db = firebaseApp.firestore();
-  const comments = [];
-  //This will get the most popular month
-  var docRef = db.collection("AUX").doc("MOST_POPULAR_MONTH");
-  docRef.get().then(function(doc) {
-  if (doc.exists) {
-      const MOST_POPULAR_MONTH = doc.data()['Month'];
-      mostPopularMonth = MOST_POPULAR_MONTH;
-      return MOST_POPULAR_MONTH;
-  } else {
-      console.log("No such document!");
-  }
-  }).catch(function(error) {
-  console.log("Error getting document:", error);
-  });
-}
-
-function getMostPopularTime(){
-  var db = firebaseApp.firestore();
-  const comments = [];
-  //This will get the most popular time
-  var docRef = db.collection("AUX").doc("MOST_POPULAR_TIME");
-  docRef.get().then(function(doc) {
-  if (doc.exists) {
-      const MOST_POPULAR_TIME = doc.data()['Time'];
-      mostPopularTime = MOST_POPULAR_TIME;
-      console.log("TEST", mostPopularTime);
-      return MOST_POPULAR_TIME;
-  } else {
-      console.log("No such document!");
-  }
-  }).catch(function(error) {
-  console.log("Error getting document:", error);
- });
-}
-
 
 function getMonthlyStats(){
   var db = firebaseApp.firestore();
   const comments = [];
   //This will get the most popular time
-  var docRef = db.collection("PROCESSED").doc("24022019");
+  var docRef = db.collection("PROCESSED").doc("MONTHS");
   docRef.get().then(function(doc) {
   if (doc.exists) {
     var theData = doc.data()['HOURLY'];
@@ -199,31 +162,7 @@ function getTotalToday(){
 
 
 
-getTotalToday();
-/*getMonthlyStats();
-getMostPopularTime();
-getMostPopularMonth();
-getMostPopularDay(); */
-/*
-console.log("The Total Today", totalToday);
-console.log("Monthly Stats", monthlyStats);
-console.log("Most Popular time", mostPopularTime);
-console.log("Most Popular Month", mostPopularM0nth);
-console.log("Most Popular Day", mostPopularDay);
-*/
-
-function myFunction(value1,value2,value3)
-{
-     var returnedObject = {};
-     returnedObject["value1"] = value1;
-     returnedObject["value2"] = value2;
-     return returnedObject;
-}
-
-var returnValue = getMonthlyStats();
-console.log("Return values ",returnValue);
-
-
+getAUXInformation();
 
 Keen.ready(function(){
   //console.log(getDateONEWEEKAGO());

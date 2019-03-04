@@ -54,7 +54,8 @@
          <div class="col-sm-6">
             <div class="chart-wrapper">
                <div class="todays-most-recent-hour">
-                  Todays most popular time is 00:00 with the room having a capacity of 0
+                  Todays most popular time is <span id="mostPopularTime"></span>
+                  <script type="text/javascript">window.onload = sameday('mostPopularTime');</script>
                </div>
                <div class="chart-title">
                   Traffic Statistics
@@ -103,7 +104,7 @@
                          <script type="text/javascript">window.onload = sameday('sameday');</script>
                       </div>
                       <div class="chart-stage">
-                         <input type="text" class="users" value="75"/>
+                         <input type="text" class="users" value=""/>
                       </div>
                    </div>
                    <div class="chart-title knob-title">
@@ -111,7 +112,7 @@
                         <script type="text/javascript">window.onload = sameday('sameday1');</script>
                      </div>
                      <div class="chart-stage">
-                        <input type="text" class="errors" value="75"/>
+                        <input type="text" class="errors" value=""/>
                      </div>
                   </div>
                   </div>
