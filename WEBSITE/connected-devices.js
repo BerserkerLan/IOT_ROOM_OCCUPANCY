@@ -62,24 +62,6 @@ function getAUXInformation(){
   });
 }
 
-function getMonthlyStats(){
-  var db = firebaseApp.firestore();
-  const comments = [];
-  //This will get the most popular time
-  var docRef = db.collection("PROCESSED").doc("MONTHS");
-  docRef.get().then(function(doc) {
-  if (doc.exists) {
-    var theData = doc.data()['HOURLY'];
-    monthlyStats = theData;
-    return theData;
-  } else {
-      console.log("No such document!");
-  }
-  }).catch(function(error) {
-  console.log("Error getting document:", error);
- });
-}
-
 function getYesterdaysDate() {
     var date = new Date();
     date.setDate(date.getDate()-1);
@@ -368,20 +350,44 @@ Keen.ready(function(){
     .catch(function(err) {
       alert('An error occurred fetching Device Crashes metric');
     });
-
+getMonthlyStats();
   /*  This funnel is built from mock data */
+  function getMonthlyStats(){
+    var db = firebaseApp.firestore();
+    const comments = [];
+    //This will get the most popular time
+    var docRef = db.collection("AUX").doc("AVERAGES");
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+      var theData = doc.data();
+      monthlyStats = theData;
+      console.log("In here!");
+      console.log("monthlyStats", monthlyStats);
+      var Monday = monthlyStats['Monday'];
+      var Tuesday = monthlyStats['Tuesday'];
+      var Wedensday = monthlyStats['Wedensday'];
+      var Thursday = monthlyStats['Thursday'];
+      var Friday = monthlyStats['Friday'];
+      var Saturday = monthlyStats['Saturday'];
+      var Sunday = monthlyStats['Sunday'];
 
-
-  var sample_funnel = new Keen.Dataviz()
-    .el('#chart-05')
-    .colors(['#00cfbb'])
-    .data({ result: [ 100, 100, 100, 100, 100, 100, 100] })
-    .height(340)
-    .type('bar')
-    .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
-    .title(null)
-    .render();
-
+      console.log("Monday: ", Monday);
+      var sample_funnel = new Keen.Dataviz()
+        .el('#chart-05')
+        .colors(['#00cfbb'])
+        .data({ result: [Monday,Tuesday, Wedensday, Thursday, Friday, Saturday,Sunday]})
+        .height(340)
+        .type('bar')
+        .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
+        .title(null)
+        .render();
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
+   });
+  }
 
   // ----------------------------------------
   // Mapbox - Active Users
