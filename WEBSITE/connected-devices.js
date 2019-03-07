@@ -346,8 +346,10 @@ Keen.ready(function(){
     .catch(function(err) {
       alert('An error occurred fetching Device Crashes metric');
     });
-getMonthlyStats();
+
   /*  This funnel is built from mock data */
+
+  getMonthlyStats();
   function getMonthlyStats(){
     var db = firebaseApp.firestore();
     const comments = [];
@@ -385,5 +387,28 @@ getMonthlyStats();
    });
   }
 
-initialize();
+
+  function setActiveButton(button) {
+    var classButtonNormal = 'btn btn-default';
+    var classButtonSelected = 'btn btn-primary';
+
+    switch (button) {
+    default:
+    case '7days':
+      document.getElementById('7days').className = classButtonSelected;
+      document.getElementById('14days').className = classButtonNormal;
+      document.getElementById('28days').className = classButtonNormal;
+      break;
+    case '14days':
+      document.getElementById('7days').className = classButtonNormal;
+      document.getElementById('14days').className = classButtonSelected;
+      document.getElementById('28days').className = classButtonNormal;
+      break;
+    case '28days':
+      document.getElementById('7days').className = classButtonNormal;
+      document.getElementById('14days').className = classButtonNormal;
+      document.getElementById('28days').className = classButtonSelected;
+      break;
+    }
+  }
 });
