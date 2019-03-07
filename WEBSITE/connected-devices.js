@@ -34,13 +34,9 @@ function updateDisplay(Todays1) {
 
 
 function getAUXInformationCallBack(day, month, time){
-  //Do something
   $('#mostPopularTime').html(time.toString());
   $('#mostPopularMonth').html(month.toString());
   $('#mostPopularDay').html(day.toString());
-  console.log("DAY", day);
-  console.log("MONTH", month);
-  console.log("DAY", time);
 }
 
 function getAUXInformation(){
@@ -388,97 +384,6 @@ getMonthlyStats();
     console.log("Error getting document:", error);
    });
   }
-
-  // ----------------------------------------
-  // Mapbox - Active Users
-  // ----------------------------------------
-  var tframe = {
-    start: '2014-01-01',
-    end: '2014-02-01'
-  };
-
-  var DEFAULTS = {
-    coordinates: {
-      lat: 37.77350,
-      lng: -122.41104
-    },
-    zoom: 11
-  };
-
-  var initialize,
-      map,
-      markerStart = DEFAULTS.coordinates;
-
-  var activeMapData,
-      heat;
-
-  function setActiveButton(button) {
-    var classButtonNormal = 'btn btn-default';
-    var classButtonSelected = 'btn btn-primary';
-
-    switch (button) {
-    default:
-    case '7days':
-      document.getElementById('7days').className = classButtonSelected;
-      document.getElementById('14days').className = classButtonNormal;
-      document.getElementById('28days').className = classButtonNormal;
-      break;
-    case '14days':
-      document.getElementById('7days').className = classButtonNormal;
-      document.getElementById('14days').className = classButtonSelected;
-      document.getElementById('28days').className = classButtonNormal;
-      break;
-    case '28days':
-      document.getElementById('7days').className = classButtonNormal;
-      document.getElementById('14days').className = classButtonNormal;
-      document.getElementById('28days').className = classButtonSelected;
-      break;
-    }
-  }
-
-  initialize = function() {
-    setActiveButton('7days');
-
-    document.getElementById('14days').addEventListener('click', function() {
-      setActiveButton('14days');
-      newgeoFilter = resize(newgeoFilter);
-      scoped_events.set({ filters: newgeoFilter,
-                          timeframe: {
-                            start: '2014-01-01',
-                            end: '2014-04-01'
-                          }
-                        });
-      runQuery();
-    });
-
-    document.getElementById('28days').addEventListener('click', function() {
-      setActiveButton('28days');
-      newgeoFilter = resize(newgeoFilter);
-      scoped_events.set({ filters: newgeoFilter,
-                          timeframe: {
-                            start: '2014-01-01',
-                            end: '2014-12-01'
-                          }
-                        });
-      runQuery();
-    });
-
-    document.getElementById('7days').addEventListener('click', function() {
-      setActiveButton('7days');
-      newgeoFilter = resize(newgeoFilter);
-      scoped_events.set({ filters: newgeoFilter,
-                          timeframe: {
-                            start: '2014-01-01',
-                            end: '2014-02-01'
-                          }
-                        });
-      runQuery();
-    });
-
-  };
-
-
-
 
 initialize();
 });
