@@ -54,8 +54,8 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
 
     // Flag that holds the on off state of the LED. On is true, Off is False
 
-    private final MutableLiveData<Boolean> pirState = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> pir2State = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> userIN = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> userOUT = new MutableLiveData<>();
     private final MutableLiveData<Boolean> readSwitchState = new MutableLiveData<>();
     private final MutableLiveData<Boolean> distanceState = new MutableLiveData<>();
 
@@ -67,16 +67,12 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return mConnectionState;
     }
 
-    public LiveData<Boolean> isConnected() {
-        return mIsConnected;
+    public LiveData<Boolean> userIN() {
+        return userIN;
     }
 
-    public LiveData<Boolean> getPIR1state() {
-        return pirState;
-    }
-
-    public LiveData<Boolean> getPIR2state() {
-        return pir2State;
+    public LiveData<Boolean> userOUT() {
+        return userOUT;
     }
 
     public LiveData<Boolean> getReadSwitchState() {
@@ -148,12 +144,12 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
 
     @Override
     public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-        pirState.postValue(pressed);
+        userIN.postValue(pressed);
     }
 
     @Override
     public void onPIR2StateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-        pir2State.postValue(pressed);
+        userOUT.postValue(pressed);
     }
 
     @Override

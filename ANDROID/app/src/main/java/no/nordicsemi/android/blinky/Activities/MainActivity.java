@@ -127,15 +127,9 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mViewModel.getPIR1state().observe(this,
-                pressed -> {
-                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
-                });
+        mViewModel.userIN().observe(this, this::insideState);
 
-        mViewModel.getPIR2state().observe(this,
-                pressed -> {
-                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
-                });
+        mViewModel.userOUT().observe(this, this::outsideState);
 
         mViewModel.getDistanceState().observe(this,
                 pressed -> {

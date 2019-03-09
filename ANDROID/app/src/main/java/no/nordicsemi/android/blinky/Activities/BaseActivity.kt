@@ -22,6 +22,33 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     var currentCount = 0 //Keeping track of the currentCount
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
     lateinit var db: FirebaseFirestore
+    var outsideState = false
+    var insideState = false
+
+
+
+    @Synchronized
+    fun insideState(state: Boolean): Boolean {
+        return if(state==insideState){
+            sensorTriggerred("PIRIN", 1)
+            false
+        } else {
+            insideState = state
+            true
+        }
+    }
+
+    @Synchronized
+    fun outsideState(state: Boolean): Boolean {
+        return if(state==outsideState){
+            sensorTriggerred("PIROUT", 1)
+            false
+        } else {
+            outsideState = state
+            true
+        }
+    }
+
 
     @Synchronized
     private fun sensorTriggerred(sensorType: String, count: Int) {
