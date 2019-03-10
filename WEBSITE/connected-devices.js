@@ -423,7 +423,6 @@ Keen.ready(function(){
         .labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', "Saturday", "Sunday"])
         .title(null)
         .render();
-
     } else {
         console.log("No such document!");
     }
