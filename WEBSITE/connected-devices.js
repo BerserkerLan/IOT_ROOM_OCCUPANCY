@@ -392,12 +392,9 @@ Keen.ready(function(){
    });
   }
 
-  getMonthlyStats();
-
-  function getMonthlyStats(){
+  dailyStats();
+  function dailyStats(){
     var db = firebaseApp.firestore();
-    const comments = [];
-    //This will get the most popular time
     var docRef = db.collection("AUX").doc("AVERAGES");
     docRef.get().then(function(doc) {
     if (doc.exists) {
@@ -405,19 +402,25 @@ Keen.ready(function(){
       monthlyStats = theData;
       var Monday = monthlyStats['Monday'];
       var Tuesday = monthlyStats['Tuesday'];
-      var Wedensday = monthlyStats['Wedensday'];
+      var Wednesday = monthlyStats['Wednesday'];
       var Thursday = monthlyStats['Thursday'];
       var Friday = monthlyStats['Friday'];
       var Saturday = monthlyStats['Saturday'];
       var Sunday = monthlyStats['Sunday'];
-
+      /*console.log("Monday", Monday);
+      console.log("Tuesday", Tuesday);
+      console.log("Wedensday", Wednesday);
+      console.log("Thursday", Thursday);
+      console.log("Friday", Friday);
+      console.log("Saturday", Saturday);
+      console.log("Sunday", Sunday); */
       var sample_funnel = new Keen.Dataviz()
         .el('#chart-05')
         .colors(['#00cfbb'])
-        .data({ result: [Monday,Tuesday, Wedensday, Thursday, Friday, Saturday,Sunday]})
+        .data({ result: [Monday,Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]})
         .height(340)
         .type('bar')
-        .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
+        .labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', "Saturday", "Sunday"])
         .title(null)
         .render();
 
