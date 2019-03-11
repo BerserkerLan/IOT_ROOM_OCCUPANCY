@@ -25,7 +25,6 @@ package no.nordicsemi.android.blinky.Activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -85,8 +84,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
-        addOutsideTimestamp();
-        insideStampsFunction("Add", getTimeStamp());
+
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
         final String deviceName = device.getName();
@@ -129,19 +127,25 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mViewModel.userIN().observe(this, this::insideState);
+        mViewModel.distance1().observe(this,
+                pressed -> {
+                    if (pressed) {
+                        sensorTriggerred("DISTANCE1");
+                    }
+                });
 
-        mViewModel.userOUT().observe(this, this::outsideState);
+        mViewModel.distance2().observe(this,
+                pressed -> {
+                    if (pressed) {
+                        sensorTriggerred("DISTANCE2");
+                    }
+                });
 
         mViewModel.getDistanceState().observe(this,
-                pressed -> {
-                    distance.setText(pressed ? "" : "PERSON");
-                });
+                pressed -> distance.setText(pressed ? "" : "PERSON"));
 
         mViewModel.getReadSwitchState().observe(this,
-                pressed -> {
-                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
-                });
+                pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
     }
 
     @OnClick(R.id.action_clear_cache)

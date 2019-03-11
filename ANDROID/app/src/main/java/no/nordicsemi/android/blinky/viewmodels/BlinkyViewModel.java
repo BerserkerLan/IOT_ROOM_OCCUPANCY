@@ -67,11 +67,11 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return mConnectionState;
     }
 
-    public LiveData<Boolean> userIN() {
+    public LiveData<Boolean> distance2() {
         return userIN;
     }
 
-    public LiveData<Boolean> userOUT() {
+    public LiveData<Boolean> distance1() {
         return userOUT;
     }
 

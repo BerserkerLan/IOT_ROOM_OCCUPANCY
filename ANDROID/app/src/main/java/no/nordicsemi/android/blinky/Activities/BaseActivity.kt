@@ -6,12 +6,9 @@ import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,165 +16,39 @@ import java.util.*
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
 
 
-
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
-    lateinit var counterReference: TextView //Lateinit counter reference
     var currentCount = 0 //Keeping track of the currentCount
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
     lateinit var db: FirebaseFirestore
-    @Volatile
-    var outsideStamps: MutableList<Long> = mutableListOf()
-    @Volatile
-    var insideStamps: MutableList<Long> = mutableListOf()
-
-
-    private fun theDifference(time1: Long, time2: Long): Boolean {
-        //This function returns true if the differnce is less than 1 second, else false
-        if (Math.abs(time1 - time2) in 0.0..1000.00) {
-            return true
-        }
-        return false
-    }
-
-    fun addInsideStamp(){
-        insideStamps.add(getTimeStamp())
-    }
-
-    fun addOutsideTimestamp(){
-        outsideStamps.add(getTimeStamp())
-    }
 
     @SuppressLint("SimpleDateFormat")
-    fun getTimeStamp(): Long {
+    fun getTimeStamp(): String {
         val date = Date()
-        println(">>>>>>data.time ${date.time}")
-        return date.time
+        return date.time.toString()
     }
 
     @Synchronized
-    fun outsideStampsFunction(action: String?, variableToAdd: Long?) {
-        if (action != null) {
-            if (action == "Add" && variableToAdd != null) {
-                outsideStamps.add(variableToAdd)
-                doAsync {
-                    Thread.sleep(1200)
-                    uiThread {
-                        outsideStampsFunction("Check", variableToAdd)
-                    }
-                }
+    fun sensorTriggerred(sensorType: String) {
+        val user = HashMap<String, Any>()
+        user[getTimeStamp()] = 1
+        // Add a new document
+        when (sensorType) {
+            "DISTANCE1" -> {
+                db.collection("D1").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener {}
+                        .addOnFailureListener {}
             }
-        }
-        if (action == "Check" && variableToAdd != null) {
-            //Here we will check if the outsideStamps contain
-            for (i in insideStamps) {
-                if (theDifference(variableToAdd, i)) {
-                    outsideStamps.remove(i)
-                    insideStamps.remove(variableToAdd)
-                    println(">>>>>>true")
-                    println(">>>>>> $outsideStamps")
-                    println(">>>>>> $insideStamps")
-                    speakOutWlcome()
-                    return
-                }
+            "DISTANCE2" -> {
+                db.collection("D2").document(getDate())
+                        .update(user)
+                        .addOnSuccessListener {}
+                        .addOnFailureListener {}
             }
         }
     }
 
-    @Synchronized
-    fun insideStampsFunction(action: String?, variableToAdd: Long?) {
-        if (action != null) {
-            if (action == "Add" && variableToAdd != null) {
-                insideStamps.add(variableToAdd)
-                doAsync {
-                    Thread.sleep(1200)
-                    uiThread {
-                        insideStampsFunction("Check", variableToAdd)
-                    }
-                }
-            }
-        }
-        if (action == "Check" && variableToAdd != null) {
-            //Here we will check if the outsideStamps contain
-            for (i in insideStamps) {
-                if (theDifference(variableToAdd, i)) {
-                    insideStamps.remove(i)
-                    outsideStamps.remove(variableToAdd)
-                    println(">>>>>>true")
-                    println(">>>>>>OUTSIDE $outsideStamps")
-                    println(">>>>>>INSIDE $insideStamps")
-                    speakOutGoodBye()
-                    return
-                }
-            }
-        }
-    }
-
-    @Synchronized
-    fun insideState(state: Boolean): Boolean {
-        /*  return if(state==insideState){
-              sensorTriggerred("PIRIN", 1)
-              false
-          } else {
-              insideState = state
-              true
-          } */
-        return true
-    }
-
-    @Synchronized
-    fun outsideState(state: Boolean): Boolean {
-        /*    return if(state==outsideState){
-                sensorTriggerred("PIROUT", 1)
-                false
-            } else {
-                outsideState = state
-                true
-            } */
-        return true
-    }
-
-
-    @Synchronized
-    private fun sensorTriggerred(sensorType: String, count: Int) {
-        if (count >= 1) {
-            val user = HashMap<String, Any>()
-            println(getCurrentTimeUsingDate().replace("/", "").replace(".", ""))
-            user[getCurrentTimeUsingDate().replace("/", "").replace(".", "")] = count
-            // Add a new document
-            when (sensorType) {
-                "PIRIN" -> {
-                    db.collection("PIR_IN").document(getDate())
-                            .set(user)
-                            .addOnSuccessListener {
-
-                            }
-                            .addOnFailureListener {
-
-                            }
-
-                }
-
-                "PIROUT" -> {
-                    db.collection("PIR_OUT").document(getDate())
-                            .set(user)
-                            .addOnSuccessListener {
-
-                            }
-                            .addOnFailureListener {
-
-                            }
-                }
-
-                else -> {
-
-                }
-            }
-        } else {
-
-        }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
@@ -190,6 +61,7 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
+    @Suppress("unused")
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTimeUsingDate(): String {
         val date = Date()
@@ -230,53 +102,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
     fun resetCounter() {
         currentCount = 0
-    }
-
-    fun speakOutWlcome() {
-        val text = "Welcome"
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-    }
-
-
-    fun speakOutGoodBye() {
-        val text = "GoodBye"
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-    }
-
-
-    /**
-     * This will increment the counter
-     */
-    fun incrementCounter() {
-        currentCount++
-        try {
-            counterReference.text = currentCount.toString()
-        } catch (e: Exception) {
-
-        }
-    }
-
-
-    /**
-     * This will decrement the counter, but not allow non zero
-     */
-    fun decrementCounter() {
-        currentCount--
-        if (currentCount >= 0) {
-            try {
-                counterReference.text = currentCount.toString()
-            } catch (e: Exception) {
-
-            }
-        } else {
-            //Not allowing counter to go negative basically
-            currentCount = 0
-            try {
-                counterReference.text = currentCount.toString()
-            } catch (e: Exception) {
-
-            }
-        }
     }
 
     /**
