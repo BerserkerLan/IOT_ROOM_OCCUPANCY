@@ -25,6 +25,7 @@ package no.nordicsemi.android.blinky.Activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -84,7 +85,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
         ButterKnife.bind(this);
-
+        addOutsideTimestamp();
+        insideStampsFunction("Add", getTimeStamp());
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
         final String deviceName = device.getName();

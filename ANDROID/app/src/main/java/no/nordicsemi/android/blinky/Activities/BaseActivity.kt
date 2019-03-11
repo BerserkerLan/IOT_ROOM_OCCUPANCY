@@ -10,11 +10,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
+
+
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
@@ -22,31 +26,115 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     var currentCount = 0 //Keeping track of the currentCount
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
     lateinit var db: FirebaseFirestore
-    var outsideState = false
-    var insideState = false
+    @Volatile
+    var outsideStamps: MutableList<Long> = mutableListOf()
+    @Volatile
+    var insideStamps: MutableList<Long> = mutableListOf()
 
 
+    private fun theDifference(time1: Long, time2: Long): Boolean {
+        //This function returns true if the differnce is less than 1 second, else false
+        if (Math.abs(time1 - time2) in 0.0..1000.00) {
+            return true
+        }
+        return false
+    }
+
+    fun addInsideStamp(){
+        insideStamps.add(getTimeStamp())
+    }
+
+    fun addOutsideTimestamp(){
+        outsideStamps.add(getTimeStamp())
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getTimeStamp(): Long {
+        val date = Date()
+        println(">>>>>>data.time ${date.time}")
+        return date.time
+    }
 
     @Synchronized
-    fun insideState(state: Boolean): Boolean {
-        return if(state==insideState){
-            sensorTriggerred("PIRIN", 1)
-            false
-        } else {
-            insideState = state
-            true
+    fun outsideStampsFunction(action: String?, variableToAdd: Long?) {
+        if (action != null) {
+            if (action == "Add" && variableToAdd != null) {
+                outsideStamps.add(variableToAdd)
+                doAsync {
+                    Thread.sleep(1200)
+                    uiThread {
+                        outsideStampsFunction("Check", variableToAdd)
+                    }
+                }
+            }
+        }
+        if (action == "Check" && variableToAdd != null) {
+            //Here we will check if the outsideStamps contain
+            for (i in insideStamps) {
+                if (theDifference(variableToAdd, i)) {
+                    outsideStamps.remove(i)
+                    insideStamps.remove(variableToAdd)
+                    println(">>>>>>true")
+                    println(">>>>>> $outsideStamps")
+                    println(">>>>>> $insideStamps")
+                    speakOutWlcome()
+                    return
+                }
+            }
         }
     }
 
     @Synchronized
-    fun outsideState(state: Boolean): Boolean {
-        return if(state==outsideState){
-            sensorTriggerred("PIROUT", 1)
-            false
-        } else {
-            outsideState = state
-            true
+    fun insideStampsFunction(action: String?, variableToAdd: Long?) {
+        if (action != null) {
+            if (action == "Add" && variableToAdd != null) {
+                insideStamps.add(variableToAdd)
+                doAsync {
+                    Thread.sleep(1200)
+                    uiThread {
+                        insideStampsFunction("Check", variableToAdd)
+                    }
+                }
+            }
         }
+        if (action == "Check" && variableToAdd != null) {
+            //Here we will check if the outsideStamps contain
+            for (i in insideStamps) {
+                if (theDifference(variableToAdd, i)) {
+                    insideStamps.remove(i)
+                    outsideStamps.remove(variableToAdd)
+                    println(">>>>>>true")
+                    println(">>>>>>OUTSIDE $outsideStamps")
+                    println(">>>>>>INSIDE $insideStamps")
+                    speakOutGoodBye()
+                    return
+                }
+            }
+        }
+    }
+
+    @Synchronized
+    fun insideState(state: Boolean): Boolean {
+        /*  return if(state==insideState){
+              sensorTriggerred("PIRIN", 1)
+              false
+          } else {
+              insideState = state
+              true
+          } */
+        return true
+    }
+
+    @Synchronized
+    fun outsideState(state: Boolean): Boolean {
+        /*    return if(state==outsideState){
+                sensorTriggerred("PIROUT", 1)
+                false
+            } else {
+                outsideState = state
+                true
+            } */
+        return true
     }
 
 
@@ -54,8 +142,8 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     private fun sensorTriggerred(sensorType: String, count: Int) {
         if (count >= 1) {
             val user = HashMap<String, Any>()
-            println(getCurrentTimeUsingDate().replace("/", "").replace(".",""))
-            user[getCurrentTimeUsingDate().replace("/", "").replace(".","")] = count
+            println(getCurrentTimeUsingDate().replace("/", "").replace(".", ""))
+            user[getCurrentTimeUsingDate().replace("/", "").replace(".", "")] = count
             // Add a new document
             when (sensorType) {
                 "PIRIN" -> {
@@ -81,29 +169,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
                             }
                 }
 
-                /* "READOPEN" -> {
-                    db.collection("READ_OPEN").document(getDate())
-                            .update(user)
-                            .addOnSuccessListener {
-
-                            }
-                            .addOnFailureListener {
-
-                            }
-
-                }
-
-                "READCLOSED" -> {
-                    db.collection("READ_CLOSED").document(getDate())
-                            .update(user)
-                            .addOnSuccessListener {
-
-                            }
-                            .addOnFailureListener {
-
-                            }
-                }
-                */
                 else -> {
 
                 }
@@ -117,7 +182,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
         db = FirebaseFirestore.getInstance()
-        sensorTriggerred("PIRIN", 1)
         super.onCreate(savedInstanceState)
     }
 
