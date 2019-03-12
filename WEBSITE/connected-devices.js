@@ -431,6 +431,61 @@ Keen.ready(function(){
    });
   }
 
+//
+hourlyStats();
+function hourlyStats(){
+  var db = firebaseApp.firestore();
+  var docRef = db.collection("AUX").doc("TODAY");
+  docRef.get().then(function(doc) {
+  if (doc.exists) {
+    var theData = doc.data();
+    st = theData;
+
+    var sample_funnel = new Keen.Dataviz()
+      .el('#chart-06')
+      .colors(['#00cfbb'])
+      .data({ result: [st['00:00'],
+st['01:00'] ,
+st['02:00'] ,
+st['03:00'] ,
+st['04:00'] ,
+st['05:00'] ,
+st['06:00'] ,
+st['07:00'] ,
+st['08:00'] ,
+st['09:00'] ,
+st['10:00'] ,
+st['11:00'] ,
+st['12:00'] ,
+st['13:00'] ,
+st['14:00'] ,
+st['15:00'] ,
+st['16:00'] ,
+st['17:00'] ,
+st['16:00'] ,
+st['17:00'] ,
+st['18:00'] ,
+st['19:00'] ,
+st['20:00'] ,
+st['21:00'] ,
+st['22:00'] ,
+st['23:00']]
+})
+      .height(340)
+      .type('bar')
+      .labels(['00:00', '01:00', '02:00', '03:00', '04:00', "05:00", "06:00", "07:00", "08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"])
+      .title(null)
+      .render();
+
+  } else {
+      console.log("No such document!");
+  }
+  }).catch(function(error) {
+  console.log("Error getting document:", error);
+ });
+}
+
+
 
   function setActiveButton(button) {
     var classButtonNormal = 'btn btn-default';
