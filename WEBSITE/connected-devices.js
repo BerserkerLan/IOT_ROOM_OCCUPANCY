@@ -28,10 +28,7 @@ var geoProject = new Keen({
 
 function updateDisplay(Todays1) {
   $('#day').html(date_time('day').toString());
-
-  //$('#getTotalYesturday').html(getTotalYesturday().toString());
 }
-
 
 function getAUXInformationCallBack(day, month, time){
   $('#mostPopularTime').html(time.toString());
@@ -42,7 +39,6 @@ function getAUXInformationCallBack(day, month, time){
 function getAUXInformation(){
   var db = firebaseApp.firestore();
   const comments = [];
-  //This will get the most popular day
   var docRef = db.collection("AUX").doc("INFO");
   docRef.get().then(function(doc) {
   if (doc.exists) {
@@ -363,18 +359,32 @@ Keen.ready(function(){
          width: '95%'
        });
         console.log("day", date_time('day').toString());
-        var theData = doc.data()[date_time('day').toString()];
-        //Here
-        geoProject
-          .query('count', {
+        getTodaysDate
+        var d = new Date();
+        var day = d.getDay();
+        if(day==0){
+          var theData = doc.data()["Monday"];
+        } else if(day==1){
+          var theData = doc.data()["Tuesday"];
+        } else if(day==2){
+          var theData = doc.data()["Wednesday"];
+        } else if(day==3){
+          var theData = doc.data()["Thursday"];
+        } else if(day==4){
+          var theData = doc.data()["Friday"];
+        } else if(day==5){
+          var theData = doc.data()["Saturday"];
+        } else if(day==6){
+          var theData = doc.data()["Sunday"];
+        }
+        console.log("The More", theData);
+        geoProject.query('count', {
             event_collection: 'user_action',
             filters: [{
                 property_name: 'error_detected',
                 operator: 'eq',
                 property_value: true
-              }
-            ]
-          })
+              }]})
           .then(function(res) {
             console.log("theData", theData);
             $('.errors').val(theData).trigger('change');
