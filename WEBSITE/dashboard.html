@@ -26,6 +26,15 @@
          <strong id="day"></strong>
       </div>
       </br>
+
+      <script type = "text/JavaScript">
+        <!--
+           function AutoRefresh( t ) {
+              setTimeout("location.reload(true);", t);
+           }
+        //-->
+     </script>
+
       <div class="navbar navbar-inverse navbar-fixed-top" role="nav78igation">
          <div class="container-fluid">
             <div class="navbar-header">
@@ -73,7 +82,7 @@
                   <div class="chart-stage">
                      <div class="row">
                         <div class="col-sm-6">
-                           <div class="chart-title knob-title">
+                           <div class="chart-title knob-title",onload = "JavaScript:AutoRefresh(5000);">
                               Today: <span id="sameday"></span>
                               <script type="text/javascript">window.onload = sameday('sameday');</script>
                            </div>
@@ -100,6 +109,7 @@
                <div class="chart-title">
                   <p><b>Daily Counts</b></p>
                </div>
+               <body >
                <div class="chart-stage">
                   <div id="chart-05"></div>
                </div>
@@ -124,7 +134,7 @@
             	data: [{
             		type: "line",
             		dataPoints: [
-            			{ y: 450 },
+                  { y: 450 },
             			{ y: 414},
             			{ y: 520},
             			{ y: 460 },
@@ -142,9 +152,6 @@
             chart.render();
 
             }
-
-
-
             </script>
          </div>
       </div>
