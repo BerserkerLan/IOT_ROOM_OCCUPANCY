@@ -127,25 +127,25 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mViewModel.getPIR1state().observe(this,
+        mViewModel.distance1().observe(this,
                 pressed -> {
-                    outSidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    if (pressed) {
+                        sensorTriggerred("DISTANCE1");
+                    }
                 });
 
-        mViewModel.getPIR2state().observe(this,
+        mViewModel.distance2().observe(this,
                 pressed -> {
-                    insidePIR.setText(pressed ? R.string.button_released : R.string.button_pressed);
+                    if (pressed) {
+                        sensorTriggerred("DISTANCE2");
+                    }
                 });
 
         mViewModel.getDistanceState().observe(this,
-                pressed -> {
-                    distance.setText(pressed ? "" : "PERSON");
-                });
+                pressed -> distance.setText(pressed ? "" : "PERSON"));
 
         mViewModel.getReadSwitchState().observe(this,
-                pressed -> {
-                    DoorContact.setText(pressed ? "OPEN" : "CLOSED");
-                });
+                pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
     }
 
     @OnClick(R.id.action_clear_cache)

@@ -48,7 +48,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
 
     public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
-    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A000-0000-1000-8003-00805F9B34FB"); //PIR2
     public final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
     public final static UUID LBS4_UUID_SERVICE_DISTANCE = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB"); //DISTANCE
 
@@ -58,7 +58,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
 
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
-    private final static UUID PIR2_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
+    private final static UUID PIR2_UUID = UUID.fromString("0000A002-0000-1000-8000-00805F9B34FB");
     private final static UUID READSWITCH_UUID = UUID.fromString("0000B005-0000-1000-8000-00805F9B34FB");
     private final static UUID DISTANCE_UUID = UUID.fromString("0000B808-0000-1000-8000-00805F9B34FB");
 

@@ -41,7 +41,6 @@ public abstract class PIR2DataCallback implements ProfileDataCallback, PIR2Callb
         }
 
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        System.out.println("BUTTON 2 STATE : " + state);
         if (state == STATE_PRESSED) {
             onPIR2StateChanged(device, true);
         } else if (state == STATE_RELEASED) {

@@ -87,8 +87,7 @@ function getDailyStats(){
 }
 
 
-function date_time(id)
-{
+function date_time(id){
         date = new Date;
         year = date.getFullYear();
         month = date.getMonth();
@@ -97,18 +96,15 @@ function date_time(id)
         day = date.getDay();
         days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
         h = date.getHours();
-        if(h<10)
-        {
+        if(h<10){
                 h = "0"+h;
         }
         m = date.getMinutes();
-        if(m<10)
-        {
+        if(m<10){
                 m = "0"+m;
         }
         s = date.getSeconds();
-        if(s<10)
-        {
+        if(s<10){
                 s = "0"+s;
         }
         result = ''+days[day]+' '+months[month]+' '+d+' '+year+' '+h+':'+m+':'+s;
@@ -140,7 +136,11 @@ function getTotalToday(){
  });
 }
 
-
+function myFunction() {
+  var d = new Date();
+  var n = d.getDay()
+  return n;
+}
 
 getAUXInformation();
 
@@ -219,6 +219,7 @@ Keen.ready(function(){
         }
       })
       .then(function(res) {
+        console.log(res);
         chart
           .data(res)
           .render();
@@ -283,36 +284,50 @@ Keen.ready(function(){
       });
   }
 
-
-
-
   // ----------------------------------------
   // New Activations
   // ----------------------------------------
 
-  $('.users').knob({
-    angleArc: 250,
-    angleOffset: -125,
-    readOnly: true,
-    min: 0,
-    max: 500,
-    fgColor: '#00bbde',
-    height: 290,
-    width: '95%'
-  });
 
-  geoProject
-    .query('count_unique', {
-      event_collection: 'activations',
-      target_property: 'user.id'
-    })
-    .then(function(res) {
-      $('.users').val(res.result).trigger('change');
-    })
-    .catch(function(err) {
-      alert('An error occurred fetching New Activations metric');
-    });
+  getTotalToday();
+  function getTotalToday(){
+    var db = firebaseApp.firestore();
+    const comments = [];
+    //This will get the most popular time
+    var docRef = db.collection("AUX").doc(String("TODAY"));
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+      $('.users').knob({
+         angleArc: 250,
+         angleOffset: -125,
+         readOnly: true,
+         min: 0,
+         max: 1000,
+         fgColor: '#00bbde',
+         height: 290,
+         width: '95%'
+       });
 
+      var theData = doc.data()['NUMBER_OF_PEOPLE_IN_TODAY'];
+      console.log("theDate", theData);
+      geoProject
+        .query('count_unique', {
+          event_collection: 'activations',
+          target_property: 'user.id'
+        })
+        .then(function(res) {
+          $('.users').val(theData).trigger('change');
+        })
+        .catch(function(err) {
+          alert('An error occurred fetching New Activations metric');
+        });
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
+   });
+  }
 
   // ----------------------------------------
   // Errors Detected
@@ -323,60 +338,89 @@ Keen.ready(function(){
     angleOffset:-125,
     readOnly:true,
     min:0,
-    max:100,
+    max:1000,
     fgColor: '#fe6672',
     height: 290,
     width: '95%'
   });
 
-  geoProject
-    .query('count', {
-      event_collection: 'user_action',
-      filters: [
-        {
-          property_name: 'error_detected',
-          operator: 'eq',
-          property_value: true
-        }
-      ]
-    })
-    .then(function(res) {
-      $('.errors').val(res.result).trigger('change');
-    })
-    .catch(function(err) {
-      alert('An error occurred fetching Device Crashes metric');
-    });
 
-  /*  This funnel is built from mock data */
 
-  getMonthlyStats();
-  function getMonthlyStats(){
+  getTotalAverage();
+  function getTotalAverage(){
     var db = firebaseApp.firestore();
     const comments = [];
     //This will get the most popular time
+    var docRef = db.collection("AUX").doc(String("AVERAGES"));
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+      $('.users').knob({
+         angleArc: 250,
+         angleOffset: -125,
+         readOnly: true,
+         min: 0,
+         max: 1000,
+         fgColor: '#00bbde',
+         height: 290,
+         width: '95%'
+       });
+        console.log("day", date_time('day').toString());
+        var theData = doc.data()[date_time('day').toString()];
+        //Here
+        geoProject
+          .query('count', {
+            event_collection: 'user_action',
+            filters: [{
+                property_name: 'error_detected',
+                operator: 'eq',
+                property_value: true
+              }
+            ]
+          })
+          .then(function(res) {
+            console.log("theData", theData);
+            $('.errors').val(theData).trigger('change');
+          })
+          .catch(function(err) {
+            alert('An error occurred fetching Device Crashes metric');
+          });
+    } else {
+        console.log("No such document!");
+    }
+    }).catch(function(error) {
+    console.log("Error getting document:", error);
+   });
+  }
+
+  dailyStats();
+  function dailyStats(){
+    var db = firebaseApp.firestore();
     var docRef = db.collection("AUX").doc("AVERAGES");
     docRef.get().then(function(doc) {
     if (doc.exists) {
       var theData = doc.data();
       monthlyStats = theData;
-      console.log("In here!");
-      console.log("monthlyStats", monthlyStats);
       var Monday = monthlyStats['Monday'];
       var Tuesday = monthlyStats['Tuesday'];
-      var Wedensday = monthlyStats['Wedensday'];
+      var Wednesday = monthlyStats['Wednesday'];
       var Thursday = monthlyStats['Thursday'];
       var Friday = monthlyStats['Friday'];
       var Saturday = monthlyStats['Saturday'];
       var Sunday = monthlyStats['Sunday'];
-
-      console.log("Monday: ", Monday);
+      /*console.log("Monday", Monday);
+      console.log("Tuesday", Tuesday);
+      console.log("Wedensday", Wednesday);
+      console.log("Thursday", Thursday);
+      console.log("Friday", Friday);
+      console.log("Saturday", Saturday);
+      console.log("Sunday", Sunday); */
       var sample_funnel = new Keen.Dataviz()
         .el('#chart-05')
         .colors(['#00cfbb'])
-        .data({ result: [Monday,Tuesday, Wedensday, Thursday, Friday, Saturday,Sunday]})
+        .data({ result: [Monday,Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]})
         .height(340)
         .type('bar')
-        .labels(['Monday', 'Tuesday', 'Wedensday', 'Thursday', 'Friday', "Saturday", "Sunday"])
+        .labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', "Saturday", "Sunday"])
         .title(null)
         .render();
     } else {
@@ -410,5 +454,6 @@ Keen.ready(function(){
       document.getElementById('28days').className = classButtonSelected;
       break;
     }
+
   }
 });
