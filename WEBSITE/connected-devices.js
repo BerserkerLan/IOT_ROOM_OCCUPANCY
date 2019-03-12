@@ -324,7 +324,6 @@ Keen.ready(function() {
 
     //
     hourlyStats();
-
     function hourlyStats() {
         var db = firebaseApp.firestore();
         var docRef = db.collection("AUX").doc("TODAY");
@@ -351,6 +350,7 @@ Keen.ready(function() {
             console.log("Error getting document:", error);
         });
     }
+
     foo();
     function foo() {
         // your function code here
