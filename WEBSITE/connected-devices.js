@@ -324,6 +324,8 @@ Keen.ready(function(){
    });
   }
 
+
+//
   // ----------------------------------------
   // Errors Detected
   // ----------------------------------------
@@ -343,6 +345,7 @@ Keen.ready(function(){
 
   getTotalAverage();
   function getTotalAverage(){
+    //Need to investigate
     var db = firebaseApp.firestore();
     const comments = [];
     //This will get the most popular time
