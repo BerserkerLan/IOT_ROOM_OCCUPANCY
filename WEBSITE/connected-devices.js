@@ -167,11 +167,6 @@ Keen.ready(function(){
     .type('horizontal-bar')
     .height(300);
 
-  tabVisitors.onclick = selectVisitorTab;
-  tabBrowsers.onclick = selectBrowserTab;
-  tabGeography.onclick = selectGeographyTab;
-
-  selectVisitorTab();
   updateDisplay();
 
 
@@ -407,13 +402,6 @@ Keen.ready(function(){
       var Friday = monthlyStats['Friday'];
       var Saturday = monthlyStats['Saturday'];
       var Sunday = monthlyStats['Sunday'];
-      /*console.log("Monday", Monday);
-      console.log("Tuesday", Tuesday);
-      console.log("Wedensday", Wednesday);
-      console.log("Thursday", Thursday);
-      console.log("Friday", Friday);
-      console.log("Saturday", Saturday);
-      console.log("Sunday", Sunday); */
       var sample_funnel = new Keen.Dataviz()
         .el('#chart-05')
         .colors(['#00cfbb'])
@@ -444,31 +432,25 @@ function hourlyStats(){
     var sample_funnel = new Keen.Dataviz()
       .el('#chart-06')
       .colors(['#00cfbb'])
-      .data({ result: [st['00:00'],
-st['01:00'] ,
-st['02:00'] ,
-st['03:00'] ,
-st['04:00'] ,
-st['05:00'] ,
-st['06:00'] ,
-st['07:00'] ,
-st['08:00'] ,
-st['09:00'] ,
-st['10:00'] ,
-st['11:00'] ,
-st['12:00'] ,
-st['13:00'] ,
-st['14:00'] ,
-st['15:00'] ,
-st['16:00'] ,
-st['17:00'] ,
-st['16:00'] ,
-st['17:00'] ,
-st['18:00'] ,
-st['19:00'] ,
-st['20:00'] ,
-st['21:00'] ,
-st['22:00'] ,
+      .data({ result: [st['00:00'],st['01:00'] ,st['02:00'],st['03:00'],st['04:00'],st['05:00'],st['06:00'],
+st['07:00'],
+st['08:00'],
+st['09:00'],
+st['10:00'],
+st['11:00'],
+st['12:00'],
+st['13:00'],
+st['14:00'],
+st['15:00'],
+st['16:00'],
+st['17:00'],
+st['16:00'],
+st['17:00'],
+st['18:00'],
+st['19:00'],
+st['20:00'],
+st['21:00'],
+st['22:00'],
 st['23:00']]
 })
       .height(340)
