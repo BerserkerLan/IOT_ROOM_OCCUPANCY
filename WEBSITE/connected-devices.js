@@ -184,8 +184,8 @@ Keen.ready(function() {
                     width: '95%'
                 });
 
-                var theData = doc.data()['NUMBER_OF_PEOPLE_IN_TODAY'];
-                console.log("theDate", theData);
+                var theData = doc.data()['CURRENT_OCCUPANCY'];
+                console.log("numberofPeopleintODAY", theData);
                 geoProject
                     .query('count_unique', {
                         event_collection: 'activations',
