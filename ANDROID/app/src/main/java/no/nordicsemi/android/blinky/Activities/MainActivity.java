@@ -54,6 +54,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.DISTNACE)
     TextView distance;
 
+    Boolean triggered1 = false;
+    Boolean triggered2 = false;
+
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -130,22 +133,41 @@ public class MainActivity extends BaseActivity {
         mViewModel.distance1().observe(this,
                 pressed -> {
                     if (pressed) {
-                        sensorTriggerred("DISTANCE1");
+                        if (!triggered2) {
+                            sensorTriggerred("DISTANCE2");
+                            triggered2 = true;
+                        } else {
+
+                        }
+                    } else {
+                        triggered2 = false;
                     }
                 });
 
         mViewModel.distance2().observe(this,
                 pressed -> {
                     if (pressed) {
-                        sensorTriggerred("DISTANCE2");
+                        if (!triggered1) {
+                            sensorTriggerred("DISTANCE1");
+                            triggered1 = true;
+                        }
+                    } else {
+                        triggered1 = false;
                     }
                 });
 
+        mViewModel.getPIR1StoredDistances().observe(this,
+                pressed -> {
+                    System.out.println("Data" + pressed);
+
+                });
         mViewModel.getDistanceState().observe(this,
                 pressed -> distance.setText(pressed ? "" : "PERSON"));
 
         mViewModel.getReadSwitchState().observe(this,
                 pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
+
+
     }
 
     @OnClick(R.id.action_clear_cache)

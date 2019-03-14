@@ -58,6 +58,7 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     private final MutableLiveData<Boolean> userOUT = new MutableLiveData<>();
     private final MutableLiveData<Boolean> readSwitchState = new MutableLiveData<>();
     private final MutableLiveData<Boolean> distanceState = new MutableLiveData<>();
+    private final MutableLiveData<String> pir1Array = new MutableLiveData<>();
 
     public LiveData<Void> isDeviceReady() {
         return mOnDeviceReady;
@@ -81,6 +82,10 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
 
     public LiveData<Boolean> getDistanceState() {
         return distanceState;
+    }
+
+    public LiveData<String> getPIR1StoredDistances() {
+        return pir1Array;
     }
 
     public LiveData<Boolean> isSupported() {
@@ -163,6 +168,10 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     }
 
     @Override
+    public void onPIR1ArrayStateChanged(@NonNull BluetoothDevice device, String pressed) {
+        pir1Array.postValue(pressed);
+    }
+    @Override
     public void onDeviceConnecting(@NonNull final BluetoothDevice device) {
         mConnectionState.postValue(getApplication().getString(R.string.state_connecting));
     }
@@ -227,4 +236,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         mConnectionState.postValue(null);
         mIsSupported.postValue(false);
     }
+
+
 }

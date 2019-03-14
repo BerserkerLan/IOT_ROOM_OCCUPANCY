@@ -20,17 +20,34 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.blinky.profile;
+package no.nordicsemi.android.blinky.profile.callback;
 
-import no.nordicsemi.android.ble.BleManagerCallbacks;
-import no.nordicsemi.android.blinky.profile.callback.PIR1ArrayCallback;
-import no.nordicsemi.android.blinky.profile.callback.PIR2Callback;
-import no.nordicsemi.android.blinky.profile.callback.PIRCallback;
-import no.nordicsemi.android.blinky.profile.callback.distanceCallback;
-import no.nordicsemi.android.blinky.profile.callback.readSwitchCallback;
+import android.bluetooth.BluetoothDevice;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.Arrays;
+
+import androidx.annotation.NonNull;
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
+
+@SuppressWarnings("ConstantConditions")
+public abstract class PIR1ArrayDataCallback implements ProfileDataCallback, PIR1ArrayCallback {
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() != 1) {
+            onInvalidDataReceived(device, data);
+            return;
+        }
+        System.out.println("Here PIR1Arrau");
+
+        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
 
 
-public interface ManagerCallbacks extends BleManagerCallbacks,
-        PIRCallback, PIR2Callback, distanceCallback, readSwitchCallback, PIR1ArrayCallback {
-    // No more methods
+        onPIR1ArrayStateChanged(device, data.toString());
+
+
+    }
 }

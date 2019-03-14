@@ -39,9 +39,10 @@ public abstract class PIRDataCallback implements ProfileDataCallback, PIRCallbac
             onInvalidDataReceived(device, data);
             return;
         }
-
+        System.out.println(">>>>>>>Here PIR1");
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
         if (state == STATE_PRESSED) {
+            System.out.println(">>>>>>>Here PIR1");
             onPIRStateChanged(device, true);
         } else if (state == STATE_RELEASED) {
             onPIRStateChanged(device, false);
