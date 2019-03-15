@@ -34,10 +34,11 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class PIR1ArrayDataCallback implements ProfileDataCallback, PIR1ArrayCallback {
+public abstract class PIR2ArrayDataCallback implements ProfileDataCallback, PIR2ArrayCallback {
+
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-
-        onPIR1ArrayStateChanged(device, data.toString());
+        onPIR2ArrayStateChanged(device, data.toString());
     }
+
 }

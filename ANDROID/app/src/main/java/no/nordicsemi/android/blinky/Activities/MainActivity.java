@@ -133,6 +133,7 @@ public class MainActivity extends BaseActivity {
         mViewModel.distance1().observe(this,
                 pressed -> {
                     if (pressed) {
+                        System.out.println(">>>>>>>> " + pressed);
                         if (!triggered2) {
                             sensorTriggerred("DISTANCE2");
                             triggered2 = true;
@@ -147,6 +148,7 @@ public class MainActivity extends BaseActivity {
         mViewModel.distance2().observe(this,
                 pressed -> {
                     if (pressed) {
+                        System.out.println(">>>>>>>>PRESSED DISTANCE2 " + pressed);
                         if (!triggered1) {
                             sensorTriggerred("DISTANCE1");
                             triggered1 = true;
@@ -156,11 +158,13 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
+
         mViewModel.getPIR1StoredDistances().observe(this,
                 pressed -> {
                     System.out.println("Data" + pressed);
 
                 });
+        System.out.println("VIEW : " + mViewModel.getPIR1StoredDistances());
         mViewModel.getDistanceState().observe(this,
                 pressed -> distance.setText(pressed ? "" : "PERSON"));
 

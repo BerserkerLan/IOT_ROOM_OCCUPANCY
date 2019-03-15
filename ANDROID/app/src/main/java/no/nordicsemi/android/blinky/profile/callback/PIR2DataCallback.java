@@ -39,7 +39,7 @@ public abstract class PIR2DataCallback implements ProfileDataCallback, PIR2Callb
             onInvalidDataReceived(device, data);
             return;
         }
-        System.out.println(">>>>>>>Here PIR2");
+       // System.out.println(">>>>>>>Here PIR2");
 
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
         if (state == STATE_PRESSED) {
