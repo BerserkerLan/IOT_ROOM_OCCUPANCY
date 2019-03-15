@@ -50,11 +50,11 @@ public class Manager extends BleManager<ManagerCallbacks> {
      */
 
     public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
-    public final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
-    public final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
+    private final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
+    private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
 
-    public final static UUID LBS_UUID_SERVICE_PIR1ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
-    public final static UUID LBS_UUID_SERVICE_PIR2ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
+    private final static UUID LBS_UUID_SERVICE_PIR1ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
+    private final static UUID LBS_UUID_SERVICE_PIR2ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
 
     /**
      * SENSOR characteristic UUID.
@@ -194,9 +194,11 @@ public class Manager extends BleManager<ManagerCallbacks> {
             if (pirService2 != null) {
                 pir2Characteristic = pirService2.getCharacteristic(PIR2_UUID);
             }
+
             if (readSwitchService != null) {
                 readSwitchCharacteristics = readSwitchService.getCharacteristic(READSWITCH_UUID);
             }
+
             //temporarily change UUIDs
             if (pir1ArrayService != null) {
                 pir1ArrayCharacteristic = pir1ArrayService.getCharacteristic(PIR1_ARRAY_CHAR_UUID);
