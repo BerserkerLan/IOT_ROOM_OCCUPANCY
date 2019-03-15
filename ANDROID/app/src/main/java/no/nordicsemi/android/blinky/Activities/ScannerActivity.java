@@ -59,7 +59,7 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
     private ScannerViewModel mScannerViewModel;
     private static final String MAC_ADDRESS_1 = "C1:9B:1E:4C:4B:7E";
-    private static final String MAC_ADDRESS_2 = "E1:7E:24:C0:17:DB";
+    private static final String MAC_ADDRESS_2 = "DA:A3:E2:4F:50:FD";
     private boolean showingDialog = false;
     @BindView(R.id.state_scanning)
     View mScanningView;
