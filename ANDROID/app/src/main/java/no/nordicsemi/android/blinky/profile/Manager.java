@@ -160,7 +160,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
             setNotificationCallback(readSwitchCharacteristics).with(readSwitchCallBack);
             setNotificationCallback(distanceCharacteristic).with(distanceCallBack);
             setNotificationCallback(pir1ArrayCharacteristic).with(pir1ArrayCallback);
-            setNotificationCallback(pir2ArrayCharacteristic).with(pir1ArrayCallback);
+            setNotificationCallback(pir2ArrayCharacteristic).with(pir2ArrayCallback);
 
 
             readCharacteristic(pirCharacteristic).with(pir1callBack).enqueue();
@@ -168,7 +168,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
             readCharacteristic(readSwitchCharacteristics).with(readSwitchCallBack).enqueue();
             readCharacteristic(distanceCharacteristic).with(distanceCallBack).enqueue();
             readCharacteristic(pir1ArrayCharacteristic).with(pir1ArrayCallback).enqueue();
-            readCharacteristic(pir2ArrayCharacteristic).with(pir1ArrayCallback).enqueue();
+            readCharacteristic(pir2ArrayCharacteristic).with(pir2ArrayCallback).enqueue();
 
             enableNotifications(pirCharacteristic).enqueue();
             enableNotifications(pir2Characteristic).enqueue();
