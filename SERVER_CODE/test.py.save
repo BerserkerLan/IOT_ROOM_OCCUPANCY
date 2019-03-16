@@ -121,16 +121,15 @@ def update_pir_things():
 def update_people_total_in_current_hour():
 	date_now = datetime.datetime.now()
 	people_in_current_hour = get_number_of_people_in_current_hour()
-	data = {"HOURLY" : {(date_now.strftime("%H") + "00") : people_in_current_hour}}
-	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
+	data = {date_now.strftime("%H") + "00" : people_in_current_hour}
+	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).update({'HOURLY' : ArrayUnion([data])})
 #Update the quarter of people, only call this function every 15 minutes
 def update_people_quarter_in_current_hour():
 	date_now = datetime.datetime.now()
 	people_in_current_hour = get_number_of_people_in_current_hour()
-	data = {"QUARTERLY" : {(date_now.strftime("%H%M")) : people_in_current_hour }}
-	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
+	data = {"QUARTERLY" : {date_now.strftime("%H%M") : people_in_current_hour }}
+	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).update(data)
 	print("In the function, number of people in quarter is {}".format(people_in_current_hour))
-
 
 
 #Gets people that went in at the current hour
