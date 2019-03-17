@@ -39,12 +39,6 @@ def get_most_popular_time_of_today():
 	popular_time = db.collection('AUX').document('MOST_POPULAR_TIME_OF_TODAY').get()
 	return popular_time.to_dict()
 
-def get_processed_in():
-	processed_in = db.collection('PROCESSED_IN').get()
-	return processed_in
-def get_processed_out():
-	processed_out = db.collection('PROCESSED_OUT').get()
-	return processed_out
 #Get people that went into the room throughout the whole day
 def get_number_of_people_in_today():
 	date_now = datetime.datetime.now()
@@ -85,7 +79,7 @@ def update_people_total_in_today():
 	people_in_today = get_number_of_people_in_today()
 	print("In the function, number of people is : {}".format(people_in_today))
 	data = {"TOTALTODAY" : people_in_today}
-	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data)
+	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
 
 def update_pir_things():
 	distance1_map = get_D1()
@@ -123,14 +117,14 @@ def update_people_total_in_current_hour():
 	people_in_current_hour = get_number_of_people_in_current_hour()
 	data = {"HOURLY" : {(date_now.strftime("%H") + "00") : people_in_current_hour}}
 	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
-#Update the quarter of people, only call this function every 15 minutes
+
+
 def update_people_quarter_in_current_hour():
 	date_now = datetime.datetime.now()
 	people_in_current_hour = get_number_of_people_in_current_hour()
-	data = {"QUARTERLY" : {(date_now.strftime("%H%M")) : people_in_current_hour }}
+	data = {"QUARTERLY" : {date_now.strftime("%H%M") : people_in_current_hour }}
 	db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
-	print("In the function, number of people in quarter is {}".format(people_in_current_hour))
-
+	print("In the function, number of people IN quarter is {}".format(people_in_current_hour))
 
 
 #Gets people that went in at the current hour
@@ -147,44 +141,61 @@ def get_number_of_people_out_current_hour():
         return sum
 
 
-def update_time_averages_today_in_aux():
+def update_time_averages():
 	date_now = datetime.datetime.now()
+	people_in = db.collection('PROCESSED_IN').document(date_now.strftime("%Y%m%d")).get()
 	sum_in = 0
+	people_out = db.collection('PROCESSED_OUT').document(date_now.strftime("%Y%m%d")).get()
+	for items in people_in.to_dict().items():
+		print("ITEM : {}".format(items))
+		if (items[0] == "QUARTERLY"):
+			print("ITEMS 11 : {}".format(items[1]))
+			for key, value in items[1].items():
+				print("VAL : {}, {}".format(key, value))
+				if (key[:2] == date_now.strftime("%H")):
+					print("Updating current average for current time")
+					sum_in += int(value)
 	sum_out = 0
-	time_now = date_now.strftime("%H%M")
-	quarterly_today_in = get_processed_in()
-	quarterly_today_out = get_processed_out()
-	for proc_in_doc in quarterly_today_in:
-		if (proc_in_doc.id == date_now.strftime("%Y%m%d")):
-			for key,value in proc_in_doc.to_dict().items():
-				print("The key : {} , the value : {}".format(key, value))
-
+	for items in people_out.to_dict().items():
+		if (items[0] == "QUARTERLY"):
+			print("IEMS 1 : {}".format(items[1]))
+			for key, value in items[1].items():
+				print("HASAKEY : {}".format(value))
+				if (key[:2] == date_now.strftime("%H")):
+					sum_out += int(value)
+	print("SUM IN {}".format(sum_in))
+	print("SUM OUT {}".format(sum_out))
+	sum = sum_in - sum_out
+	if (sum < 0):
+		sum = 0
+	print("Sum is {}".format(sum))
+	data = {(date_now.strftime("%H:") + "00") : sum}
+	db.collection('AUX').document('TODAY').set(data, merge=True)
 
 #Update TOTALTODAY for the day today
 def update_people_total_out_today():
         date_now = datetime.datetime.now()
         people_out_today = get_number_of_people_out_today()
-        print("In the function, number of people is : {}".format(people_out_today))
         data = {"TOTALTODAY" : people_out_today}
         db.collection('PROCESSED_OUT').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
+
+
 #Update the Hourly field of today
 def update_people_total_out_current_hour():
-        date_now = datetime.datetime.now()
-        people_out_current_hour = get_number_of_people_out_current_hour()
-        data = {"HOURLY" : {(date_now.strftime("%H") + "00") : people_out_current_hour}}
-        db.collection('PROCESSED_OUT').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
+	date_now = datetime.datetime.now()
+	people_out_current_hour = get_number_of_people_out_current_hour()
+	data = {"HOURLY" : {(date_now.strftime("%H") + "00") : people_out_current_hour}}
+	db.collection('PROCESSED_OUT').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
 #Update the quarter of people, only call this function every 15 minutes
 def update_people_quarter_out_current_hour():
         date_now = datetime.datetime.now()
         people_out_current_hour = get_number_of_people_out_current_hour()
         data = {"QUARTERLY" : {date_now.strftime("%H%M") : people_out_current_hour }}
         db.collection('PROCESSED_OUT').document(date_now.strftime("%Y%m%d")).set(data, merge=True)
-        print("In the function, number of people in quarter is {}".format(people_out_current_hour))
 
 def get_current_occupancy():
 	current_people = (get_number_of_people_in_today()) - (get_number_of_people_out_today())
 	return current_people
-
 def update_todays_averages():
 	day_today = datetime.datetime.now().strftime("%A")
 	print("Today is {}".format(day_today))
@@ -240,11 +251,8 @@ def update_every_10_seconds():
 	while True:
 		update_pir_things()
 		time.sleep(5)
-averages = get_averages()
-print("Averages : {}".format(averages))
 
 quarterly_thread = threading.Thread(target=update_every_1_mins, args=[]) #Try to do quarterly in a seperate thread
-quarterly_thread.start()
 
 #secondly_thread = threading.Thread(target=update_every_10_seconds, args=[])
 #secondly_thread.start()
@@ -258,4 +266,6 @@ while True:
 	update_people_total_in_current_hour()
 	update_people_total_out_today()
 	update_people_total_out_current_hour()
+	update_time_averages()
+	quarterly_thread.start()
 	time.sleep(60*15)
