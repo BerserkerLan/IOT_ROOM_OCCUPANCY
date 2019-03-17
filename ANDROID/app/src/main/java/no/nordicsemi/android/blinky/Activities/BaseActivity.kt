@@ -9,6 +9,7 @@ import android.speech.tts.TextToSpeech
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
+import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,14 +50,18 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
-    fun hexToInt(a:String): Int{
-        return 0
+    fun toHex(arg: String): Int {
+        return String.format("%040x", BigInteger(1, arg.toByteArray())).toInt()
     }
 
-    fun convertArray(a: String):List<String> {
-        val listToReturn: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
-        listToReturn.removeAt(0)
-        return listToReturn
+    fun convertArray(a: String):List<Int> {
+        val listStrings: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
+        listStrings.removeAt(0)
+        lateinit var listHex: MutableList<Int>
+        for(i in 0..listStrings.size){
+            listHex.add(i,toHex(listStrings[i]))
+        }
+        return listHex
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
