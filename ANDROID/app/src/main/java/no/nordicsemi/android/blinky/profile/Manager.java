@@ -141,7 +141,6 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final PIR2ArrayDataCallback pir2ArrayCallback = new PIR2ArrayDataCallback() {
         @Override
         public void onPIR2ArrayStateChanged(@NonNull BluetoothDevice device, String pressed) {
-            System.out.println("IN pir2ArrayDataCallBack");
             mCallbacks.onPIR2ArrayStateChanged(device, pressed);
         }
     };

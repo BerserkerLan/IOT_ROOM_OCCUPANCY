@@ -30,6 +30,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
@@ -167,8 +169,8 @@ public class MainActivity extends BaseActivity {
 
         mViewModel.getPIR2StoredDistances().observe(this,
                 pressed -> {
+                    System.out.println(Arrays.toString(convertArray(pressed).toArray()));
                     System.out.println("Data PIR2 STORED " + pressed);
-
                 });
 
         mViewModel.getDistanceState().observe(this,

@@ -49,8 +49,14 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
-    fun convertArray(a:String){
-       // val
+    fun hexToInt(a:String): Int{
+        return 0
+    }
+
+    fun convertArray(a: String):List<String> {
+        val listToReturn: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
+        listToReturn.removeAt(0)
+        return listToReturn
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +68,6 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     override fun onInit(status: Int) {
 
     }
-
 
     @Suppress("unused")
     @SuppressLint("SimpleDateFormat")
@@ -83,11 +88,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         return formatted.toString()
     }
 
-
     /**
      * Overriding onDestroy, to safely disable the TTS
      */
-
     public override fun onDestroy() {
         try {
             tts.stop()
