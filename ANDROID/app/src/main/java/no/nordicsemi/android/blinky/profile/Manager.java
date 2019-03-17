@@ -54,7 +54,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
 
     private final static UUID LBS_UUID_SERVICE_PIR1ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
-    private final static UUID LBS_UUID_SERVICE_PIR2ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
+    private final static UUID LBS_UUID_SERVICE_PIR2ARRAY = UUID.fromString("0000B004-0000-1000-8000-00805F9B34FB"); //D2 Array UUID
 
     /**
      * SENSOR characteristic UUID.
@@ -63,9 +63,8 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000A002-0000-1000-8000-00805F9B34FB");
     private final static UUID READSWITCH_UUID = UUID.fromString("0000B005-0000-1000-8000-00805F9B34FB");
-
     private final static UUID PIR1_ARRAY_CHAR_UUID = UUID.fromString("0000B002-0000-1000-8000-00805F9B34FB");
-    private final static UUID PIR2_ARRAY_CHAR_UUID = UUID.fromString("0000B002-0000-1000-8000-00805F9B34FB");
+    private final static UUID PIR2_ARRAY_CHAR_UUID = UUID.fromString("0000B060-0000-1000-8000-00805F9B34FB");
 
     private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic, pir1ArrayCharacteristic, pir2ArrayCharacteristic;
     private LogSession mLogSession;
@@ -85,6 +84,7 @@ public class Manager extends BleManager<ManagerCallbacks> {
      *
      * @param session the session, or null, if nRF Logger is not installed.
      */
+
     public void setLogger(@Nullable final LogSession session) {
         this.mLogSession = session;
     }

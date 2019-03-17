@@ -161,10 +161,16 @@ public class MainActivity extends BaseActivity {
 
         mViewModel.getPIR1StoredDistances().observe(this,
                 pressed -> {
-                    System.out.println("Data" + pressed);
+                    System.out.println("Data PIR1 STORED " + pressed);
 
                 });
-        System.out.println("VIEW : " + mViewModel.getPIR1StoredDistances());
+
+        mViewModel.getPIR2StoredDistances().observe(this,
+                pressed -> {
+                    System.out.println("Data PIR2 STORED " + pressed);
+
+                });
+
         mViewModel.getDistanceState().observe(this,
                 pressed -> distance.setText(pressed ? "" : "PERSON"));
 

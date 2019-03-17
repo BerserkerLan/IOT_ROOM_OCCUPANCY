@@ -38,6 +38,7 @@ public abstract class PIR2ArrayDataCallback implements ProfileDataCallback, PIR2
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        System.out.println(">>>>>>>>> IN HERE PIR2 CALLBACK" + data.toString());
         onPIR2ArrayStateChanged(device, data.toString());
     }
 

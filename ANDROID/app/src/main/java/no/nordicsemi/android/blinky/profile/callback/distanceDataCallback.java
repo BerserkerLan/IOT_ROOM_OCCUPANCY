@@ -49,5 +49,6 @@ public abstract class distanceDataCallback implements ProfileDataCallback, dista
         } else {
             onInvalidDataReceived(device, data);
         }
+
     }
 }

@@ -49,6 +49,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
+    fun convertArray(a:String){
+       // val
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         tts = TextToSpeech(this, this)
