@@ -48,24 +48,20 @@ public class Manager extends BleManager<ManagerCallbacks> {
     /**
      * Nordic Blinky Service UUID.
      */
-
     public final static UUID LBS_UUID_SERVICE_PIR1 = UUID.fromString("0000A000-0000-1000-8000-00805F9B34FB"); //PIR_UUID
     private final static UUID LBS2_UUID_SERVICE_PIR2 = UUID.fromString("0000A003-0000-1000-8000-00805F9B34FB"); //PIR2
-    private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID.fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
-
+    private final static UUID LBS3_UUID_SERVICE_READSWITCH = UUID. fromString("0000A004-0000-1000-8000-00805F9B34FB"); //READSWITCH
     private final static UUID LBS_UUID_SERVICE_PIR1ARRAY = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB"); //D1 Array UUID
     private final static UUID LBS_UUID_SERVICE_PIR2ARRAY = UUID.fromString("0000B004-0000-1000-8000-00805F9B34FB"); //D2 Array UUID
 
     /**
      * SENSOR characteristic UUID.
      */
-
     private final static UUID PIR_UUID = UUID.fromString("0000A001-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_UUID = UUID.fromString("0000A002-0000-1000-8000-00805F9B34FB");
     private final static UUID READSWITCH_UUID = UUID.fromString("0000B005-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR1_ARRAY_CHAR_UUID = UUID.fromString("0000B002-0000-1000-8000-00805F9B34FB");
     private final static UUID PIR2_ARRAY_CHAR_UUID = UUID.fromString("0000B060-0000-1000-8000-00805F9B34FB");
-
     private BluetoothGattCharacteristic pirCharacteristic, pir2Characteristic, readSwitchCharacteristics, distanceCharacteristic, pir1ArrayCharacteristic, pir2ArrayCharacteristic;
     private LogSession mLogSession;
 
@@ -145,7 +141,8 @@ public class Manager extends BleManager<ManagerCallbacks> {
     private final PIR2ArrayDataCallback pir2ArrayCallback = new PIR2ArrayDataCallback() {
         @Override
         public void onPIR2ArrayStateChanged(@NonNull BluetoothDevice device, String pressed) {
-            mCallbacks.onPIR1ArrayStateChanged(device, pressed);
+            System.out.println("IN pir2ArrayDataCallBack");
+            mCallbacks.onPIR2ArrayStateChanged(device, pressed);
         }
     };
 
@@ -185,7 +182,6 @@ public class Manager extends BleManager<ManagerCallbacks> {
             final BluetoothGattService readSwitchService = gatt.getService(LBS3_UUID_SERVICE_READSWITCH);
             final BluetoothGattService pir1ArrayService = gatt.getService(LBS_UUID_SERVICE_PIR1ARRAY);
             final BluetoothGattService pir2ArrayService = gatt.getService(LBS_UUID_SERVICE_PIR2ARRAY);
-            //final BluetoothGattService distanceSensorService = gatt.getService(LBS4_UUID_SERVICE_DISTANCE);
 
             if (pirService1 != null) {
                 pirCharacteristic = pirService1.getCharacteristic(PIR_UUID);
@@ -199,7 +195,6 @@ public class Manager extends BleManager<ManagerCallbacks> {
                 readSwitchCharacteristics = readSwitchService.getCharacteristic(READSWITCH_UUID);
             }
 
-            //temporarily change UUIDs
             if (pir1ArrayService != null) {
                 pir1ArrayCharacteristic = pir1ArrayService.getCharacteristic(PIR1_ARRAY_CHAR_UUID);
             }
@@ -229,5 +224,4 @@ public class Manager extends BleManager<ManagerCallbacks> {
     protected boolean shouldClearCacheWhenDisconnected() {
         return true;
     }
-
 }
