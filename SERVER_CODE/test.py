@@ -250,7 +250,7 @@ def update_every_1_mins():
 def update_every_10_seconds():
 	while True:
 		update_pir_things()
-		time.sleep(5)
+		time.sleep(60*2)
 
 quarterly_thread = threading.Thread(target=update_every_1_mins, args=[]) #Try to do quarterly in a seperate thread
 
