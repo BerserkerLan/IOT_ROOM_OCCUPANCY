@@ -135,9 +135,20 @@
                   </div>
                   <div class="chart-stage">
                      <div class="row">
-                       <h2 style="text-align: center;"><span style="background-color: #ffffff;"><strong> <span style="color: #ff0000;">The most popular time is <span id="mostPopularTime"></span> </span></strong></span></h2>
- <h2 style="text-align: center;"><br /> <span style="background-color: #ffffff;"><strong> <span style="color: #ff0000;"> The most popular day is <span id="mostPopularDay"></span> </span></strong></span></h2>
- <h2 style="text-align: center;"><br /><span style="background-color: #ffffff;"><strong> <span style="color: #ff0000;"> The most popular month is <span id="mostPopularMonth"></span> </span></strong></span></h2>
+                       <div class="col-sm-6">
+                          <div class="chart-title knob-title">
+                              Total People In Today
+                          </div>
+                          <div class="chart-stage">
+                             <input id="TotalInToday" type="text" class="TotalInToday" value=""/>
+                          </div>
+                       </div>
+                       <div class="chart-title knob-title">
+                           Total People in this hour
+                       </div>
+                       <div class="chart-stage">
+                          <input id="TotalThisHour" type="text" class="TotalInThisHour" value=""/>
+                       </div>
                      </div>
                   </div>
                </div>
@@ -151,7 +162,7 @@
                      <div class="row">
                         <div class="col-sm-6">
                            <div class="chart-title knob-title",onload = "JavaScript:AutoRefresh(5000);">
-                              Current Occupancy: <span id="sameday"></span>
+                            Current Occupancy: <span id="sameday"></span>
                               <script type="text/javascript">window.onload = sameday('sameday');</script>
                            </div>
                            <div class="chart-stage">
@@ -159,8 +170,8 @@
                            </div>
                         </div>
                         <div class="chart-title knob-title">
-                           Average for <span id="sameday1"></span>
-                           <script type="text/javascript">window.onload = sameday('sameday');</script>
+                            Average for <span id="sameday1"></span>
+                           <script type="text/javascript">window.onload = sameday('sameday1');</script>
                         </div>
                         <div class="chart-stage">
                            <input id="statsPrevious" type="text" class="errors" value=""/>

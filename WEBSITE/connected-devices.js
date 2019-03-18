@@ -166,6 +166,62 @@ Keen.ready(function() {
 
     getTotalToday();
 
+    function updateTotalTodayIn(a){
+      //TotalInThisHour
+      //TotalInToday
+      $('.TotalInToday').knob({
+          angleArc: 250,
+          angleOffset: -125,
+          readOnly: true,
+          min: 0,
+          max: 1000,
+          fgColor: '#00bbde',
+          height: 290,
+          width: '95%'
+      });
+
+      geoProject
+          .query('count_unique', {
+              event_collection: 'activations',
+              target_property: 'user.id'
+          })
+          .then(function(res) {
+              $('.TotalInToday').val(a).trigger('change');
+          })
+          .catch(function(err) {
+              alert('An error occurred fetching New Activations metric');
+          });
+    }
+
+    function updateTotalInHour(a){
+      //TotalInThisHour
+      //TotalInToday
+
+      $('.TotalInThisHour').knob({
+          angleArc: 250,
+          angleOffset: -125,
+          readOnly: true,
+          min: 0,
+          max: 1000,
+          fgColor: '#00bbde',
+          height: 290,
+          width: '95%'
+      });
+
+      geoProject
+          .query('count_unique', {
+              event_collection: 'activations',
+              target_property: 'user.id'
+          })
+          .then(function(res) {
+              $('.TotalInThisHour').val(a).trigger('change');
+          })
+          .catch(function(err) {
+              alert('An error occurred fetching New Activations metric');
+          });
+    }
+
+
     function getTotalToday() {
         var db = firebaseApp.firestore();
         const comments = [];
@@ -331,6 +387,17 @@ Keen.ready(function() {
             if (doc.exists) {
                 var theData = doc.data();
                 st = theData;
+
+                updateTotalTodayIn(st["TOTAL"]);
+                var d = new Date();
+                var hour =  d.getHours();
+                if(hour<9){
+                  hour = "0" + hour + ":00";
+                } else {
+                  hour = hour + ":00";
+                }
+                updateTotalInHour(st[hour]);
+
                 var sample_funnel = new Keen.Dataviz()
                     .el('#chart-06')
                     .colors(['#00cfbb'])

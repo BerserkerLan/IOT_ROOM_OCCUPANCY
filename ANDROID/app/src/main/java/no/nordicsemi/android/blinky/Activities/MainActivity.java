@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity {
 
         mViewModel.getPIR2StoredDistances().observe(this,
                 pressed -> {
-                    System.out.println(Arrays.toString(convertArray(pressed).toArray()));
+                   // System.out.println(Arrays.toString(convertArray(pressed).toArray()));
                     System.out.println("Data PIR2 STORED " + pressed);
                 });
 

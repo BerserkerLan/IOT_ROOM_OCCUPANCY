@@ -1,8 +1,7 @@
 
 //http://www.webestools.com/scripts_tutorials-code-source-7-display-date-and-time-in-javascript-real-time-clock-javascript-date-time.html
 
-function date_time(id)
-{
+function date_time(id){
         date = new Date;
         year = date.getFullYear();
         month = date.getMonth();
@@ -21,8 +20,7 @@ function date_time(id)
                 m = "0"+m;
         }
         s = date.getSeconds();
-        if(s<10)
-        {
+        if(s<10){
                 s = "0"+s;
         }
         result = ''+days[day]+' '+months[month]+' '+d+' '+year+' '+h+':'+m+':'+s;
