@@ -391,12 +391,9 @@ Keen.ready(function() {
                 } else {
                   hour = hour + ":00";
                 }
-                console.log("The Hour", hour);
-                console.log("The motion", st['NUMBER_OF_PEOPLE_IN_TODAY']);
-                updateTotalTodayIn(st['NUMBER_OF_PEOPLE_IN_TODAY']);
-                console.log("Hourly", st[hour]);
-                updateTotalInHour(st[hour]);
 
+                updateTotalTodayIn(st['NUMBER_OF_PEOPLE_IN_TODAY']);
+                updateTotalInHour(st[hour]);
 
                 var sample_funnel = new Keen.Dataviz()
                     .el('#chart-06')
