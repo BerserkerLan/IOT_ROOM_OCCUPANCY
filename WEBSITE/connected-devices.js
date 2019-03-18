@@ -194,10 +194,7 @@ Keen.ready(function() {
     }
 
     function updateTotalInHour(a){
-      //TotalInThisHour
-      //TotalInToday
-
-      $('.TotalInThisHour').knob({
+    $('.TotalInThisHour').knob({
           angleArc: 250,
           angleOffset: -125,
           readOnly: true,
@@ -207,7 +204,6 @@ Keen.ready(function() {
           height: 290,
           width: '95%'
       });
-
       geoProject
           .query('count_unique', {
               event_collection: 'activations',
@@ -388,7 +384,6 @@ Keen.ready(function() {
                 var theData = doc.data();
                 st = theData;
 
-                updateTotalTodayIn(st["TOTAL"]);
                 var d = new Date();
                 var hour =  d.getHours();
                 if(hour<9){
@@ -396,7 +391,12 @@ Keen.ready(function() {
                 } else {
                   hour = hour + ":00";
                 }
+                console.log("The Hour", hour);
+                console.log("The motion", st['NUMBER_OF_PEOPLE_IN_TODAY']);
+                updateTotalTodayIn(st['NUMBER_OF_PEOPLE_IN_TODAY']);
+                console.log("Hourly", st[hour]);
                 updateTotalInHour(st[hour]);
+
 
                 var sample_funnel = new Keen.Dataviz()
                     .el('#chart-06')
@@ -409,7 +409,6 @@ Keen.ready(function() {
                     .labels(['00:00', '01:00', '02:00', '03:00', '04:00', "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"])
                     .title(null)
                     .render();
-
             } else {
                 console.log("No such document!");
             }
