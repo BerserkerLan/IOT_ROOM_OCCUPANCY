@@ -19,302 +19,34 @@
   ~ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
   ~ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<!--
+	This has to be databaseInstance CoordinatorLayout, or any other layout that dispatches insets
+	to its children, as the image is to be drawn behind status bar as well.
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity"
+    android:background="@color/colorAccent"
+    android:fitsSystemWindows="true"
+    tools:context=".Activities.SplashScreenActivity"
     tools:ignore="ContentDescription">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
-        android:id="@+id/device_container"
+    <!--
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/appbar_layout"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:fitsSystemWindows="true"
+        android:scaleType="centerCrop"
+        android:background="@color/colorNordicLogoTop"
+        app:srcCompat="@drawable/nordic_logo"/>
+        -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/button_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:background="@android:color/white"
-                app:cardElevation="1dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/button_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/button_tool_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="?actionBarSize"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:logo="@drawable/ic_radio_button_checked"
-                        app:title="@string/title_button_state2"
-                        app:titleMarginStart="@dimen/toolbar_title_margin"
-                        app:titleTextColor="@android:color/black" />
-
-                    <TextView
-                        android:id="@+id/button_summary"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_tool_bar" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/state"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary" />
-
-                    <TextView
-                        android:id="@+id/outSidePIR"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_unknown"
-                        android:textStyle="bold"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/button_card2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:background="@android:color/white"
-                app:cardElevation="1dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/button_container2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/button_tool_bar2"
-                        android:layout_width="0dp"
-                        android:layout_height="?actionBarSize"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:logo="@drawable/ic_radio_button_checked"
-                        app:title="@string/title_button_state"
-                        app:titleMarginStart="@dimen/toolbar_title_margin"
-                        app:titleTextColor="@android:color/black" />
-
-                    <TextView
-                        android:id="@+id/button_summary2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_tool_bar2" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/state"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary2" />
-
-                    <TextView
-                        android:id="@+id/insidePIR"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_unknown"
-                        android:textStyle="bold"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary2" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/button_card3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:background="@android:color/white"
-                app:cardElevation="1dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/button_container3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/button_tool_bar3"
-                        android:layout_width="0dp"
-                        android:layout_height="?actionBarSize"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:logo="@drawable/ic_radio_button_checked"
-                        app:title="DOOR CONTACT"
-                        app:titleMarginStart="@dimen/toolbar_title_margin"
-                        app:titleTextColor="@android:color/black" />
-
-                    <TextView
-                        android:id="@+id/button_summary3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="@string/openclose"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_tool_bar3" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/state"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary3" />
-
-                    <TextView
-                        android:id="@+id/doorContact"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_unknown"
-                        android:textStyle="bold"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary3" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/button_card4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:background="@android:color/white"
-                app:cardElevation="1dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/button_container4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/button_tool_bar4"
-                        android:layout_width="0dp"
-                        android:layout_height="?actionBarSize"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:logo="@drawable/ic_radio_button_checked"
-                        app:title="DISTANCE"
-                        app:titleMarginStart="@dimen/toolbar_title_margin"
-                        app:titleTextColor="@android:color/black" />
-
-                    <TextView
-                        android:id="@+id/button_summary4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
-                        android:text="@string/distance_sensor"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_tool_bar4" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/state"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary4" />
-
-                    <TextView
-                        android:id="@+id/DISTNACE"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/activity_horizontal_margin"
-                        android:text="@string/button_unknown"
-                        android:textStyle="bold"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_summary4" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/progress_container"
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_blinky_feature" />
 
-        <TextView
-            android:id="@+id/connection_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="16sp"
-            tools:text="@string/state_connecting" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-    </LinearLayout>
-
-    <include
-        android:id="@+id/not_supported"
-        layout="@layout/info_not_supported"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        tools:visibility="visible" />
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

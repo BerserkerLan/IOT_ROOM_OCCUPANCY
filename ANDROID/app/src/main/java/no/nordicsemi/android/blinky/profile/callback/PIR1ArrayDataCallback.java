@@ -37,7 +37,20 @@ import no.nordicsemi.android.ble.data.Data;
 public abstract class PIR1ArrayDataCallback implements ProfileDataCallback, PIR1ArrayCallback {
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        byte[] dataByte = data.getValue();
+        onPIR1ArrayStateChanged(device, Arrays.toString(convert(dataByte)));
 
-        onPIR1ArrayStateChanged(device, data.toString());
     }
+
+    private int[] convert(byte buf[]) {
+        int intArr[] = new int[buf.length / 4];
+        int offset = 0;
+        for(int i = 0; i < intArr.length; i++) {
+            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[offset] & 0xFF) << 24);
+            offset += 4;
+        }
+        return intArr;
+    }
+
 }

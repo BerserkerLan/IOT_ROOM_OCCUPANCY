@@ -9,9 +9,11 @@ import android.speech.tts.TextToSpeech
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
+import org.jetbrains.anko.doAsync
 import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.max
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
@@ -51,13 +53,57 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
     fun toHex(arg: String): Int {
-        return String.format("%040x", BigInteger(1, arg.toByteArray())).toInt()
+        val arg_int = arg.toInt()
+        val n = java.lang.Long.parseLong(arg_int.toString(), 16).toInt()
+        return n
     }
 
-    fun convertArray(a: String):List<Int> {
+
+    fun sendArraysToServer(list1: String, list2: String){
+
+
+        //convert the strings to arrays of ints
+        var list1IntArray  = convertArray(list1)
+        var list2IntArray = convertArray(list2)
+
+        //sort the arrrays
+        list1IntArray.sorted()
+        list2IntArray.sorted()
+
+        lateinit var orderedList: MutableList<String>
+
+        val maxSize = max(list1IntArray.size, list2IntArray.size)
+
+        for(i in 0..maxSize){
+            try {
+                if(list1IntArray.isNotEmpty() && list2IntArray.isNotEmpty()){
+                  if(list1IntArray[0] < list2IntArray[1] && list1IntArray[0]!=-1){
+                      orderedList.add("D1")
+                      list1IntArray.removeAt(0)
+                      list1IntArray.removeAt(0)
+                  }
+                } else if (list2IntArray.isEmpty()){
+                    orderedList.add("D1")
+                } else if (list1IntArray.isEmpty()){
+                    orderedList.add("D2")
+                }
+
+
+            } catch (e:Exception){
+
+            }
+        }
+
+        println("Data   $orderedList")
+
+        doAsync{
+
+        }
+    }
+    fun convertArray(a: String):MutableList<Int> {
         val listStrings: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
         listStrings.removeAt(0)
-        lateinit var listHex: MutableList<Int>
+        var listHex: MutableList<Int>  = arrayListOf()
         for(i in 0..listStrings.size){
             listHex.add(i,toHex(listStrings[i]))
         }

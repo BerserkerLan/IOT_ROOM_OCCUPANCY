@@ -38,8 +38,18 @@ public abstract class PIR2ArrayDataCallback implements ProfileDataCallback, PIR2
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        System.out.println(">>>>>>>>> IN HERE PIR2 CALLBACK" + data.toString());
-        onPIR2ArrayStateChanged(device, data.toString());
+        byte[] dataByte = data.getValue();
+        onPIR2ArrayStateChanged(device, Arrays.toString(convert(dataByte)));
     }
 
+    private int[] convert(byte buf[]) {
+        int intArr[] = new int[buf.length / 4];
+        int offset = 0;
+        for(int i = 0; i < intArr.length; i++) {
+            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[offset] & 0xFF) << 24);
+            offset += 4;
+        }
+        return intArr;
+    }
 }

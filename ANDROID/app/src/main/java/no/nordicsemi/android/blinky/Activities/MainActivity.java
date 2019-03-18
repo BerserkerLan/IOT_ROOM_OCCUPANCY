@@ -26,15 +26,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.Arrays;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.R;
@@ -47,17 +41,13 @@ public class MainActivity extends BaseActivity {
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.outSidePIR)
-    TextView outSidePIR;
-    @BindView(R.id.insidePIR)
-    TextView insidePIR;
-    @BindView(R.id.doorContact)
-    TextView DoorContact;
-    @BindView(R.id.DISTNACE)
-    TextView distance;
-
     Boolean triggered1 = false;
     Boolean triggered2 = false;
+
+    String list1 = "";
+    String list2 = "";
+    Boolean sendListToServer1 = false;
+    Boolean sendListToServer2 = false;
 
     @Override
     public void onBackPressed() {
@@ -88,8 +78,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-        ButterKnife.bind(this);
+       // ButterKnife.bind(this);
 
+        list1 = "";
+        list2 = "";
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
         final String deviceName = device.getName();
@@ -97,40 +89,13 @@ public class MainActivity extends BaseActivity {
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(deviceName);
+      /*  getSupportActionBar().setTitle(deviceName);
         getSupportActionBar().setSubtitle(deviceAddress);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); */
 
         // Configure the view model
         mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
         mViewModel.connect(device);
-
-        // Set up views
-        final LinearLayout progressContainer = findViewById(R.id.progress_container);
-        final TextView connectionState = findViewById(R.id.connection_state);
-        final View content = findViewById(R.id.device_container);
-        final View notSupported = findViewById(R.id.not_supported);
-
-
-        mViewModel.isDeviceReady().observe(this, deviceReady -> {
-            progressContainer.setVisibility(View.GONE);
-            content.setVisibility(View.VISIBLE);
-        });
-
-        mViewModel.getConnectionState().observe(this, text -> {
-            if (text != null) {
-                progressContainer.setVisibility(View.VISIBLE);
-                notSupported.setVisibility(View.GONE);
-                connectionState.setText(text);
-            }
-        });
-
-        mViewModel.isSupported().observe(this, supported -> {
-            if (!supported) {
-                progressContainer.setVisibility(View.GONE);
-                notSupported.setVisibility(View.VISIBLE);
-            }
-        });
 
         mViewModel.distance1().observe(this,
                 pressed -> {
@@ -139,8 +104,6 @@ public class MainActivity extends BaseActivity {
                         if (!triggered2) {
                             sensorTriggerred("DISTANCE2");
                             triggered2 = true;
-                        } else {
-
                         }
                     } else {
                         triggered2 = false;
@@ -160,28 +123,71 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
-
-        mViewModel.getPIR1StoredDistances().observe(this,
+        mViewModel.getDistanceStored1().observe(this,
                 pressed -> {
-                    System.out.println("Data PIR1 STORED " + pressed);
-
+                    System.out.println("Data DISTANCE1 STORED " + pressed);
+                    if (list1.equals("")) {
+                        list1 = pressed;
+                        sendListToServer1 = true;
+                    } else if (list1.equals(pressed)) {
+                        sendListToServer1 = false;
+                        //Do nothing we've already seen this
+                    }
                 });
 
-        mViewModel.getPIR2StoredDistances().observe(this,
+        mViewModel.getDistanceStored2().observe(this,
                 pressed -> {
-                   // System.out.println(Arrays.toString(convertArray(pressed).toArray()));
-                    System.out.println("Data PIR2 STORED " + pressed);
+                    System.out.println("Data DISTANCE2 STORED " + pressed);
+                    if (list2.equals("")) {
+                        list2 = pressed;
+                        sendListToServer2 = true;
+                    } else if (list1.equals(pressed)) {
+                        sendListToServer2 = false;
+                        //Do nothing we've already seen this
+                    }
                 });
 
-        mViewModel.getDistanceState().observe(this,
-                pressed -> distance.setText(pressed ? "" : "PERSON"));
 
-        mViewModel.getReadSwitchState().observe(this,
-                pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
+        new Thread(() -> {
+            while(true){
+                try {
+                    System.out.println(">>>>IN WHILE");
+                    if(sendListToServer1 && sendListToServer2){
+                        sendArraysToServer(list1, list2);
+                        sendListToServer1 = false;
+                        sendListToServer2 = false;
+                    }
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
+            }
+        }).start();
     }
-
+    /*
+     Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:01.136 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:04.692 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:04.693 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:05.277 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:05.326 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:07.617 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:07.910 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:08.299 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:08.494 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:08.495 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:09.080 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:09.080 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:10.542 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:10.543 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:11.127 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:11.128 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:18.148 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+03-18 22:23:23.997 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:23.998 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
+     */
     @OnClick(R.id.action_clear_cache)
     public void onTryAgainClicked() {
         mViewModel.reconnect();

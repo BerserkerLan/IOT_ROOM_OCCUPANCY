@@ -85,11 +85,11 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return distanceState;
     }
 
-    public LiveData<String> getPIR1StoredDistances() {
+    public LiveData<String> getDistanceStored1() {
         return pir1Array;
     }
 
-    public LiveData<String> getPIR2StoredDistances() {
+    public LiveData<String> getDistanceStored2() {
         return pir2Array;
     }
 
