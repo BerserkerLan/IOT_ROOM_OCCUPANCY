@@ -244,7 +244,7 @@ def update_every_1_mins():
 		update_people_in_today()
 		update_people_out_today()
 		update_most_popular_time()
-		time.sleep(5)
+		time.sleep(60*2)
 
 
 def update_every_10_seconds():
