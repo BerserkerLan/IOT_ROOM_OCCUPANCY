@@ -12,24 +12,35 @@ import no.nordicsemi.android.blinky.utils.UserDatabase
 import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.max
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
 
+/**
+ * The purpose of this activity is to reduce code duplication
+ * It can be inherited from any activity, and it inherits AppCompatActivity
+ */
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
     var currentCount = 0 //Keeping track of the currentCount
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
-    lateinit var db: FirebaseFirestore
+    lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
 
+
+    /**
+     * Get timestamp down to ms level
+     */
     @SuppressLint("SimpleDateFormat")
     fun getTimeStamp(): String {
         val date = Date()
         return date.time.toString()
     }
 
+
+    /**
+     * This function will update the database accordingly, all that is needed is to pass which sensor to update for
+     */
     @Synchronized
     fun sensorTriggerred(sensorType: String) {
         val user = HashMap<String, Any>()
@@ -51,15 +62,12 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
-    fun toHex(arg: String): Int {
-        val arg_int = arg.toInt()
-        val n = java.lang.Long.parseLong(arg_int.toString(), 16).toInt()
-        return n
-    }
 
-
+    /**
+     * This function takes in intArrays, then updates the server accordingly based on timestamps
+     */
+    @Suppress("unused")
     fun sendArraysToServer(list1: IntArray, list2: IntArray) {
-
 
         //convert the array to a mutableList
         var list1IntArray = list1.toMutableList()
@@ -69,32 +77,29 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         list1IntArray.sorted()
         list2IntArray.sorted()
 
-        var orderedList: MutableList<String> = mutableListOf()
-
-        val maxSize = max(list1IntArray.size, list2IntArray.size)
+        val orderedList: MutableList<String> = mutableListOf()
+        val maxSize = list1IntArray.size+ list2IntArray.size
 
         for (i in 0..maxSize) {
-            println(">>>>>>>>INT ARRAY 1 $list1IntArray")
-            println(">>>>>>>>INT ARRAY 2 $list2IntArray")
+
             try {
                 if (list1IntArray.isNotEmpty() && list2IntArray.isNotEmpty()) {
-                    if (list1IntArray[0] < list2IntArray[0]) {
-                        orderedList.add("D1")
-                        list1IntArray.removeAt(0)
-                    } else if (list1IntArray[0] > list2IntArray[0]) {
-                        orderedList.add("D2")
-                        list2IntArray.removeAt(0)
-                    } else if (list1IntArray[0] == list2IntArray[0]) {
-                        orderedList.add("D1")
-                        list2IntArray.removeAt(0)
+                    when {
+                        list1IntArray[0] < list2IntArray[0] -> {
+                            orderedList.add("D1")
+                            list1IntArray.removeAt(0)
+                        }
+                        list1IntArray[0] > list2IntArray[0] -> {
+                            orderedList.add("D2")
+                            list2IntArray.removeAt(0)
+                        }
+                        list1IntArray[0] == list2IntArray[0] -> {
+                            orderedList.add("D1")
+                            list2IntArray.removeAt(0)
+                        }
                     }
-                } else if (list2IntArray.isEmpty()) {
-                    orderedList.add("D1")
-                } else if (list1IntArray.isEmpty()) {
-                    orderedList.add("D2")
+
                 }
-
-
             } catch (e: Exception) {
 
             }
@@ -117,25 +122,21 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         }
     }
 
-    fun convertArray(a: String): MutableList<Int> {
-        val listStrings: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
-        listStrings.removeAt(0)
-        var listHex: MutableList<Int> = arrayListOf()
-        for (i in 0..listStrings.size) {
-            listHex.add(i, toHex(listStrings[i]))
-        }
-        return listHex
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        tts = TextToSpeech(this, this)
-        db = FirebaseFirestore.getInstance()
+        tts = TextToSpeech(this, this) //Instantiate tts
+        db = FirebaseFirestore.getInstance() //Instantiate firestore
         super.onCreate(savedInstanceState)
     }
 
     override fun onInit(status: Int) {
 
     }
+
+
+    /**
+     * This function will get the current timestamp in this format
+     * "hh/mm/ss/a"
+     */
 
     @Suppress("unused")
     @SuppressLint("SimpleDateFormat")
@@ -147,6 +148,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
+    /**
+     * This function will get the current date in yyyymmdd format
+     */
     @SuppressLint("SimpleDateFormat")
     private fun getDate(): String {
         val cal = Calendar.getInstance()

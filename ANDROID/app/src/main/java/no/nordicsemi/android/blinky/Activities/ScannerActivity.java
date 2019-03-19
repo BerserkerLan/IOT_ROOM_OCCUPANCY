@@ -92,6 +92,7 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
         mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
         mScannerViewModel.getScannerState().observe(this, this::startScan);
         mScannerViewModel.getDevices().observe(this, devices -> {
+            //Here we check if we can autoconnect
             boolean MAC1 = false;
             no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice MAC1_DEVICE = null;
             boolean MAC2 = false;
@@ -99,11 +100,14 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
             try {
                 for (int i = 0; i < devices.size(); i++) {
                     if (MAC1 && MAC2) {
+                        //If both boards are on, we break and we deal with this event later
                         break;
                     } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_1)) {
+                        //If only board 1 is on
                         MAC1 = true;
                         MAC1_DEVICE = devices.get(i);
                     } else if (devices.get(i).getAddress().equals(MAC_ADDRESS_2)) {
+                        //If only board 2 is on
                         MAC2 = true;
                         MAC2_DEVICE = devices.get(i);
                     }
@@ -112,6 +116,7 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
 
             }
             if (MAC1 && MAC2) {
+                //If board 1 AND board 2 is on, we ask the user which one they want to connect to
                 if (!showingDialog) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     DiscoveredBluetoothDevice finalMAC2_DEVICE = MAC2_DEVICE;
@@ -134,12 +139,12 @@ public class ScannerActivity extends BaseActivity implements DevicesAdapter.OnIt
                 }
             } //If we reach this stage, its either MAC1 or MAC2, cannot be both
             else if (MAC2) {
-                //Start with MAC2
+                //Start with MAC2, as its the only one which is one
                 final Intent controlBlinkIntent = new Intent(this, MainActivity.class);
                 controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, MAC2_DEVICE);
                 startActivity(controlBlinkIntent);
             } else if (MAC1) {
-                //Start with MAC1
+                //Start with MAC1, as its the only one which is one
                 final Intent controlBlinkIntent = new Intent(this, MainActivity.class);
                 controlBlinkIntent.putExtra(MainActivity.EXTRA_DEVICE, MAC1_DEVICE);
                 startActivity(controlBlinkIntent);

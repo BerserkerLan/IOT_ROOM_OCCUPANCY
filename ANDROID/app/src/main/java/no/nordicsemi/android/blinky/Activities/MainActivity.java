@@ -26,10 +26,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
@@ -49,6 +49,10 @@ public class MainActivity extends BaseActivity {
     Boolean sendListToServer1 = false;
     Boolean sendListToServer2 = false;
 
+
+    /**
+     * Overriding onBackPressed to prevent accidentally exiting the activity
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -78,24 +82,24 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-       // ButterKnife.bind(this);
 
         list1 = "";
         list2 = "";
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-        final String deviceName = device.getName();
-        final String deviceAddress = device.getAddress();
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-      /*  getSupportActionBar().setTitle(deviceName);
-        getSupportActionBar().setSubtitle(deviceAddress);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); */
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keep screen on flag
+
 
         // Configure the view model
         mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
         mViewModel.connect(device);
+
+        /*
+          This will deal with getting readings from the inside distance sensor
+         */
 
         mViewModel.distance1().observe(this,
                 pressed -> {
@@ -110,6 +114,10 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
+        /*
+          This will deal with getting readings from the outside distance sensor
+         */
+
         mViewModel.distance2().observe(this,
                 pressed -> {
                     if (pressed) {
@@ -123,6 +131,9 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
+        /*
+          This will deal with getting NEW IN data regarding the stored data in the occasion that the gateway disconnects from the board
+         */
         mViewModel.getDistanceStored1().observe(this,
                 pressed -> {
                     System.out.println("Data DISTANCE1 STORED " + pressed);
@@ -134,6 +145,9 @@ public class MainActivity extends BaseActivity {
                         //Do nothing we've already seen this
                     }
                 });
+        /*
+          This will deal with getting NEW OUT data regarding the stored data in the occasion that the gateway disconnects from the board
+         */
 
         mViewModel.getDistanceStored2().observe(this,
                 pressed -> {
@@ -147,9 +161,11 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
-        int [] a = {0,2,5};
-        int [] b = {1,3};
+        /*
+        int [] b = {1,2,3,6,7};
+        int [] a = {4,5,8};
         sendArraysToServer(a, b);
+        System.out.println("D1 D1 D1 D2 D2 D1 D1 D2"); */
 
         /*new Thread(() -> {
             while(true){
@@ -165,32 +181,10 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
 
-
-            }
+             }
         }).start(); */
     }
-    /*
-     Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:01.136 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:04.692 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED
-03-18 22:23:04.693 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:05.277 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:05.326 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:07.617 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:07.910 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:08.299 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:08.494 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:08.495 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:09.080 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:09.080 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:10.542 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:10.543 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:11.127 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:11.128 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:18.148 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:23.997 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
-03-18 22:23:23.998 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-     */
+
     @OnClick(R.id.action_clear_cache)
     public void onTryAgainClicked() {
         mViewModel.reconnect();
