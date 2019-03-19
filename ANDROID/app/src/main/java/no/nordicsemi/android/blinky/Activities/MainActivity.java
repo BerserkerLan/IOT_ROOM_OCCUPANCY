@@ -147,8 +147,11 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
+        int [] a = {0,2,5};
+        int [] b = {1,3};
+        sendArraysToServer(a, b);
 
-        new Thread(() -> {
+        /*new Thread(() -> {
             while(true){
                 try {
                     System.out.println(">>>>IN WHILE");
@@ -164,12 +167,12 @@ public class MainActivity extends BaseActivity {
 
 
             }
-        }).start();
+        }).start(); */
     }
     /*
      Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
 03-18 22:23:01.136 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
-03-18 22:23:04.692 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
+03-18 22:23:04.692 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED
 03-18 22:23:04.693 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true
 03-18 22:23:05.277 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: Data DISTANCE1 STORED [1195919690, 1263291726, 1330663762, 1398035798, 1465407834]
 03-18 22:23:05.326 8406-8406/no.nordicsemi.android.nrfblinky I/System.out: >>>>>>>>PRESSED DISTANCE2 true

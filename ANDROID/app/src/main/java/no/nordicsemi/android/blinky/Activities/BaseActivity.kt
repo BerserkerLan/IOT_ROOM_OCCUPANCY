@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
 import org.jetbrains.anko.doAsync
-import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
@@ -59,53 +58,71 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
-    fun sendArraysToServer(list1: String, list2: String){
+    fun sendArraysToServer(list1: IntArray, list2: IntArray) {
 
 
-        //convert the strings to arrays of ints
-        var list1IntArray  = convertArray(list1)
-        var list2IntArray = convertArray(list2)
+        //convert the array to a mutableList
+        var list1IntArray = list1.toMutableList()
+        var list2IntArray = list2.toMutableList()
 
         //sort the arrrays
         list1IntArray.sorted()
         list2IntArray.sorted()
 
-        lateinit var orderedList: MutableList<String>
+        var orderedList: MutableList<String> = mutableListOf()
 
         val maxSize = max(list1IntArray.size, list2IntArray.size)
 
-        for(i in 0..maxSize){
+        for (i in 0..maxSize) {
+            println(">>>>>>>>INT ARRAY 1 $list1IntArray")
+            println(">>>>>>>>INT ARRAY 2 $list2IntArray")
             try {
-                if(list1IntArray.isNotEmpty() && list2IntArray.isNotEmpty()){
-                  if(list1IntArray[0] < list2IntArray[1] && list1IntArray[0]!=-1){
-                      orderedList.add("D1")
-                      list1IntArray.removeAt(0)
-                      list1IntArray.removeAt(0)
-                  }
-                } else if (list2IntArray.isEmpty()){
+                if (list1IntArray.isNotEmpty() && list2IntArray.isNotEmpty()) {
+                    if (list1IntArray[0] < list2IntArray[0]) {
+                        orderedList.add("D1")
+                        list1IntArray.removeAt(0)
+                    } else if (list1IntArray[0] > list2IntArray[0]) {
+                        orderedList.add("D2")
+                        list2IntArray.removeAt(0)
+                    } else if (list1IntArray[0] == list2IntArray[0]) {
+                        orderedList.add("D1")
+                        list2IntArray.removeAt(0)
+                    }
+                } else if (list2IntArray.isEmpty()) {
                     orderedList.add("D1")
-                } else if (list1IntArray.isEmpty()){
+                } else if (list1IntArray.isEmpty()) {
                     orderedList.add("D2")
                 }
 
 
-            } catch (e:Exception){
+            } catch (e: Exception) {
 
             }
         }
 
+        try {
+            if (list2IntArray.isEmpty()) {
+                orderedList.add("D1")
+            } else if (list1IntArray.isEmpty()) {
+                orderedList.add("D2")
+            }
+        } catch (e: Exception) {
+
+        }
+
         println("Data   $orderedList")
 
-        doAsync{
+        doAsync {
 
         }
     }
-    fun convertArray(a: String):MutableList<Int> {
+
+    fun convertArray(a: String): MutableList<Int> {
         val listStrings: MutableList<String> = ((a.split(" ")).toString()).split("-") as MutableList<String>
         listStrings.removeAt(0)
-        var listHex: MutableList<Int>  = arrayListOf()
-        for(i in 0..listStrings.size){
-            listHex.add(i,toHex(listStrings[i]))
+        var listHex: MutableList<Int> = arrayListOf()
+        for (i in 0..listStrings.size) {
+            listHex.add(i, toHex(listStrings[i]))
         }
         return listHex
     }
