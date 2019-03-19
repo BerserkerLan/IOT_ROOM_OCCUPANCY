@@ -26,7 +26,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,8 +48,11 @@ public class MainActivity extends BaseActivity {
 
     String list1 = "";
     String list2 = "";
+    int [] list1_array;
+    int [] list2_array;
     Boolean sendListToServer1 = false;
     Boolean sendListToServer2 = false;
+    String timestamp = "";
 
 
     /**
@@ -97,13 +102,17 @@ public class MainActivity extends BaseActivity {
         mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
         mViewModel.connect(device);
 
+
+
         /*
           This will deal with getting readings from the inside distance sensor
          */
 
         mViewModel.distance1().observe(this,
                 pressed -> {
+                    System.out.println("IN DISTANCE1");
                     if (pressed) {
+                        timestamp = getTimeStamp();
                         System.out.println(">>>>>>>> " + pressed);
                         if (!triggered2) {
                             sensorTriggerred("DISTANCE2");
@@ -120,7 +129,9 @@ public class MainActivity extends BaseActivity {
 
         mViewModel.distance2().observe(this,
                 pressed -> {
+                    System.out.println("IN DISTANCE2");
                     if (pressed) {
+                        timestamp = getTimeStamp();
                         System.out.println(">>>>>>>>PRESSED DISTANCE2 " + pressed);
                         if (!triggered1) {
                             sensorTriggerred("DISTANCE1");
@@ -136,6 +147,8 @@ public class MainActivity extends BaseActivity {
          */
         mViewModel.getDistanceStored1().observe(this,
                 pressed -> {
+                    System.out.println("IN DISTANCES STORED1");
+                    timestamp = getTimeStamp();
                     System.out.println("Data DISTANCE1 STORED " + pressed);
                     if (list1.equals("")) {
                         list1 = pressed;
@@ -149,8 +162,47 @@ public class MainActivity extends BaseActivity {
           This will deal with getting NEW OUT data regarding the stored data in the occasion that the gateway disconnects from the board
          */
 
+        //onLinkLossOccurred
+        mViewModel.getMIsConnected().observe(this,
+                pressed -> {
+                   if(!pressed){
+                       System.out.println(">>>>>>>>>>>>>BOARD DISCONNECTED");
+                       boardDisconnectedSpeak();
+                   } else {
+                       boardConnectedSpeak();
+                       System.out.println("THE BOARD IS CONNECTED");
+                   }
+                });
+        ImageView imageView = findViewById(R.id.image);
+        imageView.setOnLongClickListener(v -> {
+            mViewModel.getMIsConnected().observe(this,
+                    pressed -> {
+                        if(!pressed){
+                            System.out.println(">>>>>>>>>>>>>BOARD DISCONNECTED");
+                            boardDisconnectedSpeak();
+                        } else {
+                            boardConnectedSpeak();
+                            System.out.println("THE BOARD IS CONNECTED");
+                        }
+                    });
+            return true;
+        });
+        imageView.setOnClickListener((View.OnClickListener) v -> {
+            mViewModel.getMIsConnected().observe(this,
+                    pressed -> {
+                        if(!pressed){
+                            System.out.println(">>>>>>>>>>>>>BOARD DISCONNECTED");
+                            boardDisconnectedSpeak();
+                        } else {
+                            System.out.println("THE BOARD IS CONNECTED");
+                        }
+                    });
+        });
+
         mViewModel.getDistanceStored2().observe(this,
                 pressed -> {
+                    System.out.println("IN DISTANCE STORED2");
+                    timestamp = getTimeStamp();
                     System.out.println("Data DISTANCE2 STORED " + pressed);
                     if (list2.equals("")) {
                         list2 = pressed;
@@ -167,12 +219,15 @@ public class MainActivity extends BaseActivity {
         sendArraysToServer(a, b);
         System.out.println("D1 D1 D1 D2 D2 D1 D1 D2"); */
 
-        /*new Thread(() -> {
+        new Thread(() -> {
             while(true){
                 try {
-                    System.out.println(">>>>IN WHILE");
                     if(sendListToServer1 && sendListToServer2){
-                        sendArraysToServer(list1, list2);
+                        try{
+                            sendArraysToServer(null, null);
+                        } catch (Exception e){
+
+                        }
                         sendListToServer1 = false;
                         sendListToServer2 = false;
                     }
@@ -182,7 +237,7 @@ public class MainActivity extends BaseActivity {
                 }
 
              }
-        }).start(); */
+        }).start();
     }
 
     @OnClick(R.id.action_clear_cache)

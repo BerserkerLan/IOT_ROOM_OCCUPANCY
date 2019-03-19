@@ -25,6 +25,8 @@ package no.nordicsemi.android.blinky.viewmodels;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 
+import com.google.android.gms.flags.Flag;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -69,6 +71,12 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return mConnectionState;
     }
 
+    public LiveData<Boolean> getMIsConnected(){
+        return mIsConnected;
+    }
+
+
+
     public LiveData<Boolean> distance2() {
         return userIN;
     }
@@ -77,13 +85,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return userOUT;
     }
 
-    public LiveData<Boolean> getReadSwitchState() {
-        return readSwitchState;
-    }
-
-    public LiveData<Boolean> getDistanceState() {
-        return distanceState;
-    }
 
     public LiveData<String> getDistanceStored1() {
         return pir1Array;
@@ -192,11 +193,13 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     @Override
     public void onDeviceDisconnecting(@NonNull final BluetoothDevice device) {
         mIsConnected.postValue(false);
+        System.out.println("DEVICE DISCONNECED");
     }
 
     @Override
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         mIsConnected.postValue(false);
+        System.out.println("DEVICE DISCONNECED");
     }
 
     @Override
