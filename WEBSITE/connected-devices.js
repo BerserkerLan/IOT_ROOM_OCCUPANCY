@@ -5,6 +5,7 @@ src = "https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"
 src = "https://www.gstatic.com/firebasejs/5.8.4/firebase-messaging.js"
 src = "https://www.gstatic.com/firebasejs/5.8.4/firebase-functions.js"
 
+//Firebase configuration
 const firebaseApp = firebase.initializeApp({
     apiKey: "AIzaSyC-vZnOFnjnZbIHfMJFaXPhPSxY65w64uM",
     authDomain: "iotssc.firebaseapp.com",
@@ -25,16 +26,19 @@ var geoProject = new Keen({
     readKey: 'd1b97982ce67ad4b411af30e53dd75be6cf610213c35f3bd3dd2ef62eaeac14632164890413e2cc2df2e489da88e87430af43628b0c9e0b2870d0a70580d5f5fe8d9ba2a6d56f9448a3b6f62a5e6cdd1be435c227253fbe3fab27beb0d14f91b710d9a6e657ecf47775281abc17ec455'
 });
 
+//This will set the counting timestamp at the top of the page
 function updateDisplay(Todays1) {
     $('#day').html(date_time('day').toString());
 }
 
+//This function will update the cards with meaningful informtion
 function getAUXInformationCallBack(day, month, time) {
     $('#mostPopularTime').html(time.toString());
     $('#mostPopularMonth').html(month.toString());
     $('#mostPopularDay').html(day.toString());
 }
 
+//This function will get auxilarily information for the information cards
 function getAUXInformation() {
     var db = firebaseApp.firestore();
     const comments = [];
@@ -53,12 +57,14 @@ function getAUXInformation() {
     });
 }
 
+//This function will get yesterdays date
 function getYesterdaysDate() {
     var date = new Date();
     date.setDate(date.getDate() - 1);
     return date.getDate() + '' + (date.getMonth() + 1) + '' + date.getFullYear();
 }
 
+//This function will get todays date
 function getTodaysDate() {
     var today = new Date();
     var dd = today.getDate();
@@ -77,11 +83,7 @@ function getTodaysDate() {
     return today;
 }
 
-function getDailyStats() {
-    //  console.log(getTodaysDate());
-}
-
-
+//This function returns a timestamp
 function date_time(id) {
     date = new Date;
     year = date.getFullYear();
@@ -108,11 +110,13 @@ function date_time(id) {
     return true;
 }
 
+//This function gets the date one week ago
 function getDateONEWEEKAGO() {
     var onceWeekAgo = new Date();
     return (oneWeekAgo.getDate() - 7);
 }
 
+//This function gets the today for today
 function getTotalToday() {
     var db = firebaseApp.firestore();
     const comments = [];
@@ -131,130 +135,96 @@ function getTotalToday() {
     });
 }
 
+//Function to return the date
 function myFunction() {
     var d = new Date();
     var n = d.getDay()
     return n;
 }
 
-getAUXInformation();
-
 Keen.ready(function() {
-    //console.log(getDateONEWEEKAGO());
-    var tabVisitors = document.getElementById('tab-visitors');
-    var tabBrowsers = document.getElementById('tab-browsers');
-    var tabGeography = document.getElementById('tab-geography');
-    var activeRequest;
 
-    var chart_visitors = new Keen.Dataviz()
-        .el('#visitors')
-        .height(300)
-        .title('Daily Visits')
-        .type('area');
-
-    var chart_browsers = new Keen.Dataviz()
-        .el('#browser')
-        .type('line')
-        .height(300);
-
-    var chart_geographies = new Keen.Dataviz()
-        .el('#geography')
-        .type('horizontal-bar')
-        .height(300);
-
-    updateDisplay();
-
-    getTotalToday();
-
-    function updateTotalTodayIn(a){
-      //TotalInThisHour
-      //TotalInToday
-      $('.TotalInToday').knob({
-          angleArc: 250,
-          angleOffset: -125,
-          readOnly: true,
-          min: 0,
-          max: 1000,
-          fgColor: '#00bbde',
-          height: 290,
-          width: '95%'
-      });
-
-      geoProject
-          .query('count_unique', {
-              event_collection: 'activations',
-              target_property: 'user.id'
-          })
-          .then(function(res) {
-              $('.TotalInToday').val(a).trigger('change');
-          })
-          .catch(function(err) {
-              alert('An error occurred fetching New Activations metric');
-          });
-    }
-
-    function updateTotalInHour(a){
-    $('.TotalInThisHour').knob({
-          angleArc: 250,
-          angleOffset: -125,
-          readOnly: true,
-          min: 0,
-          max: 1000,
-          fgColor: '#00bbde',
-          height: 290,
-          width: '95%'
-      });
-      geoProject
-          .query('count_unique', {
-              event_collection: 'activations',
-              target_property: 'user.id'
-          })
-          .then(function(res) {
-              $('.TotalInThisHour').val(a).trigger('change');
-          })
-          .catch(function(err) {
-              alert('An error occurred fetching New Activations metric');
-          });
-    }
-
-
-    function getTotalToday() {
-        var db = firebaseApp.firestore();
-        const comments = [];
-        //This will get the most popular time
-        var docRef = db.collection("AUX").doc(String("TODAY"));
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                $('.users').knob({
-                    angleArc: 250,
-                    angleOffset: -125,
-                    readOnly: true,
-                    min: 0,
-                    max: 1000,
-                    fgColor: '#00bbde',
-                    height: 290,
-                    width: '95%'
-                });
-
-                var theData = doc.data()['CURRENT_OCCUPANCY'];
-                console.log("numberofPeopleintODAY", theData);
-                geoProject
-                    .query('count_unique', {
-                        event_collection: 'activations',
-                        target_property: 'user.id'
-                    })
-                    .then(function(res) {
-                        $('.users').val(theData).trigger('change');
-                    })
-                    .catch(function(err) {
-                        alert('An error occurred fetching New Activations metric');
-                    });
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
+    /*
+    Upated the dial for the total in today
+    */
+    function updateTotalTodayIn(a) {
+        $('.TotalInToday').knob({
+            angleArc: 250,
+            angleOffset: -125,
+            readOnly: true,
+            min: 0,
+            max: 1000,
+            fgColor: '#b71c1c',
+            height: 290,
+            width: '95%'
         });
+
+        geoProject
+            .query('count_unique', {
+                event_collection: 'activations',
+                target_property: 'user.id'
+            })
+            .then(function(res) {
+                $('.TotalInToday').val(a).trigger('change');
+            })
+            .catch(function(err) {
+                alert('An error occurred fetching New Activations metric');
+            });
+    }
+
+    /*
+    Upated the dial for the total in this hour
+    */
+
+    function updateTotalInHour(a) {
+        $('.TotalInThisHour').knob({
+            angleArc: 250,
+            angleOffset: -125,
+            readOnly: true,
+            min: 0,
+            max: 1000,
+            fgColor: '#311b92',
+            height: 290,
+            width: '95%'
+        });
+        geoProject
+            .query('count_unique', {
+                event_collection: 'activations',
+                target_property: 'user.id'
+            })
+            .then(function(res) {
+                $('.TotalInThisHour').val(a).trigger('change');
+            })
+            .catch(function(err) {
+                alert('An error occurred fetching New Activations metric');
+            });
+    }
+
+
+    //This function sets the dial for the total people currently in the room
+    function setTotalToday(theData) {
+        $('.users').knob({
+            angleArc: 250,
+            angleOffset: -125,
+            readOnly: true,
+            min: 0,
+            max: 1000,
+            fgColor: '#006064',
+            height: 290,
+            width: '95%'
+        });
+        console.log("numberofPeopleintODAY", theData);
+        geoProject
+            .query('count_unique', {
+                event_collection: 'activations',
+                target_property: 'user.id'
+            })
+            .then(function(res) {
+                $('.users').val(theData).trigger('change');
+            })
+            .catch(function(err) {
+                alert('An error occurred fetching New Activations metric');
+            });
     }
 
 
@@ -274,18 +244,15 @@ Keen.ready(function() {
         width: '95%'
     });
 
-
-
-    getTotalAverage();
-
     function getTotalAverage() {
         //Need to investigate
         var db = firebaseApp.firestore();
         const comments = [];
         //This will get the most popular time
-        var docRef = db.collection("AUX").doc(String("AVERAGES"));
+        var docRef = db.collection("AUX").doc("AVERAGES");
         docRef.get().then(function(doc) {
             if (doc.exists) {
+                updateBarDays(doc.data())
                 $('.users').knob({
                     angleArc: 250,
                     angleOffset: -125,
@@ -339,43 +306,32 @@ Keen.ready(function() {
         });
     }
 
-    dailyStats();
 
-    function dailyStats() {
-        var db = firebaseApp.firestore();
-        var docRef = db.collection("AUX").doc("AVERAGES");
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                var theData = doc.data();
-                monthlyStats = theData;
-                var Monday = monthlyStats['Monday'];
-                var Tuesday = monthlyStats['Tuesday'];
-                var Wednesday = monthlyStats['Wednesday'];
-                var Thursday = monthlyStats['Thursday'];
-                var Friday = monthlyStats['Friday'];
-                var Saturday = monthlyStats['Saturday'];
-                var Sunday = monthlyStats['Sunday'];
-                var sample_funnel = new Keen.Dataviz()
-                    .el('#chart-05')
-                    .colors(['#00cfbb'])
-                    .data({
-                        result: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
-                    })
-                    .height(340)
-                    .type('bar')
-                    .labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', "Saturday", "Sunday"])
-                    .title(null)
-                    .render();
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+    /*
+    This function will update the bar graph at the bottom left with the new data
+    */
+    function updateBarDays(theData) {
+        monthlyStats = theData;
+        var Monday = monthlyStats['Monday'];
+        var Tuesday = monthlyStats['Tuesday'];
+        var Wednesday = monthlyStats['Wednesday'];
+        var Thursday = monthlyStats['Thursday'];
+        var Friday = monthlyStats['Friday'];
+        var Saturday = monthlyStats['Saturday'];
+        var Sunday = monthlyStats['Sunday'];
+        var sample_funnel = new Keen.Dataviz()
+            .el('#chart-05')
+            .colors(['#ffa500'])
+            .data({
+                result: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+            })
+            .height(340)
+            .type('bar')
+            .labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', "Saturday", "Sunday"])
+            .title(null)
+            .render();
     }
 
-    //
-    hourlyStats();
     function hourlyStats() {
         var db = firebaseApp.firestore();
         var docRef = db.collection("AUX").doc("TODAY");
@@ -385,13 +341,14 @@ Keen.ready(function() {
                 st = theData;
 
                 var d = new Date();
-                var hour =  d.getHours();
-                if(hour<9){
-                  hour = "0" + hour + ":00";
+                var hour = d.getHours();
+                if (hour < 9) {
+                    hour = "0" + hour + ":00";
                 } else {
-                  hour = hour + ":00";
+                    hour = hour + ":00";
                 }
 
+                setTotalToday(doc.data()['CURRENT_OCCUPANCY']);
                 updateTotalTodayIn(st['NUMBER_OF_PEOPLE_IN_TODAY']);
                 updateTotalInHour(st[hour]);
 
@@ -399,8 +356,10 @@ Keen.ready(function() {
                     .el('#chart-06')
                     .colors(['#00cfbb'])
                     .data({
-                  result: [st['00:00'], st['01:00'], st['02:00'], st['03:00'], st['04:00'], st['05:00'], st['06:00'],st['07:00'],st['08:00'],st['09:00'],st['10:00'],
-                  st['11:00'],st['12:00'],st['13:00'],st['14:00'],st['15:00'],st['16:00'],st['17:00'],st['16:00'],st['17:00'],st['18:00'],st['19:00'],st['20:00'],st['21:00'],st['22:00'],st['23:00']]})
+                        result: [st['00:00'], st['01:00'], st['02:00'], st['03:00'], st['04:00'], st['05:00'], st['06:00'], st['07:00'], st['08:00'], st['09:00'], st['10:00'],
+                            st['11:00'], st['12:00'], st['13:00'], st['14:00'], st['15:00'], st['16:00'], st['17:00'], st['16:00'], st['17:00'], st['18:00'], st['19:00'], st['20:00'], st['21:00'], st['22:00'], st['23:00']
+                        ]
+                    })
                     .height(340)
                     .type('bar')
                     .labels(['00:00', '01:00', '02:00', '03:00', '04:00', "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"])
@@ -415,16 +374,13 @@ Keen.ready(function() {
     }
 
     foo();
+
     function foo() {
-        // your function code here
-        console.log("IN here");;
         getAUXInformation();
         updateDisplay();
-        getTotalToday();
         getTotalAverage();
-        dailyStats();
         hourlyStats();
-        setTimeout(foo, 5000);
+        setTimeout(foo, 5000); //Recursively call this function every 5 seconds
     }
 
 });
