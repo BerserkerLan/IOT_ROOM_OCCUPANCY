@@ -35,10 +35,13 @@ public class SplashScreenActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        switchToScanner();
+        setContentView(R.layout.activity_splash_screen); //Load XML
+        switchToScanner(); //Switch activity to the scanner activity
     }
 
+    /**
+     * Function to switch to the scanner activity
+     */
     private void switchToScanner() {
         new Handler().postDelayed(() -> {
             final Intent intent = new Intent(this, ScannerActivity.class);
@@ -48,6 +51,10 @@ public class SplashScreenActivity extends Activity {
         }, DURATION);
     }
 
+
+    /**
+     * Overriding onBackPressed as we do NOT want the user to back out of this activity at this stage
+     */
     @Override
     public void onBackPressed() {
         // We don't want the splash screen to be interrupted

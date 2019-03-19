@@ -9,25 +9,38 @@ import android.speech.tts.TextToSpeech
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import no.nordicsemi.android.blinky.utils.UserDatabase
+import org.jetbrains.anko.doAsync
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
 
+/**
+ * The purpose of this activity is to reduce code duplication
+ * It can be inherited from any activity, and it inherits AppCompatActivity
+ */
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
     var currentCount = 0 //Keeping track of the currentCount
     lateinit var tts: TextToSpeech //Lateinit instance of the tts
-    lateinit var db: FirebaseFirestore
+    lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
 
+
+    /**
+     * Get timestamp down to ms level
+     */
     @SuppressLint("SimpleDateFormat")
     fun getTimeStamp(): String {
         val date = Date()
         return date.time.toString()
     }
 
+
+    /**
+     * This function will update the database accordingly, all that is needed is to pass which sensor to update for
+     */
     @Synchronized
     fun sensorTriggerred(sensorType: String) {
         val user = HashMap<String, Any>()
@@ -50,9 +63,68 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
+    /**
+     * This function takes in intArrays, then updates the server accordingly based on timestamps
+     */
+    @Suppress("unused")
+    fun sendArraysToServer(list1: IntArray, list2: IntArray) {
+
+        //convert the array to a mutableList
+        var list1IntArray = list1.toMutableList()
+        var list2IntArray = list2.toMutableList()
+
+        //sort the arrrays
+        list1IntArray.sorted()
+        list2IntArray.sorted()
+
+        val orderedList: MutableList<String> = mutableListOf()
+        val maxSize = list1IntArray.size+ list2IntArray.size
+
+        for (i in 0..maxSize) {
+
+            try {
+                if (list1IntArray.isNotEmpty() && list2IntArray.isNotEmpty()) {
+                    when {
+                        list1IntArray[0] < list2IntArray[0] -> {
+                            orderedList.add("D1")
+                            list1IntArray.removeAt(0)
+                        }
+                        list1IntArray[0] > list2IntArray[0] -> {
+                            orderedList.add("D2")
+                            list2IntArray.removeAt(0)
+                        }
+                        list1IntArray[0] == list2IntArray[0] -> {
+                            orderedList.add("D1")
+                            list2IntArray.removeAt(0)
+                        }
+                    }
+
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+
+        try {
+            if (list2IntArray.isEmpty()) {
+                orderedList.add("D1")
+            } else if (list1IntArray.isEmpty()) {
+                orderedList.add("D2")
+            }
+        } catch (e: Exception) {
+
+        }
+
+        println("Data   $orderedList")
+
+        doAsync {
+
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        tts = TextToSpeech(this, this)
-        db = FirebaseFirestore.getInstance()
+        tts = TextToSpeech(this, this) //Instantiate tts
+        db = FirebaseFirestore.getInstance() //Instantiate firestore
         super.onCreate(savedInstanceState)
     }
 
@@ -60,6 +132,11 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
     }
 
+
+    /**
+     * This function will get the current timestamp in this format
+     * "hh/mm/ss/a"
+     */
 
     @Suppress("unused")
     @SuppressLint("SimpleDateFormat")
@@ -71,6 +148,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     }
 
 
+    /**
+     * This function will get the current date in yyyymmdd format
+     */
     @SuppressLint("SimpleDateFormat")
     private fun getDate(): String {
         val cal = Calendar.getInstance()
@@ -80,11 +160,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         return formatted.toString()
     }
 
-
     /**
      * Overriding onDestroy, to safely disable the TTS
      */
-
     public override fun onDestroy() {
         try {
             tts.stop()

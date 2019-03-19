@@ -26,14 +26,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.WindowManager;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
@@ -45,15 +41,18 @@ public class MainActivity extends BaseActivity {
 
     private BlinkyViewModel mViewModel;
 
-    @BindView(R.id.outSidePIR)
-    TextView outSidePIR;
-    @BindView(R.id.insidePIR)
-    TextView insidePIR;
-    @BindView(R.id.doorContact)
-    TextView DoorContact;
-    @BindView(R.id.DISTNACE)
-    TextView distance;
+    Boolean triggered1 = false;
+    Boolean triggered2 = false;
 
+    String list1 = "";
+    String list2 = "";
+    Boolean sendListToServer1 = false;
+    Boolean sendListToServer2 = false;
+
+
+    /**
+     * Overriding onBackPressed to prevent accidentally exiting the activity
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -83,69 +82,107 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-        ButterKnife.bind(this);
 
+        list1 = "";
+        list2 = "";
         final Intent intent = getIntent();
         final DiscoveredBluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-        final String deviceName = device.getName();
-        final String deviceAddress = device.getAddress();
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(deviceName);
-        getSupportActionBar().setSubtitle(deviceAddress);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keep screen on flag
+
 
         // Configure the view model
         mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
         mViewModel.connect(device);
 
-        // Set up views
-        final LinearLayout progressContainer = findViewById(R.id.progress_container);
-        final TextView connectionState = findViewById(R.id.connection_state);
-        final View content = findViewById(R.id.device_container);
-        final View notSupported = findViewById(R.id.not_supported);
-
-
-        mViewModel.isDeviceReady().observe(this, deviceReady -> {
-            progressContainer.setVisibility(View.GONE);
-            content.setVisibility(View.VISIBLE);
-        });
-
-        mViewModel.getConnectionState().observe(this, text -> {
-            if (text != null) {
-                progressContainer.setVisibility(View.VISIBLE);
-                notSupported.setVisibility(View.GONE);
-                connectionState.setText(text);
-            }
-        });
-
-        mViewModel.isSupported().observe(this, supported -> {
-            if (!supported) {
-                progressContainer.setVisibility(View.GONE);
-                notSupported.setVisibility(View.VISIBLE);
-            }
-        });
+        /*
+          This will deal with getting readings from the inside distance sensor
+         */
 
         mViewModel.distance1().observe(this,
                 pressed -> {
                     if (pressed) {
-                        sensorTriggerred("DISTANCE1");
+                        System.out.println(">>>>>>>> " + pressed);
+                        if (!triggered2) {
+                            sensorTriggerred("DISTANCE2");
+                            triggered2 = true;
+                        }
+                    } else {
+                        triggered2 = false;
                     }
                 });
+
+        /*
+          This will deal with getting readings from the outside distance sensor
+         */
 
         mViewModel.distance2().observe(this,
                 pressed -> {
                     if (pressed) {
-                        sensorTriggerred("DISTANCE2");
+                        System.out.println(">>>>>>>>PRESSED DISTANCE2 " + pressed);
+                        if (!triggered1) {
+                            sensorTriggerred("DISTANCE1");
+                            triggered1 = true;
+                        }
+                    } else {
+                        triggered1 = false;
                     }
                 });
 
-        mViewModel.getDistanceState().observe(this,
-                pressed -> distance.setText(pressed ? "" : "PERSON"));
+        /*
+          This will deal with getting NEW IN data regarding the stored data in the occasion that the gateway disconnects from the board
+         */
+        mViewModel.getDistanceStored1().observe(this,
+                pressed -> {
+                    System.out.println("Data DISTANCE1 STORED " + pressed);
+                    if (list1.equals("")) {
+                        list1 = pressed;
+                        sendListToServer1 = true;
+                    } else if (list1.equals(pressed)) {
+                        sendListToServer1 = false;
+                        //Do nothing we've already seen this
+                    }
+                });
+        /*
+          This will deal with getting NEW OUT data regarding the stored data in the occasion that the gateway disconnects from the board
+         */
 
-        mViewModel.getReadSwitchState().observe(this,
-                pressed -> DoorContact.setText(pressed ? "OPEN" : "CLOSED"));
+        mViewModel.getDistanceStored2().observe(this,
+                pressed -> {
+                    System.out.println("Data DISTANCE2 STORED " + pressed);
+                    if (list2.equals("")) {
+                        list2 = pressed;
+                        sendListToServer2 = true;
+                    } else if (list1.equals(pressed)) {
+                        sendListToServer2 = false;
+                        //Do nothing we've already seen this
+                    }
+                });
+
+        /*
+        int [] b = {1,2,3,6,7};
+        int [] a = {4,5,8};
+        sendArraysToServer(a, b);
+        System.out.println("D1 D1 D1 D2 D2 D1 D1 D2"); */
+
+        /*new Thread(() -> {
+            while(true){
+                try {
+                    System.out.println(">>>>IN WHILE");
+                    if(sendListToServer1 && sendListToServer2){
+                        sendArraysToServer(list1, list2);
+                        sendListToServer1 = false;
+                        sendListToServer2 = false;
+                    }
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+             }
+        }).start(); */
     }
 
     @OnClick(R.id.action_clear_cache)

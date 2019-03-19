@@ -24,31 +24,33 @@ package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.Arrays;
+
 import androidx.annotation.NonNull;
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class distanceDataCallback implements ProfileDataCallback, distanceCallback {
-    private static final int STATE_RELEASED = 0x00;
-    private static final int STATE_PRESSED = 0x01;
-
+public abstract class PIR1ArrayDataCallback implements ProfileDataCallback, PIR1ArrayCallback {
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-
-        if (data.size() != 1) {
-            onInvalidDataReceived(device, data);
-            return;
-        }
-
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        if (state == STATE_PRESSED) {
-            distancestatechanged(device, true);
-        } else if (state == STATE_RELEASED) {
-            distancestatechanged(device, false);
-        } else {
-            onInvalidDataReceived(device, data);
-        }
+        byte[] dataByte = data.getValue();
+        onPIR1ArrayStateChanged(device, Arrays.toString(convert(dataByte)));
 
     }
+
+    private int[] convert(byte buf[]) {
+        int intArr[] = new int[buf.length / 4];
+        int offset = 0;
+        for(int i = 0; i < intArr.length; i++) {
+            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[offset] & 0xFF) << 24);
+            offset += 4;
+        }
+        return intArr;
+    }
+
 }

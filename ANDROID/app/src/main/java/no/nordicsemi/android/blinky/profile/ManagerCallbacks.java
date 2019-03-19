@@ -23,13 +23,17 @@
 package no.nordicsemi.android.blinky.profile;
 
 import no.nordicsemi.android.ble.BleManagerCallbacks;
+import no.nordicsemi.android.blinky.profile.callback.PIR1ArrayCallback;
+import no.nordicsemi.android.blinky.profile.callback.PIR2ArrayCallback;
+import no.nordicsemi.android.blinky.profile.callback.PIR2ArrayDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.PIR2Callback;
+import no.nordicsemi.android.blinky.profile.callback.PIR2DataCallback;
 import no.nordicsemi.android.blinky.profile.callback.PIRCallback;
 import no.nordicsemi.android.blinky.profile.callback.distanceCallback;
 import no.nordicsemi.android.blinky.profile.callback.readSwitchCallback;
 
 
 public interface ManagerCallbacks extends BleManagerCallbacks,
-        PIRCallback, PIR2Callback, distanceCallback, readSwitchCallback {
+        PIRCallback, PIR2Callback, distanceCallback, readSwitchCallback, PIR1ArrayCallback, PIR2ArrayCallback {
     // No more methods
 }

@@ -58,6 +58,8 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     private final MutableLiveData<Boolean> userOUT = new MutableLiveData<>();
     private final MutableLiveData<Boolean> readSwitchState = new MutableLiveData<>();
     private final MutableLiveData<Boolean> distanceState = new MutableLiveData<>();
+    private final MutableLiveData<String> pir1Array = new MutableLiveData<>();
+    private final MutableLiveData<String> pir2Array = new MutableLiveData<>();
 
     public LiveData<Void> isDeviceReady() {
         return mOnDeviceReady;
@@ -83,13 +85,20 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return distanceState;
     }
 
+    public LiveData<String> getDistanceStored1() {
+        return pir1Array;
+    }
+
+    public LiveData<String> getDistanceStored2() {
+        return pir2Array;
+    }
+
     public LiveData<Boolean> isSupported() {
         return mIsSupported;
     }
 
     public BlinkyViewModel(@NonNull final Application application) {
         super(application);
-
         // Initialize the manager
         mBlinkyManager = new Manager(getApplication());
         mBlinkyManager.setGattCallbacks(this);
@@ -98,7 +107,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     /**
      * Connect to peripheral.
      */
-
     public void connect(@NonNull final DiscoveredBluetoothDevice device) {
         // Prevent from calling again when called again (screen orientation changed)
         if (mDevice == null) {
@@ -115,7 +123,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
      * If this device was not supported, its services were cleared on disconnection, so
      * reconnection may help.
      */
-
     public void reconnect() {
         if (mDevice != null) {
             mBlinkyManager.connect(mDevice)
@@ -128,7 +135,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     /**
      * Disconnect from peripheral.
      */
-
     private void disconnect() {
         mDevice = null;
         mBlinkyManager.disconnect().enqueue();
@@ -160,6 +166,16 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     @Override
     public void readswitchstatechanged(@NonNull BluetoothDevice device, boolean pressed) {
         readSwitchState.postValue(pressed);
+    }
+
+    @Override
+    public void onPIR1ArrayStateChanged(@NonNull BluetoothDevice device, String pressed) {
+        pir1Array.postValue(pressed);
+    }
+
+    @Override
+    public void onPIR2ArrayStateChanged(@NonNull BluetoothDevice device, String pressed) {
+        pir2Array.postValue(pressed);
     }
 
     @Override
