@@ -89,12 +89,20 @@ def update_pir_things():
 		for distance2 in distance2_map:
 			if (distance1.id == distance2.id): #Same date
 				dist_date = distance1.id
-				for key1, value1 in distance1.to_dict().items():
+				print("In same date, {}".format(dist_date))
+				distance1_dict = distance1.to_dict()
+				for key1, value1 in list(distance1_dict.items()):
 					time1 = key1
-					for key2, value2 in distance2.to_dict().items():
+					print("Looping inside list 1")
+					print("Time 1 is : {}".format(time1))
+					distance2_dict = distance2.to_dict()
+					for key2,value2 in list(distance2_dict.items()):
+						print("Looping inside list 2")
 						time2 = key2
+						print("Time 2 is : {}".format(time2))
 						gap = int(time1) - int(time2)
-						if (gap <=20000 and gap >= 0): #2000 ms gap should be good I think
+						print("gap is {}".format(gap))
+						if (gap <=200000 and gap >= 0): #2000 ms gap should be good I think
 							date_now = datetime.datetime.now()
 							doc_name = date_now.strftime("%Y%m%d")
 							time = date_now.strftime("%H%M%S")
@@ -102,7 +110,13 @@ def update_pir_things():
 							db.collection('PIR_IN').document(doc_name).set(data, merge=True)
 							db.collection('D1').document(dist_date).update({key1 : firestore.DELETE_FIELD})
 							db.collection('D2').document(dist_date).update({key2 : firestore.DELETE_FIELD})
-						elif (gap >= -20000 and gap <= 0):
+							try:
+								distance1_dict.pop(time1)
+								distance2_dict.pop(time2)
+							except:
+								print("Caught")
+							break
+						elif (gap >= -200000 and gap <= 0):
 							print("Met second cond")
 							date_now = datetime.datetime.now()
 							doc_name = date_now.strftime("%Y%m%d")
@@ -111,6 +125,12 @@ def update_pir_things():
 							db.collection('PIR_OUT').document(doc_name).set(data, merge=True)
 							db.collection('D1').document(dist_date).update({key1 : firestore.DELETE_FIELD})
 							db.collection('D2').document(dist_date).update({key2 : firestore.DELETE_FIELD})
+							try:
+								distance1_dict.pop(time1)
+								distance2_dict.pop(time2)
+							except:
+								print("Caught")
+							break
 #Update the Hourly field of today
 def update_people_total_in_current_hour():
 	date_now = datetime.datetime.now()
@@ -247,15 +267,14 @@ def update_every_1_mins():
 		time.sleep(60*2)
 
 
-def update_every_10_seconds():
-	while True:
-		update_pir_things()
-		time.sleep(60*2)
+
 
 quarterly_thread = threading.Thread(target=update_every_1_mins, args=[]) #Try to do quarterly in a seperate thread
 
 #secondly_thread = threading.Thread(target=update_every_10_seconds, args=[])
 #secondly_thread.start()
+
+quarterly_thread.start()
 
 
 
@@ -267,5 +286,4 @@ while True:
 	update_people_total_out_today()
 	update_people_total_out_current_hour()
 	update_time_averages()
-	quarterly_thread.start()
 	time.sleep(60*15)
