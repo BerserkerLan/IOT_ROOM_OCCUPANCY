@@ -65,9 +65,11 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return mOnDeviceReady;
     }
 
-    public LiveData<String> getConnectionState() {
-        return mConnectionState;
+    public LiveData<Boolean> getMIsConnected(){
+        return mIsConnected;
     }
+
+
 
     public LiveData<Boolean> distance2() {
         return userIN;
@@ -77,13 +79,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
         return userOUT;
     }
 
-    public LiveData<Boolean> getReadSwitchState() {
-        return readSwitchState;
-    }
-
-    public LiveData<Boolean> getDistanceState() {
-        return distanceState;
-    }
 
     public LiveData<String> getDistanceStored1() {
         return pir1Array;
@@ -192,11 +187,13 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
     @Override
     public void onDeviceDisconnecting(@NonNull final BluetoothDevice device) {
         mIsConnected.postValue(false);
+        System.out.println("DEVICE DISCONNECED");
     }
 
     @Override
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         mIsConnected.postValue(false);
+        System.out.println("DEVICE DISCONNECED");
     }
 
     @Override

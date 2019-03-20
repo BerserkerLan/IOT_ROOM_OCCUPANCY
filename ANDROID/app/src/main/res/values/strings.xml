@@ -24,22 +24,10 @@
     <string name="app_name">IOT GATEWAY</string>
     <string name="feature_name">IOT</string>
 
-    <string name="title">@string/app_name</string>
-
     <string name="menu_filter">Filter</string>
     <string name="menu_filter_uuid">Only devices advertising LBS UUID</string>
     <string name="menu_filter_nearby">Only nearby devices</string>
     <string name="unknown_device">Unknown Device</string>
-    <string name="turn_on">On</string>
-    <string name="turn_off">Off</string>
-    <string name="title_led_state">LED</string>
-    <string name="title_button_state">INSIDE PIR</string>
-    <string name="title_button_state2">OUTSIDE PIR</string>
-    <string name="state">State</string>
-    <string name="button_pressed">TRIGGERED</string>
-    <string name="button_released"> </string>
-    <string name="button_unknown">UNKNOWN</string>
-    <string name="button_summary">Trigger the sensor</string>
     <string name="location_permission_title">LOCATION PERMISSION REQUIRED</string>
     <string name="location_permission_info">From Android 6.0 Marshmallow onwards the application requires Location permission in order to scan for Bluetooth Low Energy devices.
       \n\nThis is because Bluetooth LE beacons, for example iBeacons or Eddystone, may be used to determine the phone\'s and user\'s location. <b>Nordic</b> will not use this information in any way.</string>
@@ -55,18 +43,7 @@
 		If you are sure your Nordic is advertising and it doesn\'t show up here, click the button below to enable Location.</string>
     <string name="blinky_guide_location_action">Enable</string>
 
-    <string name="not_supported_title">DEVICE NOT SUPPORTED</string>
-    <string name="not_supported_info">1. The Nordic service hasn\'t been found on the device\'s attribute table.
-		\n\n2. Make sure the DK is flashed with the correct firmware.
-		\n\n3. If you used the DK with another firmware before, the old services might have been cached by the system.</string>
-    <string name="not_supported_action">Fix and try again</string>
-
-    <string name="state_scanning">Scanning…</string>
     <string name="state_connecting">Connecting…</string>
     <string name="state_discovering_services">Discovering services…</string>
     <string name="state_initializing">Initializing…</string>
-    <string name="state_disconnected">Device disconnected.</string>
-    <string name="button_2">OUTSIDE PIR</string>
-    <string name="openclose">OPEN OR CLOSE THE DOOR</string>
-    <string name="distance_sensor">Distance Sensor</string>
 </resources>

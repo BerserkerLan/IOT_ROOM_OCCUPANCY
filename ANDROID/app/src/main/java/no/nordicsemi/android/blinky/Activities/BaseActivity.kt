@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS")
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATED_IDENTITY_EQUALS", "unused")
 
 /**
  * The purpose of this activity is to reduce code duplication
@@ -23,14 +23,26 @@ import java.util.*
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
-    var currentCount = 0 //Keeping track of the currentCount
-    lateinit var tts: TextToSpeech //Lateinit instance of the tts
-    lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
+    private var currentCount = 0 //Keeping track of the currentCount
+    private lateinit var tts: TextToSpeech //Lateinit instance of the tts
+    private lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
 
+    @Synchronized
+    fun boardConnectedSpeak() {
+        tts.language = Locale.US
+        tts.speak("The board is connected", TextToSpeech.QUEUE_ADD, null)
+    }
+
+    @Synchronized
+    fun boardDisconnectedSpeak() {
+        tts.language = Locale.US
+        tts.speak("The board is disconnected, please reconnect", TextToSpeech.QUEUE_ADD, null)
+    }
 
     /**
      * Get timestamp down to ms level
      */
+
     @SuppressLint("SimpleDateFormat")
     fun getTimeStamp(): String {
         val date = Date()
@@ -66,19 +78,19 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     /**
      * This function takes in intArrays, then updates the server accordingly based on timestamps
      */
-    @Suppress("unused")
-    fun sendArraysToServer(list1: IntArray, list2: IntArray) {
+
+    fun sendArraysToServer(list1: IntArray?, list2: IntArray?) {
 
         //convert the array to a mutableList
-        var list1IntArray = list1.toMutableList()
-        var list2IntArray = list2.toMutableList()
+        val list1IntArray = list1!!.toMutableList()
+        var list2IntArray = list2!!.toMutableList()
 
         //sort the arrrays
         list1IntArray.sorted()
         list2IntArray.sorted()
 
         val orderedList: MutableList<String> = mutableListOf()
-        val maxSize = list1IntArray.size+ list2IntArray.size
+        val maxSize = list1IntArray.size + list2IntArray.size
 
         for (i in 0..maxSize) {
 
@@ -118,6 +130,14 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
         println("Data   $orderedList")
 
         doAsync {
+
+            for (i in orderedList) {
+                if (i == "D1") {
+                    sensorTriggerred("D1")
+                } else if (i == "D2") {
+                    sensorTriggerred("D2")
+                }
+            }
 
         }
     }

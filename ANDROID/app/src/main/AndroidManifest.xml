@@ -45,7 +45,6 @@
             android:name=".Activities.MainActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".Activities.ScannerActivity" />
-        <activity android:name=".viewmodels.BaseActivity" />
         <activity android:name=".Activities.BaseActivity" />
     </application>
 
