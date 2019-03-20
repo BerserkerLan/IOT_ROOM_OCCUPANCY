@@ -25,8 +25,6 @@ package no.nordicsemi.android.blinky.viewmodels;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 
-import com.google.android.gms.flags.Flag;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -65,10 +63,6 @@ public class BlinkyViewModel extends AndroidViewModel implements ManagerCallback
 
     public LiveData<Void> isDeviceReady() {
         return mOnDeviceReady;
-    }
-
-    public LiveData<String> getConnectionState() {
-        return mConnectionState;
     }
 
     public LiveData<Boolean> getMIsConnected(){

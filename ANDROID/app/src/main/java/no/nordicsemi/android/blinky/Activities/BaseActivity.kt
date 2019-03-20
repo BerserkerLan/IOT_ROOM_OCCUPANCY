@@ -23,9 +23,9 @@ import java.util.*
 
 open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech.OnInitListener {
     lateinit var databaseInstance: UserDatabase //Lateinit instance of the database
-    var currentCount = 0 //Keeping track of the currentCount
-    lateinit var tts: TextToSpeech //Lateinit instance of the tts
-    lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
+    private var currentCount = 0 //Keeping track of the currentCount
+    private lateinit var tts: TextToSpeech //Lateinit instance of the tts
+    private lateinit var db: FirebaseFirestore //FIrestore global instance within base activity
 
     @Synchronized
     fun boardConnectedSpeak() {
@@ -82,7 +82,7 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     fun sendArraysToServer(list1: IntArray?, list2: IntArray?) {
 
         //convert the array to a mutableList
-        var list1IntArray = list1!!.toMutableList()
+        val list1IntArray = list1!!.toMutableList()
         var list2IntArray = list2!!.toMutableList()
 
         //sort the arrrays

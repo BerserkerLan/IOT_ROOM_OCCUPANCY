@@ -26,7 +26,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -187,17 +186,15 @@ public class MainActivity extends BaseActivity {
                     });
             return true;
         });
-        imageView.setOnClickListener((View.OnClickListener) v -> {
-            mViewModel.getMIsConnected().observe(this,
-                    pressed -> {
-                        if(!pressed){
-                            System.out.println(">>>>>>>>>>>>>BOARD DISCONNECTED");
-                            boardDisconnectedSpeak();
-                        } else {
-                            System.out.println("THE BOARD IS CONNECTED");
-                        }
-                    });
-        });
+        imageView.setOnClickListener(v -> mViewModel.getMIsConnected().observe(this,
+                pressed -> {
+                    if(!pressed){
+                        System.out.println(">>>>>>>>>>>>>BOARD DISCONNECTED");
+                        boardDisconnectedSpeak();
+                    } else {
+                        System.out.println("THE BOARD IS CONNECTED");
+                    }
+                }));
 
         mViewModel.getDistanceStored2().observe(this,
                 pressed -> {
@@ -225,7 +222,7 @@ public class MainActivity extends BaseActivity {
                     if(sendListToServer1 && sendListToServer2){
                         try{
                             sendArraysToServer(null, null);
-                        } catch (Exception e){
+                        } catch (Exception ignored){
 
                         }
                         sendListToServer1 = false;
@@ -240,8 +237,4 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
-    @OnClick(R.id.action_clear_cache)
-    public void onTryAgainClicked() {
-        mViewModel.reconnect();
-    }
 }
