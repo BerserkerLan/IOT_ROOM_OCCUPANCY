@@ -78,16 +78,27 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     /**
      * This function takes in intArrays, then updates the server accordingly based on timestamps
      */
+    fun removeZeros(list1: IntArray?): MutableList<Int> {
+        val MutableList: MutableList<Int> = mutableListOf()
+        for (i in list1!!) {
+            if (i != 0) {
+                MutableList.add(i)
+            }
+        }
+        return MutableList
+    }
 
     fun sendArraysToServer(list1: IntArray?, list2: IntArray?) {
 
         //convert the array to a mutableList
-        val list1IntArray = list1!!.toMutableList()
-        var list2IntArray = list2!!.toMutableList()
+        val list1IntArray = removeZeros(list1)
+        val list2IntArray = removeZeros(list2)
 
         //sort the arrrays
         list1IntArray.sorted()
         list2IntArray.sorted()
+
+        //:TODO Remove all zeros from the lists
 
         val orderedList: MutableList<String> = mutableListOf()
         val maxSize = list1IntArray.size + list2IntArray.size
