@@ -263,9 +263,8 @@ Keen.ready(function() {
                     height: 290,
                     width: '95%'
                 });
-                console.log("day", date_time('day').toString());
-                getTodaysDate
-                var d = new Date();
+                //console.log("day", date_time('day').toString());
+              /*  var d = new Date();
                 var day = d.getDay();
                 if (day == 0) {
                     var theData = doc.data()["Monday"];
@@ -279,10 +278,10 @@ Keen.ready(function() {
                     var theData = doc.data()["Friday"];
                 } else if (day == 5) {
                     var theData = doc.data()["Saturday"];
-                } else if (day == 6) {
-                    var theData = doc.data()["Sunday"];
-                }
-                console.log("The More", theData);
+                } else if (day == 6) { */
+                    var theData = doc.data()["Thursday"];
+              //  }
+                console.log("Thursday Data", theData);
                 geoProject.query('count', {
                         event_collection: 'user_action',
                         filters: [{
