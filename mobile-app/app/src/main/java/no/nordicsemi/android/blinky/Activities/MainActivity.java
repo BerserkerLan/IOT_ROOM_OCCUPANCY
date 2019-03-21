@@ -29,9 +29,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.OnClick;
 import no.nordicsemi.android.blinky.R;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
@@ -47,13 +47,23 @@ public class MainActivity extends BaseActivity {
 
     String list1 = "";
     String list2 = "";
-    int [] list1_array;
-    int [] list2_array;
     Boolean sendListToServer1 = false;
     Boolean sendListToServer2 = false;
     String timestamp = "";
 
-
+    public int[] convertString(String a)
+    {
+        a = a.substring(1, a.length()-1);
+        String[] elephantList = a.split(",");
+        int[] timeStamps = new int[elephantList.length];
+        int i = 0;
+        for (String str : elephantList) {
+            timeStamps[i] = Integer.parseInt(str.trim());
+            i++;
+        }
+        System.out.println(">>>>>t");
+        return timeStamps;
+    }
     /**
      * Overriding onBackPressed to prevent accidentally exiting the activity
      */
@@ -144,6 +154,7 @@ public class MainActivity extends BaseActivity {
         /*
           This will deal with getting NEW IN data regarding the stored data in the occasion that the gateway disconnects from the board
          */
+
         mViewModel.getDistanceStored1().observe(this,
                 pressed -> {
                     System.out.println("IN DISTANCES STORED1");
@@ -172,6 +183,7 @@ public class MainActivity extends BaseActivity {
                        System.out.println("THE BOARD IS CONNECTED");
                    }
                 });
+
         ImageView imageView = findViewById(R.id.image);
         imageView.setOnLongClickListener(v -> {
             mViewModel.getMIsConnected().observe(this,
@@ -201,6 +213,7 @@ public class MainActivity extends BaseActivity {
                     System.out.println("IN DISTANCE STORED2");
                     timestamp = getTimeStamp();
                     System.out.println("Data DISTANCE2 STORED " + pressed);
+                    convertString(pressed);
                     if (list2.equals("")) {
                         list2 = pressed;
                         sendListToServer2 = true;
@@ -221,7 +234,7 @@ public class MainActivity extends BaseActivity {
                 try {
                     if(sendListToServer1 && sendListToServer2){
                         try{
-                            sendArraysToServer(null, null);
+                            sendArraysToServer(convertString(list1), convertString(list2));
                         } catch (Exception ignored){
 
                         }
@@ -236,5 +249,6 @@ public class MainActivity extends BaseActivity {
              }
         }).start();
     }
+
 
 }

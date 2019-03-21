@@ -78,16 +78,30 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
     /**
      * This function takes in intArrays, then updates the server accordingly based on timestamps
      */
+    private fun removeZeros(list1: IntArray?): MutableList<Int> {
+        val mutableList: MutableList<Int> = mutableListOf()
+        for (i in list1!!) {
+            if (i != 0) {
+                mutableList.add(i)
+            }
+        }
+        return mutableList
+    }
 
     fun sendArraysToServer(list1: IntArray?, list2: IntArray?) {
 
         //convert the array to a mutableList
-        val list1IntArray = list1!!.toMutableList()
-        var list2IntArray = list2!!.toMutableList()
+        val list1IntArray = removeZeros(list1)
+        val list2IntArray = removeZeros(list2)
 
         //sort the arrrays
         list1IntArray.sorted()
         list2IntArray.sorted()
+
+        if(list1IntArray.size==0 || list2IntArray.size==0){
+            println(">>>>>>>>>>IN this catch")
+            return
+        }
 
         val orderedList: MutableList<String> = mutableListOf()
         val maxSize = list1IntArray.size + list2IntArray.size
@@ -119,9 +133,9 @@ open class BaseActivity : AppCompatActivity(), ComponentCallbacks2, TextToSpeech
 
         try {
             if (list2IntArray.isEmpty()) {
-                orderedList.add("D1")
+                orderedList.add("DISTANCE1")
             } else if (list1IntArray.isEmpty()) {
-                orderedList.add("D2")
+                orderedList.add("DISTANCE2")
             }
         } catch (e: Exception) {
 
