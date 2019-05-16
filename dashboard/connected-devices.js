@@ -43,18 +43,11 @@ function getAUXInformation() {
     var db = firebaseApp.firestore();
     const comments = [];
     var docRef = db.collection("AUX").doc("INFO");
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            var MOST_POPULAR_DAY = doc.data()['DAY'];
-            var MOST_POPULAR_MONTH = doc.data()['MONTH'];
-            var MOST_POPULAR_TIME = doc.data()['TIME'];
-            getAUXInformationCallBack(MOST_POPULAR_DAY, MOST_POPULAR_MONTH, MOST_POPULAR_TIME);
-        } else {
-            console.log("No such document!");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
+    var MOST_POPULAR_DAY = "Monday";
+    var MOST_POPULAR_MONTH = "March";
+    var MOST_POPULAR_TIME = "12:15";
+    getAUXInformationCallBack(MOST_POPULAR_DAY, MOST_POPULAR_MONTH, MOST_POPULAR_TIME);
+
 }
 
 //This function will get yesterdays date
@@ -121,18 +114,8 @@ function getTotalToday() {
     var db = firebaseApp.firestore();
     const comments = [];
     //This will get the most popular time
-    var docRef = db.collection("PROCESSED").doc(String(getTodaysDate()));
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            var theData = doc.data()['TOTALTODAY'];
-            totalToday = doc.data()['TOTALTODAY'];
-            return theData;
-        } else {
-            console.log("No such document!");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
+    var theData = 15;
+    totalToday = 15;
 }
 
 //Function to return the date
@@ -246,63 +229,18 @@ Keen.ready(function() {
 
     function getTotalAverage() {
         //Need to investigate
-        var db = firebaseApp.firestore();
-        const comments = [];
-        //This will get the most popular time
-        var docRef = db.collection("AUX").doc("AVERAGES");
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                updateBarDays(doc.data())
-                $('.users').knob({
-                    angleArc: 250,
-                    angleOffset: -125,
-                    readOnly: true,
-                    min: 0,
-                    max: 1000,
-                    fgColor: '#00bbde',
-                    height: 290,
-                    width: '95%'
-                });
-                //console.log("day", date_time('day').toString());
-              /*  var d = new Date();
-                var day = d.getDay();
-                if (day == 0) {
-                    var theData = doc.data()["Monday"];
-                } else if (day == 1) {
-                    var theData = doc.data()["Tuesday"];
-                } else if (day == 2) {
-                    var theData = doc.data()["Wednesday"];
-                } else if (day == 3) {
-                    var theData = doc.data()["Thursday"];
-                } else if (day == 4) {
-                    var theData = doc.data()["Friday"];
-                } else if (day == 5) {
-                    var theData = doc.data()["Saturday"];
-                } else if (day == 6) { */
-                    var theData = doc.data()["Thursday"];
-              //  }
-                console.log("Thursday Data", theData);
-                geoProject.query('count', {
-                        event_collection: 'user_action',
-                        filters: [{
-                            property_name: 'error_detected',
-                            operator: 'eq',
-                            property_value: true
-                        }]
-                    })
-                    .then(function(res) {
-                        console.log("theData", theData);
-                        $('.errors').val(theData).trigger('change');
-                    })
-                    .catch(function(err) {
-                        alert('An error occurred fetching Device Crashes metric');
-                    });
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
+        $('.users').knob({
+            angleArc: 250,
+            angleOffset: -125,
+            readOnly: true,
+            min: 0,
+            max: 1000,
+            fgColor: '#00bbde',
+            height: 290,
+            width: '95%'
         });
+        $('.errors').val(30).trigger('change');
+
     }
 
 
@@ -310,19 +248,11 @@ Keen.ready(function() {
     This function will update the bar graph at the bottom left with the new data
     */
     function updateBarDays(theData) {
-        monthlyStats = theData;
-        var Monday = monthlyStats['Monday'];
-        var Tuesday = monthlyStats['Tuesday'];
-        var Wednesday = monthlyStats['Wednesday'];
-        var Thursday = monthlyStats['Thursday'];
-        var Friday = monthlyStats['Friday'];
-        var Saturday = monthlyStats['Saturday'];
-        var Sunday = monthlyStats['Sunday'];
         var sample_funnel = new Keen.Dataviz()
             .el('#chart-05')
             .colors(['#ffa500'])
             .data({
-                result: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+                result: [109, 160, 120, 150, 200, 60, 34]
             })
             .height(340)
             .type('bar')
@@ -331,45 +261,29 @@ Keen.ready(function() {
             .render();
     }
 
+updateBarDays();
     function hourlyStats() {
         var db = firebaseApp.firestore();
-        var docRef = db.collection("AUX").doc("TODAY");
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                var theData = doc.data();
-                st = theData;
+        var docRef = 25;
 
-                var d = new Date();
-                var hour = d.getHours();
-                if (hour < 9) {
-                    hour = "0" + hour + ":00";
-                } else {
-                    hour = hour + ":00";
-                }
+        var sample_funnel = new Keen.Dataviz()
+            .el('#chart-06')
+            .colors(['#00cfbb'])
+            .data({
+                result: [20, 26, 31, 25, 29, 32, 37, 32, 23, 34, 18,
+                    15, 17, 20, 29, 12, 13, 15, 17, 20, 29, 12, 13, 15
+                ]
+            })
+            .height(340)
+            .type('bar')
+            .labels(['00:00', '01:00', '02:00', '03:00', '04:00', "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"])
+            .title(null)
+            .render();
 
-                setTotalToday(doc.data()['CURRENT_OCCUPANCY']);
-                updateTotalTodayIn(st['NUMBER_OF_PEOPLE_IN_TODAY']);
-                updateTotalInHour(st[hour]);
 
-                var sample_funnel = new Keen.Dataviz()
-                    .el('#chart-06')
-                    .colors(['#00cfbb'])
-                    .data({
-                        result: [st['00:00'], st['01:00'], st['02:00'], st['03:00'], st['04:00'], st['05:00'], st['06:00'], st['07:00'], st['08:00'], st['09:00'], st['10:00'],
-                            st['11:00'], st['12:00'], st['13:00'], st['14:00'], st['15:00'], st['16:00'], st['17:00'], st['18:00'], st['19:00'], st['20:00'], st['21:00'], st['22:00'], st['23:00']
-                        ]
-                    })
-                    .height(340)
-                    .type('bar')
-                    .labels(['00:00', '01:00', '02:00', '03:00', '04:00', "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"])
-                    .title(null)
-                    .render();
-            } else {
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+                setTotalToday(15);
+                updateTotalTodayIn(23);
+                updateTotalInHour(12);
     }
 
     foo();
