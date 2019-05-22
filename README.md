@@ -25,7 +25,7 @@ This project was conducted in Room 3.09 in Appleton Tower at the University of E
 
 
 
-##MIT Licence
+## MIT Licence
 
 Copyright (c) 2018 [Mahbub Iftekhar](https://www.mahbubiftekhar.co.uk/) & [Rusab Abrez Asher](https://github.com/BerserkerLan)
 
