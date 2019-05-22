@@ -1,5 +1,5 @@
 # Internet of Things Room Occupancy Detection System
-This is a full stack implementation of the Internet of Things, Systems, Security and the Cloud course taught at the University of Edinburgh in 2019.
+This is a full stack implementation of the coursework for the Internet of Things, Systems, Security and the Cloud course taught at the University of Edinburgh in 2019.
 
 ## Project Outline
 This system consists of: 
