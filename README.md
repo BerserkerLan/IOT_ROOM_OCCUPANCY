@@ -1,6 +1,31 @@
-## CODE LICESNSE - MIT
+# Internet of Things Room Occupancy Detection System
+This is a full stack implementation of the Internet of Things, Systems, Security and the Cloud course taught at the University of Edinburgh in 2019.
 
-MIT Licence
+## Project Outline
+This system consists of: 
+* Firmware for a Nodric NRF51
+* An Android application gateway
+* A server to handle data processing
+* A website to visualize the processed data
+* A User side application to view the website
+
+## Environment
+This project was conducted in Room 3.09 in Appleton Tower at the University of Edinburgh.
+*Insert a system diagram here or something too*
+
+## Firmware
+
+## Android Gateway
+
+## Server
+
+## Website
+
+## User Side Application
+
+
+
+##MIT Licence
 
 Copyright (c) 2018 [Mahbub Iftekhar](https://www.mahbubiftekhar.co.uk/) & [Rusab Abrez Asher](https://github.com/BerserkerLan)
 
