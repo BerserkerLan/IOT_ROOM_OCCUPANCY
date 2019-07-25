@@ -26,7 +26,7 @@ This project was conducted in Room 3.09 in Appleton Tower at the University of E
 ## User Side Application
 ![Alt text](Screenshots/android_user_app_screen_1.png)
 ![Alt text](Screenshots/android_user_app_screen_2.png)
-![Alt text](Screenshots/android_user_app_screen_3.png)
+![Alt text](Screenshots/android_user_app_screen_3.jpg)
 
 
 ## MIT Licence
