@@ -16,7 +16,8 @@ This project was conducted in Room 3.09 in Appleton Tower at the University of E
 ## Firmware
 
 ## Android Gateway
-
+![alt text](/Screenshots/android_bluetooth_app_screen_1.png)
+![alt text](/Screenshots/android_bluetooth_app_screen_2.png)
 ## Server
 
 ## Website
