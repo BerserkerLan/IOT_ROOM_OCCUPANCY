@@ -31,7 +31,7 @@ This project was conducted in Room 3.09 in Appleton Tower at the University of E
 
 ## MIT Licence
 
-Copyright (c) 2018 [Mahbub Iftekhar](https://www.mahbubiftekhar.co.uk/) & [Rusab Abrez Asher](https://github.com/BerserkerLan)
+Copyright (c) 2019 [Mahbub Iftekhar](https://www.mahbubiftekhar.co.uk/) & [Rusab Abrez Asher](https://github.com/BerserkerLan)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
